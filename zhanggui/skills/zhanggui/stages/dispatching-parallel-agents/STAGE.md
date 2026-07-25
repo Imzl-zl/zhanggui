@@ -27,7 +27,7 @@
    - 明确约束（"不改生产代码"/"只动 boundary 内"）；
    - 明确输出（"返回根因与改动摘要"）。
 3. **同一条消息里发出全部派发** = 并行；一条一个 = 串行。
-4. 写范围可能相邻时，给每个 agent 配独立 worktree（见 `../using-git-worktrees/STAGE.md`）。
+4. 写范围可能相邻时，为每个 agent 读取 `../../../zhanggui-using-git-worktrees/SKILL.md` 的 `Zhanggui Embedded` 模式建立独立 worktree。
 
 Prompt 反面示例：
 

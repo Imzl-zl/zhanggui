@@ -13,7 +13,7 @@ const leafSkills = [
   { name: 'zhanggui-verification-before-completion', enabled: true },
   { name: 'zhanggui-requesting-code-review', enabled: true },
   { name: 'zhanggui-receiving-code-review', enabled: true },
-  { name: 'zhanggui-using-git-worktrees', enabled: false },
+  { name: 'zhanggui-using-git-worktrees', enabled: true },
   { name: 'zhanggui-dispatching-parallel-agents', enabled: false },
   { name: 'zhanggui-finishing-a-development-branch', enabled: false },
 ];

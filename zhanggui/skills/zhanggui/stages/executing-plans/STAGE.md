@@ -36,7 +36,7 @@
 2. 文件、符号和接口是否仍与仓库一致。
 3. `sync_targets` 是否覆盖公开接口、调用方、类型、schema、迁移、配置、测试和文档。
 4. WorkflowState 的 `open_nodes` 与 `fog` 是否为空；若有 user-owned decisions，`consensus` 是否已 confirmed。
-5. 高风险改动、并行子任务或用户要求隔离时，读取 `../using-git-worktrees/STAGE.md` 先建立隔离工作区并验证基线。
+5. 高风险改动、并行子任务或用户要求隔离时，读取 `../../../zhanggui-using-git-worktrees/SKILL.md` 的 `Zhanggui Embedded` 模式建立隔离工作区并验证基线。
 
 事实过时但不改变设计时，就地更新 tracker 并记录原因。发现设计缺口时返回 `StageStatus: design-drift` 和原 task return point，由当前编排 frame 恢复 design；不让用户手动重新路由。
 
