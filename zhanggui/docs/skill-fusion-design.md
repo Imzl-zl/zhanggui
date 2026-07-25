@@ -144,6 +144,11 @@ DESIGN→SPEC/EPIC 是单次 cutover：候选工件核对期间 DESIGN 仍胜出
 
 所有向用户的决策问题统一为引导式格式：问题 + 研究背景（同类设计 > 官方指南 > 模型自身判断，无同类时标注）+ 2-4 个带差异的选项 + 明确推荐 + 自由输入出口。用户独有信息用开放问题，不硬造选项。格式随熟悉度伸缩：陌生领域（Assisted 卡点）用完整引导式，用户熟悉的 Owner 领域以开放问题 + 推荐为主、选项按需；格式只统一"怎么问"，不改变 owner 分权（问多少、谁决定）。
 
+问题内容与交付通道分离：所有等待用户的路径先构造统一 `QuestionRequest`（question、context、options、recommended、free_form），再由编排器检查当前宿主暴露的能力。`AskUserQuestion`、`request_user_input`、`ask` 或等价结构化工具能忠实表达请求时必须真实调用，不能用普通消息里的编号菜单替代；推荐项使用原生元数据，宿主自动提供的 `Other` / 自定义输入直接承担自由输入出口，不重复造选项。
+
+只有宿主没有原生结构化提问能力，或工具 schema 无法表达不带伪造选项的纯开放问题时，才允许文字提问，并以 `no-native-question-tool` 或 `unsupported-question-shape` 显式记录降级。Skill 只能强制使用已存在的宿主能力，不能为不提供该能力的客户端制造弹框。
+
+
 用户自由输入是一等回答：明确决定关闭节点；想法/方向触发收敛循环——复述理解、补研究、更新选项后继续一次一问直到收敛，不受"仪式性追问限一次"约束。design-assist 转出的 user-owned 卡点必须把研究与选项预填进 node，grilling 复用不重做。
 
 ### 4.11 运行时鲁棒性
@@ -344,7 +349,7 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 22. 非空根无 `.zhanggui-root` -> 不自动采用；按 config/fallback/一次询问处理。
 23. CSV 全 DONE 但 FinalizationStatus=pending-validation -> 恢复 final validation，不误判完成。
 24. 高风险改动整体完成 -> code-review 先于 verification；Critical/Important findings 回任务循环修复并重跑 validation。
-25. verified 后在独立分支/worktree -> finishing 呈现 4/3 固定选项，由用户选择；选项 2/3 不清理 worktree。
+25. verified 后在独立分支/worktree -> finishing 构造稳定 choice id 的 4/3 选项；宿主有原生结构化提问能力时真实调用，由用户选择，`push-pr` / `keep` 不清理 worktree。
 26. 并行派发 -> 子代理报告不作真值，经 diff + validation 核实后由主编排更新 CSV。
 27. 评审请求且不改文件 -> 按 code-review 检查单出报告，minimal state，报告后 stop。
 28. 无领域声明的 "grill me"/"逐项问我" -> 视为全领域声明，全部领域 `owner:user` 逐项一次一问，不落入"未声明默认 model"。
@@ -356,6 +361,10 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 34. Minimal 投影下命中完整 state 触发点（写 return_point、新建 node/fog、写任务工件）-> 先补齐完整字段再执行该动作。
 35. 一轮中误发多个问题 -> 用户任答其一后，其余问题重新入队按节奏逐轮问，不并行追问。
 36. 用户中途明确放弃目标 -> 执行 scope reset：剪枝 nodes/fog、作废受影响 decisions、重置 consensus、重新路由，DESIGN.md 按用户意愿处理。
+37. 宿主暴露可表达当前选项的原生结构化提问工具 -> 实际发生一次宿主可识别的 tool call event，推荐使用原生字段，自动 `Other` 不重复添加，assistant 文本不再出现等价编号菜单；只输出工具名、JSON 或伪调用同样判失败；grilling、共识确认和 finishing 均适用。
+38. 宿主没有原生提问工具，或纯开放问题无法被其 schema 忠实表达 -> 记录明确 fallback reason 后只问一个文字问题，不伪造选项，不静默假装已弹框。
+39. Detached HEAD 的 finishing 选项删除 `local-merge` -> `recommended` 只能是仍存在的 `push-pr` 或 `keep`；无 PR 流程时推荐 `keep`，不得生成 schema 无效的推荐 id。
+40. finishing 收到无法等价到四个稳定 id 的自由输入 -> 保持同一 `finishing-choice` 未决并进入收敛循环；收敛前无动作、无临时第五 id，最终 `Choice` 仍是稳定 id。
 ## 13. 演进规则
 新增路由或 stage 前必须回答：
 1. 它解决的是新意图、新决策纪律，还是已有阶段实现细节？

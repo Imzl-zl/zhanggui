@@ -25,8 +25,8 @@
 ## 单节点流程
 
 1. 查明当前 node 所依赖的事实，确认问题仍然成立。
-2. 按入口"提问格式"构造问题，格式随熟悉度伸缩：用户主导且熟悉的领域用开放问题 + 明确推荐，方案空间确实有多个候选时才列选项；当前领域对用户显著陌生（Assisted 转入的卡点，或用户自述不懂）时用完整引导式——先做同类设计/最佳实践快速研究，把参考写进问题背景并给 2-4 个带差异的选项。用户独有信息（业务规则、偏好）始终用开放问题。node 已含 design-assist 预填的研究和选项时直接复用，不重做研究。
-3. 在等待用户前更新当前 state：`StageStatus: awaiting-user`、当前 node id 和问题。
+2. 按入口“提问格式”构造 `QuestionRequest`，格式随熟悉度伸缩：用户主导且熟悉的领域用开放问题 + 明确推荐，方案空间确实有多个候选时才列选项；当前领域对用户显著陌生（Assisted 转入的卡点，或用户自述不懂）时用完整引导式，先做同类设计/最佳实践快速研究，把参考写进 `context` 并给 2-4 个带差异的选项。用户独有信息（业务规则、偏好）始终用开放问题。node 已含 design-assist 预填的研究和选项时直接复用，不重做研究。
+3. 在等待用户前更新当前 state：`StageStatus: awaiting-user`、当前 node id 和 `QuestionRequest`；再由编排器按入口“原生提问分发契约”发出，不能把问题包直接渲染为普通文字菜单。
 4. 收到答案后记录决定、owner=user 和理由；用答案剪枝、新增或重排后续节点。
 5. 明确决定直接关闭 node；答案含糊或与约束冲突时只围绕同一 node 澄清一次。用户给出想法、方向或部分意见而非决定时，进入入口"提问格式"定义的收敛循环——复述理解、必要时补充研究、更新选项和推荐后继续一次一问，直到收敛为明确决定；收敛循环不算仪式性追问。
 6. 用户说“这部分你看着办”时，不回答该问题；返回明确的 `OwnershipChanges`，由编排器改为 model 后重新调度。
@@ -56,7 +56,7 @@ prototype 不夺走 owner。它回答后仍由用户确认 parent decision，除
 
 1. 复述完整 decisions、重要 assumptions、rejected branches 和边界。
 2. 设置 `consensus: pending`。
-3. 只问一次是否已达到 shared understanding。
+3. 构造共识确认 `QuestionRequest`：选项为 `confirm`（recap 准确）与 `adjust`（需要修改并通过自由输入说明），已通过完整性检查时推荐 `confirm`；更新等待状态后按入口“原生提问分发契约”发出，不直接输出文字确认句。
 4. 用户明确确认后返回 `ConsensusChange: pending -> confirmed`。
 
 Open nodes 为空但 consensus 未确认时，仍是 `Readiness: continue-design`。
@@ -64,7 +64,8 @@ Open nodes 为空但 consensus 未确认时，仍是 `Readiness: continue-design
 ## 输出 delta
 
 ```text
-Question: 当前 node 按提问格式构造的问题包——问题、背景、选项、推荐、自由输入出口（等待时）
+QuestionRequest: 当前 node 的 id、问题、背景、选项、recommended 和 free_form（等待时）
+Delivery: native:<tool> | text-fallback:<reason>（等待时）
 Resolved: Dn -> 结论、owner=user、理由（回答后）
 NewNodes: id、domain、owner、question、depends_on
 Pruned: 被答案取消的 node 及原因

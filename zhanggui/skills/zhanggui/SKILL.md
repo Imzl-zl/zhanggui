@@ -159,6 +159,30 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 2. 可延迟的元问题（worktree、沉淀文件）延迟到必须决定时再问，不在开局堆积。
 3. 同一时刻多个问题都必需时，按阻塞程度只问最先必需的一个，其余顺延到后续等待轮。
 
+### 原生提问分发契约
+
+“提问格式”只定义问题内容，不是普通 assistant 消息的排版模板。任何路径准备等待用户（decision、共识确认、恢复候选、worktree、prototype、finishing 或其他元问题）时，先构造同一个请求：
+
+```yaml
+QuestionRequest:
+  id: decision-or-meta-id
+  question: 一句话问题
+  context: 研究背景或 null
+  options: [{ id, label, description }]  # 纯开放问题为 []
+  recommended: option-id | null
+  free_form: true | false
+```
+
+然后按以下顺序分发：
+
+1. 从当前宿主已暴露的工具中识别结构化用户输入能力，例如 `AskUserQuestion`、`request_user_input`、`ask` 或等价工具；能力结论在本会话内复用。
+2. 工具能忠实表达当前 `QuestionRequest` 时，分发动作固定为“选择已暴露工具 → 按其真实 schema 填参 → 产生宿主可识别的 tool call event → 结束本轮等待”。**必须真实调用该工具**，一次调用只发当前一个问题；在普通 assistant 文本中写工具名、JSON、伪调用或编号菜单都不算调用，也不得与真实调用重复发送。
+3. `options` 映射到原生选项及说明，`recommended` 映射到原生推荐字段；宿主没有推荐字段时，把推荐项移到第一项并在 label/description 标注。宿主自动提供 `Other` / 自定义输入时不得再造“其他”选项，直接把它作为 `free_form` 出口。
+4. 纯开放问题优先使用支持自由文本的原生工具；只有宿主没有结构化提问工具，或工具 schema 无法在不伪造选项的前提下表达当前问题时，才退化为文字提问。首次退化时用一句话说明 `no-native-question-tool` 或 `unsupported-question-shape`，禁止静默降级。
+
+Stage 可以构造 `QuestionRequest`，但实际等待前由当前编排 frame 完成上述分发，并记录 `Delivery: native:<tool> | text-fallback:<reason>`。
+
+
 ### 提问格式
 
 向用户提出的决策问题统一使用引导式格式，不裸问：
@@ -168,7 +192,7 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 3. **选项**：2-4 个，每个附一句差异或代价；明确标注**推荐项和理由**，但不替用户选择。
 4. **自由输入出口**：明确告知可以不选任何选项、直接描述想法或大方向。
 
-问用户独有信息（业务规则、偏好、资源约束）时用开放问题，可附示例降低回答负担，不硬造选项。宿主有结构化提问工具时，推荐项排第一并标注，自由输入映射到其自定义输入机制。
+问用户独有信息（业务规则、偏好、资源约束）时用开放问题，可附示例降低回答负担，不硬造选项；是否使用原生工具只由上节分发契约决定。
 
 格式随用户对当前领域的熟悉度伸缩：Assisted 转入的卡点或用户自述不懂时用完整引导式（背景 + 选项 + 推荐），降低决策门槛；用户主导且熟悉的 Owner 领域内，开放问题 + 推荐即可，选项只在方案空间确实存在多个候选时列出，不为格式而造选项。两条路径的差异始终由 owner 分权决定（问多少、谁决定什么）；本格式只统一"怎么问"，不改变分权。
 
@@ -186,9 +210,20 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 
 只声明部分领域时，未声明领域默认 `owner: model`；无领域限定的 Owner 信号（"逐项问我"、"grill me"、"所有/全部设计都由我定"）视为全领域声明，把全部领域设为 `user`。若用户措辞对某个已 ready node 的 owner 真有冲突，只围绕该 node 问一次，不做全局模式访谈。
 
-提示已经明确时不再问模式问题。只有交互方式确实不清且会改变结果时，问一次：
+提示已经明确时不再问模式问题。只有交互方式确实不清且会改变结果时，构造并按“原生提问分发契约”发出一次：
 
-> 这部分你想自己逐项定，还是让我先调研并给出推荐设计？
+```yaml
+QuestionRequest:
+  id: decision-mode
+  question: 这部分由你逐项决定，还是由我先调研并给出推荐设计？
+  options:
+    - { id: owner, label: 我逐项决定, description: 真实 decision node 由我回答，Agent 每次只问一个 }
+    - { id: assisted, label: Agent 先设计, description: Agent 查明事实并处理明显优解，只把重大权衡交给我 }
+  recommended: assisted
+  free_form: true
+```
+
+更新等待状态后真实调用宿主工具；不得把以上问题或选项改写成普通 assistant blockquote。
 
 ### Assisted 的用户卡点
 
