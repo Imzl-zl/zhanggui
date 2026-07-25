@@ -20,6 +20,18 @@ disable-model-invocation: true
 
 ## 宿主调用契约
 
+### 文件定位
+
+本 skill 是目录包，必须整目录安装：`SKILL.md`、`stages/`、`RECOVERY.md` 缺一不可。本文件与各 stage 文档中的全部相对路径（`stages/...`、`RECOVERY.md`、stage 内同目录引用）一律相对**本 SKILL.md 所在目录**（下称 `<skill-dir>`）解析，与项目根和当前工作目录无关；访问文件时先用 `<skill-dir>` 拼出绝对路径再读取或执行。
+
+首次需要读取 stage 文件时按以下顺序确定 `<skill-dir>`：候选目录必须真实存在 `stages/` 才算命中（宿主注入的内容镜像可能不带文件包），否则继续下一序；命中后本会话内复用，不重复探测：
+
+1. 宿主加载本 skill 时提供的位置信息（base directory、skill 文件路径或等价字段）。
+2. 搜索特征路径 `**/stages/grilling/STAGE.md`：范围为项目根与用户主目录下的 skills 安装位置（`.agents/skills/`、`.claude/skills/`、`.codex/skills/`、`.gemini/skills/`、`.trae/skills/` 等宿主自有 skills/插件目录）。命中后回退两级得到候选目录，其中须存在 frontmatter 为 `name: zhanggui` 的 `SKILL.md`，该候选目录即 `<skill-dir>`。多处命中时优先项目根下的安装，其次用户主目录；同一优先级仍有多处时按一次一问请用户指定。
+3. 均未命中时报告"找不到 zhanggui 的 stage 检查单文件，无法按检查单执行"，并按一次一问节奏请用户给出安装路径。仅当用户明确表示不提供时，才在**显式声明降级**后以本文件已加载的编排规则加通用实践继续；禁止静默降级，禁止把降级输出当作按检查单执行的结果。
+
+### 阶段调用
+
 - 进入阶段时只读取对应的 `stages/<stage>/STAGE.md`；阶段结束时返回 state delta，由当前编排 frame 合并。task-root 采用与冷启动恢复细则在需要时读取同目录 `RECOVERY.md`，不常驻。
 - “返回编排器”表示继续执行已加载的本文件，绝不再次 invoke `/zhanggui`，也不要求用户输入下一条 slash command。
 - stage 不直接调用 sibling stage；它只能返回 `StageStatus` 和下一阶段建议，实际路由由本编排器决定。

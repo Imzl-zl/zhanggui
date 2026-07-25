@@ -98,10 +98,11 @@ npm test 2>&1 | grep 'DEBUG git init'
 
 If something appears during tests but you don't know which test:
 
-Use the bisection script `find-polluter.sh` in this directory:
+Use the bisection script `find-polluter.sh` in this directory (resolve against the skill directory, not the project root):
 
 ```bash
-./find-polluter.sh '.git' 'src/**/*.test.ts'
+SKILL_DIR="<absolute path of the zhanggui skill directory>"
+bash "$SKILL_DIR/stages/systematic-debugging/find-polluter.sh" '.git' 'src/**/*.test.ts'
 ```
 
 Runs tests one-by-one, stops at first polluter. See script for usage.
