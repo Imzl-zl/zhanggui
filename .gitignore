@@ -1,3 +1,4 @@
 # 仅供本地参考的第三方仓库（含独立 .git，不纳入本仓库）
 /skills/
 /superpowers/
+/.worktrees/
