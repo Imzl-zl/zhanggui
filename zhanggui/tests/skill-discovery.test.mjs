@@ -42,6 +42,35 @@ function parseFrontmatter(content) {
   return { metadata, body: match[2] };
 }
 
+function extractSection(content, startHeading, endHeading) {
+  const start = content.indexOf(startHeading);
+  assert.notEqual(start, -1, `missing ${startHeading}`);
+  const sectionStart = start + startHeading.length;
+  const end = endHeading ? content.indexOf(endHeading, sectionStart) : -1;
+  return content.slice(sectionStart, end === -1 ? content.length : end);
+}
+
+function assertDualModeContract(body) {
+  assert.match(body, /## Invocation Modes/);
+  const direct = extractSection(body, '### Direct', '### Zhanggui Embedded');
+  const embedded = extractSection(body, '### Zhanggui Embedded', '\n## ');
+
+  assert.match(direct, /\b(?:do not|does not|never|without|owns no)\b/i);
+  assert.match(direct, /(?:WorkflowState|tracker|return point|ReturnPhase|readiness)/i);
+  assert.match(embedded, /\/zhanggui/);
+  assert.match(embedded, /\b(?:return|returns|delta|preserve|preserves)\b/i);
+  assert.match(embedded, /(?:readiness|state|tracker|return point|return fields?)/i);
+
+  if (body.includes('## Completion Contracts')) {
+    const completion = extractSection(body, '## Completion Contracts');
+    assert.match(extractSection(completion, '### Direct', '### Zhanggui Embedded'), /```text/);
+    assert.match(extractSection(completion, '### Zhanggui Embedded'), /```text/);
+  } else {
+    assert.match(direct, /```text/);
+    assert.match(embedded, /```text/);
+  }
+}
+
 async function discoverSkillNames() {
   const entries = await readdir(skillsRoot, { withFileTypes: true });
   const names = [];
@@ -124,11 +153,43 @@ for (const { name: skillName, enabled } of leafSkills) {
     assert.equal(metadata.name, skillName);
     assert.match(metadata.description ?? '', /^Use when\b/);
     assert.equal(metadata['disable-model-invocation'], undefined);
-    assert.match(body, /## Invocation Modes/);
-    assert.match(body, /### Direct/);
-    assert.match(body, /### Zhanggui Embedded/);
+    assertDualModeContract(body);
   });
 }
+
+test('dual-mode contract rejects hollow mode headings', () => {
+  const hollow = [
+    '## Invocation Modes',
+    '### Direct',
+    'Run the procedure.',
+    '### Zhanggui Embedded',
+    'Run the procedure.',
+  ].join('\n');
+
+  assert.throws(() => assertDualModeContract(hollow));
+});
+
+test('worktree leaf delegates embedded decisions and never commits setup automatically', async () => {
+  const skillPath = path.join(skillsRoot, 'zhanggui-using-git-worktrees', 'SKILL.md');
+  const content = await readFile(skillPath, 'utf8');
+  const { body } = parseFrontmatter(content);
+
+  assert.doesNotMatch(body, /commit the isolated setup change/i);
+  assert.match(body, /without explicit user (?:consent|authorization)/i);
+  assert.match(body, /QuestionRequest/);
+  assert.match(body, /\/zhanggui[\s\S]*`awaiting`/);
+  assert.match(body, /StageStatus:[^\n]*awaiting-user/);
+  assert.equal(body.match(/^SetupChange:/gm)?.length, 2);
+});
+
+test('executing stage loads embedded leaf procedures without nested invocation', async () => {
+  const stagePath = path.join(skillsRoot, 'zhanggui', 'stages', 'executing-plans', 'STAGE.md');
+  const content = await readFile(stagePath, 'utf8');
+  const intro = content.split('## 加载形态')[0];
+
+  assert.doesNotMatch(intro, /不调用其他 skill/);
+  assert.match(intro, /Zhanggui Embedded/);
+});
 
 test('stateful routing stages remain internal', async () => {
   for (const stageName of statefulStages) {

@@ -17,6 +17,8 @@ For manual creation, choose `BranchName` from an explicit user name first, then 
 
 Use this mode only when `/zhanggui` supplies the current task goal and isolation trigger. Use the task goal for naming, return the workspace/baseline delta to the same execute or parallel-dispatch frame, and never set global readiness or select the next task.
 
+Any consent or failure-path decision follows mode ownership: Direct asks through the host and waits locally; Embedded returns a `QuestionRequest` with `StageStatus: awaiting-user`, then `/zhanggui` updates `awaiting` and owns native delivery before the wait. Embedded never asks the user directly.
+
 ## Core Principle
 
 Detect existing isolation first. Prefer host-native worktree tools. Use manual git worktrees only as a fallback. Never fight the host or nest isolation.
@@ -32,7 +34,7 @@ git branch --show-current
 
 - Different git/common dirs and no superproject path means this is already a linked worktree. Skip creation and continue with setup/baseline.
 - A superproject path means submodule, not worktree; treat it as a normal checkout.
-- In a normal checkout, honor an existing user worktree preference. Without one, ask once for consent. A refusal means work in place and continue with setup/baseline.
+- In a normal checkout, honor an existing user worktree preference. Without one, Direct asks once for consent; Embedded returns `QuestionRequest: worktree-consent` and waits through the root contract. A refusal means work in place and continue with setup/baseline.
 
 ## Step 1: Create Isolation
 
@@ -44,7 +46,7 @@ Use `EnterWorktree`, `WorktreeCreate`, `/worktree`, or an equivalent exposed hos
 
 Directory priority is explicit user preference, existing `.worktrees/`, existing `worktrees/`, then `.worktrees/`. Store the selected relative directory as `WORKTREE_DIR` and the full target as `WORKTREE_PATH="$WORKTREE_DIR/$BRANCH_NAME"`.
 
-Before creating a project-local worktree, verify the selected directory is ignored. If it is not ignored, add that exact directory to `.gitignore` and commit the isolated setup change before continuing.
+Before creating a project-local worktree, verify the selected directory is ignored. If it is not ignored, add that exact directory to `.gitignore`, rerun `git check-ignore`, leave the setup change uncommitted, and report it. Never stage or commit this change without explicit user authorization or a pre-existing project rule.
 
 ```bash
 git check-ignore -q "$WORKTREE_DIR"
@@ -63,7 +65,7 @@ Detect the repository's existing setup path and run it: `package.json` uses its 
 Run the project's actual test command before changing production files.
 
 - Passing baseline: record command, counts, and zero failures.
-- Failing baseline: report failures and ask whether to investigate or continue; do not silently proceed.
+- Failing baseline: report the failures. Direct asks whether to investigate or continue; Embedded returns `QuestionRequest: baseline-failure` with `StageStatus: awaiting-user` for root delivery. Never silently proceed.
 - No test command: record `Baseline: not available` with the repository evidence used to establish that fact. Never report it as passing.
 
 ## Red Flags
@@ -73,6 +75,8 @@ Run the project's actual test command before changing production files.
 - Creating a project-local worktree before verifying ignore rules.
 - Inventing a task or branch name with no stated rule.
 - Skipping setup/baseline, or continuing past a failing baseline without a decision.
+- Staging or committing `.gitignore` setup without explicit authorization.
+- Asking the user directly from Embedded mode instead of returning a `QuestionRequest` to `/zhanggui`.
 
 ## Completion Contracts
 
@@ -81,6 +85,7 @@ Run the project's actual test command before changing production files.
 ```text
 Workspace: 路径与分支；原地工作时明确写 in-place
 Baseline: 测试命令与结果，或 not available + evidence
+SetupChange: none | .gitignore modified-uncommitted
 Outcome: isolated | in-place | blocked
 ```
 
@@ -91,7 +96,9 @@ Report the workspace and stop. Do not claim that an unspecified task has started
 ```text
 Workspace: 路径与分支
 Baseline: 测试命令与结果，或 not available + evidence
-StageStatus: isolated | in-place | blocked
+SetupChange: none | .gitignore modified-uncommitted
+QuestionRequest: worktree-consent | baseline-failure（仅 awaiting-user）
+StageStatus: isolated | in-place | blocked | awaiting-user
 ```
 
 `/zhanggui` resumes the same frame after merging this delta. Branch integration and cleanup rules live in `../zhanggui-finishing-a-development-branch/SKILL.md`.

@@ -221,24 +221,24 @@ task_root / next / checkpoint
 
 Minimal 投影只含 `goal / intent / phase / readiness / next`，用于问答、评审和无需设计的 Transient。完整字段只在 Design/Discovery、prototype、跨会话或 detour 中启用；升级由机械触发点决定——新建 node/fog、写 return_point、写任务工件、phase 进入 design/discovery/prototype 前必须补齐，不做软判断。
 
-## 7. Stage 接口
+## 7. Supporting procedure 接口
 
-| Stage | 输入 | 局部输出 |
+| Procedure | 输入 | 局部输出 |
 |---|---|---|
-| design-assist | 完整 state + model node | resolved/new/pruned/ownership/prototype request |
-| grilling | 完整 state + user node | one question 或 user decision delta |
-| prototype | 完整 state + parent id + success signal | artifact/result/status |
-| writing-plans | settled state + durable/epic readiness | artifacts + plan-ready |
-| executing-plans | plan/tracker + task | task status/debug/design/verify request |
-| TDD | task + observable contract | Red/Green/Refactor evidence |
-| debugging | evidence + return_point | root cause/change/validation/return point |
-| verification | claim + acceptance + evidence + return_point | verified/not-verified + return target |
-| code-review | scope + contract + trigger + return_point | strengths/findings/verdict + return target |
-| finishing | verified 结论 + branch/workspace 状态 | 用户选项执行结果 + cleanup 状态 |
-| worktrees | 隔离触发条件 | workspace/baseline + isolated/in-place |
-| dispatch | 独立域划分 + 每 agent scope | 派发计划/结果核实/冲突/集成验证 |
+| design-assist stage | 完整 state + model node | resolved/new/pruned/ownership/prototype request |
+| grilling stage | 完整 state + user node | one question 或 user decision delta |
+| prototype stage | 完整 state + parent id + success signal | artifact/result/status |
+| writing-plans stage | settled state + durable/epic readiness | artifacts + plan-ready |
+| executing-plans stage | plan/tracker + task | task status/debug/design/verify request |
+| test-driven-development leaf | task + observable contract | Red/Green/Refactor evidence |
+| systematic-debugging leaf | evidence + return_point | root cause/change/validation/return point |
+| verification-before-completion leaf | claim + acceptance + evidence + return_point | verified/not-verified + return target |
+| requesting/receiving-code-review leaves | scope/feedback + contract + return fields | strengths/findings/verdict 或反馈处理 delta |
+| finishing-a-development-branch leaf | verified 结论 + branch/workspace 状态 | 用户选项执行结果 + cleanup 状态 |
+| using-git-worktrees leaf | 隔离触发条件 | workspace/baseline + isolated/in-place |
+| dispatching-parallel-agents leaf | 独立域划分 + 每 agent scope | 派发计划/结果核实/冲突/集成验证 |
 
-stage 输出永远是局部 delta，不是新的全局 ledger。
+内部 stage 和 leaf 的 `Zhanggui Embedded` 模式只返回局部 delta，不创建新的全局 ledger；leaf 的 Direct 模式按自身 Completion Contract 终止。
 design-drift 必须重开受影响 nodes，并按全局规则使旧 consensus 失效；设计收敛、重新 recap（如需）和 planning 后才能恢复原 execution task。任何新增/重开 node 或 fog 都把 confirmed 重置为 pending（仍有 user-owned decisions）或 not-required（没有）；只改事实文字属于 fact drift。
 
 ## 8. Readiness

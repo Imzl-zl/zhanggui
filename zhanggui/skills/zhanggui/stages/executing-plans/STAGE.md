@@ -1,7 +1,7 @@
 
 # Executing Plans — 单一真值执行阶段
 
-这是 `/zhanggui` 的 supporting stage，不是独立 skill。它接收已准备好的 Transient、Durable 或 Epic 工作，执行后返回 task delta；不创建第二套 tracker，也不调用其他 skill。
+这是 `/zhanggui` 的 supporting stage，不是独立 skill。它接收已准备好的 Transient、Durable 或 Epic 工作，执行后返回 task delta；不创建第二套 tracker，也不通过宿主发起 nested skill invocation。需要工程子流程时，按本文件的确定路径读取 sibling leaf 的 `Zhanggui Embedded` procedure，并把 delta 返回根 frame。
 
 所有 `.tasks/...` 路径按 `WorkflowState.task_root` 解析；恢复和 shape 升级必须沿用同一个根。
 
