@@ -43,7 +43,7 @@ Preserve `ReturnPhase` and `ReturnNode` unchanged in the output. Debug does not 
 - 构建失败
 - 集成问题
 
-多个互不相关的失败可按 `../zhanggui/stages/dispatching-parallel-agents/STAGE.md` 并行调查，每个失败域一个 agent。
+多个互不相关的失败可读取 `../zhanggui-dispatching-parallel-agents/SKILL.md` 并行调查，每个失败域一个 agent。
 
 **特别推荐**：
 - 时间压力下（紧急时猜测诱人但更慢）

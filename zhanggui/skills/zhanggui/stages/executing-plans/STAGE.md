@@ -51,7 +51,7 @@ TODO → IN_PROGRESS → DONE
 - `DONE` 必须有当前 `validation` 的新鲜证据。
 - 失败时保留 `IN_PROGRESS` 或标记 `FAILED`，在 notes 记录错误、已验证假设和下一策略。
 - 串行 Durable 同一时刻最多一个 `IN_PROGRESS`；使用并行派发时允许多个写范围不冲突的行同时 `IN_PROGRESS`，但每行仍需独立 diff 与 validation 核实。
-- Epic 只有在写范围互不冲突、依赖已完成时才能并行多个子任务；并行派发按 `../dispatching-parallel-agents/STAGE.md` 执行，子代理结果必须经 diff 与 validation 核实，不信任报告。
+- Epic 只有在写范围互不冲突、依赖已完成时才能并行多个子任务；并行派发读取 `../../../zhanggui-dispatching-parallel-agents/SKILL.md` 的 `Zhanggui Embedded` 模式，子代理结果必须经 diff 与 validation 核实，不信任报告。
 
 ## 每个任务的执行循环
 
