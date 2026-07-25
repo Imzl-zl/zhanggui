@@ -1,9 +1,21 @@
+---
+name: zhanggui-systematic-debugging
+description: Use when encountering a bug, test failure, build failure, performance problem, or unexpected behavior before proposing or implementing a fix
+---
 
-# 系统化调试
+# Systematic Debugging
 
-这是 `/zhanggui` 的 supporting stage，不是独立 skill。进入时接收完整失败证据以及 `ReturnPhase`、`ReturnNode`；结束时返回 debug delta，由当前编排 frame 恢复原阶段。
+## Invocation Modes
 
-## 输入和返回点
+### Direct
+
+Use this mode when the skill is activated from the catalog or invoked explicitly. Establish `Symptom` and `Evidence` from the request, repository, environment, and a reproducible run. Do not require or invent `WorkflowState`, `ReturnPhase`, `ReturnNode`, or global `Readiness`.
+
+Run the four phases through a standalone outcome. `resolved`, `blocked`, and `architecture-review-required` are terminal results for this invocation; do not pretend another router will resume the work.
+
+### Zhanggui Embedded
+
+Use this mode only when `/zhanggui` loads this file as a supporting procedure and supplies:
 
 ```text
 Symptom: 可复现的失败
@@ -12,7 +24,7 @@ ReturnPhase: route | discovery | design | prototype | execute | verify
 ReturnNode: decision id | prototype parent id | task id | validation id
 ```
 
-debug 不设置全局 `Readiness`。设计/原型中的失败解决后回原 decision node；执行失败回原 task；顶层 bug 请求（debug 即主线，无先行阶段）`ReturnPhase` 写 `route`、`ReturnNode` 留空，修复后按意图路由继续执行路径。
+Preserve `ReturnPhase` and `ReturnNode` unchanged in the output. Debug does not set global `Readiness`: design/prototype failures return to the original decision node, execution failures return to the original task, and a top-level bug uses `ReturnPhase: route` with an empty `ReturnNode`. The Zhanggui frame, not this skill, resumes routing.
 
 ## 核心原则
 
@@ -31,7 +43,7 @@ debug 不设置全局 `Readiness`。设计/原型中的失败解决后回原 dec
 - 构建失败
 - 集成问题
 
-多个互不相关的失败可按 `../dispatching-parallel-agents/STAGE.md` 并行调查，每个失败域一个 agent。
+多个互不相关的失败可按 `../zhanggui/stages/dispatching-parallel-agents/STAGE.md` 并行调查，每个失败域一个 agent。
 
 **特别推荐**：
 - 时间压力下（紧急时猜测诱人但更慢）
@@ -135,7 +147,7 @@ debug 不设置全局 `Readiness`。设计/原型中的失败解决后回原 dec
    - 不假装知道
    - 求助、研究
 
-永久生产 bugfix 在 Phase 4 写实现前同时遵守 `../test-driven-development/STAGE.md`；先让回归测试以正确原因失败，再修根因。用于调查的临时 probe 不等于生产实现。
+永久生产 bugfix 在 Phase 4 写实现前同时遵守 `../zhanggui/stages/test-driven-development/STAGE.md`；先让回归测试以正确原因失败，再修根因。用于调查的临时 probe 不等于生产实现。
 
 ### Phase 4：实现
 
@@ -236,7 +248,20 @@ debug 不设置全局 `Readiness`。设计/原型中的失败解决后回原 dec
 - `defense-in-depth.md`：多层验证
 - `condition-based-waiting.md`：条件轮询替代任意 timeout
 
-## 输出 delta
+## Completion Contracts
+
+### Direct
+
+```text
+RootCause: 已证实的根因和证据
+Change: 修复或设计事实；未修改时明确写 none
+Validation: 新鲜命令/场景及结果
+Outcome: resolved | blocked | architecture-review-required
+```
+
+报告实际结果后结束本次调用。没有编排 frame 时不得输出或伪造 `ReturnPhase`、`ReturnNode`。
+
+### Zhanggui Embedded
 
 ```text
 RootCause: 已证实的根因和证据
@@ -247,4 +272,4 @@ ReturnNode: 原 decision/prototype/task/validation id
 StageStatus: resolved | blocked | architecture-review-required
 ```
 
-`resolved` 只表示本次 debug 闭环；编排器必须回到 ReturnPhase 继续原流程。
+`resolved` 只表示本次 debug 闭环；`/zhanggui` 必须回到 `ReturnPhase` 继续原流程。本 skill 不自行切换 phase、清空 return point 或设置 readiness。

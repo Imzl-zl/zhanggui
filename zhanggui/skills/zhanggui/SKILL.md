@@ -4,13 +4,13 @@ description: Use when starting any development effort - an idea, bug, plan, revi
 disable-model-invocation: true
 ---
 
-# Zhanggui（掌柜）- 单入口编排器
+# Zhanggui（掌柜）- 有状态编排器
 
-用户只调用一次 `/zhanggui`。本 skill 保持为整个会话的编排 frame；设计、原型、计划、执行、调试和验证只是按需读取的内部 stage 文档，不是可独立调用的 skill。
+用户只调用一次 `/zhanggui`。本 skill 是整个会话唯一拥有 `WorkflowState`、decision frontier、consensus、return point 和最终 readiness 的编排 frame。有状态设计/计划/执行步骤保留为内部 `STAGE.md`；可独立闭环的过程以 sibling leaf skill 暴露，直接调用时自行结束，由本编排器加载时只按 `Zhanggui Embedded` 契约返回局部 delta。
 
 ## 核心纪律优先级
 
-本文件与各 stage 的规则发生冲突、或同一轮命中多条规则无法兼顾时，按下表小序号胜出裁决，不逐条权衡：
+本文件与各 supporting procedure 的规则发生冲突、或同一轮命中多条规则无法兼顾时，按下表小序号胜出裁决，不逐条权衡：
 
 1. **用户所有权**：user-owned decision 未经用户回答不得替用户决定；推荐只是信息，不是默认答案。user-owned 领域内拿不准是可查事实还是真实决策时，按决策处理。
 2. **单一真值**：任一范围只有一个状态真值；候选、镜像或会话记忆与真值分歧时以真值为准。
@@ -22,19 +22,21 @@ disable-model-invocation: true
 
 ### 文件定位
 
-本 skill 是目录包，必须整目录安装：`SKILL.md`、`stages/`、`RECOVERY.md` 缺一不可。本文件与各 stage 文档中的全部相对路径（`stages/...`、`RECOVERY.md`、stage 内同目录引用）一律相对**本 SKILL.md 所在目录**（下称 `<skill-dir>`）解析，与项目根和当前工作目录无关；访问文件时先用 `<skill-dir>` 拼出绝对路径再读取或执行。
+完整运行单元是 plugin 的整个 `skills/` collection：`zhanggui/SKILL.md`、`zhanggui/stages/`、`zhanggui/RECOVERY.md` 以及 Stage 导航表引用的 sibling leaf skill 缺一不可。`stages/...`、`RECOVERY.md` 相对**本 SKILL.md 所在目录**（下称 `<skill-dir>`）解析；`../zhanggui-.../SKILL.md` 也从 `<skill-dir>` 解析。与项目根和当前工作目录无关，访问前先拼出绝对路径。
 
-首次需要读取 stage 文件时按以下顺序确定 `<skill-dir>`：候选目录必须真实存在 `stages/` 才算命中（宿主注入的内容镜像可能不带文件包），否则继续下一序；命中后本会话内复用，不重复探测：
+首次需要读取 supporting procedure 时按以下顺序确定 `<skill-dir>`：候选目录必须真实存在 `stages/` 才算命中（宿主注入的内容镜像可能不带文件包），否则继续下一序；命中后本会话内复用，不重复探测：
 
 1. 宿主加载本 skill 时提供的位置信息（base directory、skill 文件路径或等价字段）。
 2. 搜索特征路径 `**/stages/grilling/STAGE.md`：范围为项目根与用户主目录下的 skills 安装位置（`.agents/skills/`、`.claude/skills/`、`.codex/skills/`、`.gemini/skills/`、`.trae/skills/` 等宿主自有 skills/插件目录）。命中后回退两级得到候选目录，其中须存在 frontmatter 为 `name: zhanggui` 的 `SKILL.md`，该候选目录即 `<skill-dir>`。多处命中时优先项目根下的安装，其次用户主目录；同一优先级仍有多处时按一次一问请用户指定。
-3. 均未命中时报告"找不到 zhanggui 的 stage 检查单文件，无法按检查单执行"，并按一次一问节奏请用户给出安装路径。仅当用户明确表示不提供时，才在**显式声明降级**后以本文件已加载的编排规则加通用实践继续；禁止静默降级，禁止把降级输出当作按检查单执行的结果。
+3. 均未命中时报告"找不到 zhanggui 的 supporting procedure 文件，无法按检查单执行"，并按一次一问节奏请用户给出完整 skills collection 的安装路径。仅当用户明确表示不提供时，才在**显式声明降级**后以本文件已加载的编排规则加通用实践继续；禁止静默降级，禁止把降级输出当作按检查单执行的结果。
 
-### 阶段调用
+### Supporting procedure 加载
 
-- 进入阶段时只读取对应的 `stages/<stage>/STAGE.md`；阶段结束时返回 state delta，由当前编排 frame 合并。task-root 采用与冷启动恢复细则在需要时读取同目录 `RECOVERY.md`，不常驻。
+- Stage 导航表中的路径是唯一加载位置：有状态步骤读取 `stages/<stage>/STAGE.md`；dual-mode leaf 读取 `../zhanggui-.../SKILL.md` 并强制使用其中 `Zhanggui Embedded` 契约。不要靠名称猜路径。
+- 编排器读取 leaf 文件是当前 frame 内的 procedure load，不是新的 user command，也不依赖宿主提供 nested skill call/return stack。
+- supporting procedure 返回局部 delta 后由当前 frame 合并。task-root 与冷启动恢复细则在需要时读取同目录 `RECOVERY.md`，不常驻。
 - “返回编排器”表示继续执行已加载的本文件，绝不再次 invoke `/zhanggui`，也不要求用户输入下一条 slash command。
-- stage 不直接调用 sibling stage；它只能返回 `StageStatus` 和下一阶段建议，实际路由由本编排器决定。
+- supporting procedure 不直接路由 sibling；它只能返回自己的状态和下一动作建议，实际 phase、return point 和 readiness 由本编排器决定。
 
 ## WorkflowState - 唯一设计状态
 
@@ -123,7 +125,7 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 |---|---|---|
 | 继续/恢复、提供 checkpoint，或存在活动 tracker | 按冷启动优先序 hydrate 设计/drift/execution 真值 | checkpoint 对应 phase |
 | 问答、研究、解释、评审且不改文件 | 直接处理，不建 tracker；代码评审请求按 `code-review` stage 检查单出报告；完成后 `stop` | route |
-| Bug、测试失败、异常行为 | 读取 `systematic-debugging`；保存 return point | debug |
+| Bug、测试失败、异常行为 | 保存 return point；读取 `../zhanggui-systematic-debugging/SKILL.md` 的 `Zhanggui Embedded` 模式 | debug |
 | 已有可执行计划或明确任务清单 | 复用现有真值，不新建第二套 | execute |
 | 部分计划、笔记或不完整 TODO | 先做可执行性检查 | route |
 | 目标明确、局部、无重大设计 | 建 Transient 会话 plan | execute |
@@ -325,7 +327,7 @@ Owner/grill-me 领域内只能跳过：
 | `phase = plan` ∧ `readiness ∈ {durable-plan, epic-plan}` | `stages/writing-plans/STAGE.md` |
 | `phase = execute`（Transient 直入；Durable/Epic 需 plan-ready） | `stages/executing-plans/STAGE.md` |
 | `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `stages/test-driven-development/STAGE.md` |
-| `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `stages/systematic-debugging/STAGE.md` |
+| `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `../zhanggui-systematic-debugging/SKILL.md`（Zhanggui Embedded） |
 | `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `stages/verification-before-completion/STAGE.md` |
 | 完成门/任务级/ad-hoc 评审触发（同步子步骤，不占 return_point 单槽） | `stages/code-review/STAGE.md` |
 | verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `stages/finishing-a-development-branch/STAGE.md` |
