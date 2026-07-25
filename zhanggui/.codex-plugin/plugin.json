@@ -1,7 +1,7 @@
 {
   "name": "zhanggui",
-  "version": "0.4.0",
-  "description": "单入口开发工作流：以可恢复 WorkflowState 编排决策 owner、UI 原型、计划、执行、调试和验证",
+  "version": "0.5.0",
+  "description": "有状态单入口编排器与八个可独立发现的调试、TDD、验证、审查及交付技能",
   "author": {
     "name": "zhanglu"
   },
@@ -9,15 +9,18 @@
   "keywords": [
     "planning",
     "debugging",
+    "tdd",
     "verification",
+    "code-review",
+    "worktree",
     "workflow"
   ],
   "skills": "./skills/",
   "hooks": {},
   "interface": {
     "displayName": "Zhanggui（掌柜）",
-    "shortDescription": "一次调用完成路由、设计、计划、执行与验证",
-    "longDescription": "用户只需调用 /zhanggui。plugin 只发现这一个入口；入口在同一编排 frame 内维护可恢复 WorkflowState，按决策 owner 和 UI mode 读取 supporting stages。短任务使用最小会话状态，跨会话设计使用 DESIGN checkpoint，物化后由 SPEC/EPIC 接管设计真值，执行按 Transient/Durable/Epic 保持单一状态真值。",
+    "shortDescription": "单入口编排与八个可复用工程技能",
+    "longDescription": "完整开发工作流只需调用一次 /zhanggui；explicit-only 根入口在同一 frame 内维护可恢复 WorkflowState。八个 sibling leaf skills 可由宿主独立发现，也可按 Zhanggui Embedded 契约复用于调试、TDD、完成验证、请求/接收审查、worktree、并行派发和分支收尾。",
     "developerName": "zhanglu",
     "category": "Developer Tools",
     "capabilities": [
@@ -26,8 +29,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "先输入 /zhanggui 启动工作流，再直接描述你的想法或问题。",
-      "Type /zhanggui first, then describe your goal in plain language."
+      "完整工作流先输入 /zhanggui，再直接描述目标；窄任务也可直接描述，由宿主匹配对应 leaf skill。",
+      "Type /zhanggui for the full workflow, or describe a narrow task and let the host match a leaf skill."
     ],
     "brandColor": "#10B981",
     "screenshots": []

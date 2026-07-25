@@ -1,7 +1,7 @@
 # Skill 融合工作流设计
 
-**状态：** v0.4 权威设计文档  
-**日期：** 2026-07-22  
+**状态：** v0.5 权威设计文档  
+**日期：** 2026-07-25  
 **实现入口：** [`zhanggui/`](../README.md)
 
 ## 1. 背景
@@ -14,13 +14,14 @@
 4. UI 要么只能靠文字想象，要么每次都启动过重原型。
 5. 原 v0.2 把内部阶段注册成 model-invoked skill，但又要求它们返回 user-only router；宿主无法强制这个 re-entry。
 6. Mixed owner、prototype detour 和大而模糊设计缺少可恢复的决策依赖。
+7. v0.4 把成熟的调试、TDD、验证、审查和交付过程全部藏在根 skill 内，宿主无法按窄意图独立发现或复用。
 
 ## 2. 目标
 
-- 用户只需启动 `/zhanggui` 一次。
+- 用户启动完整工作流时只需调用 `/zhanggui` 一次。
 - 内部路由遵守宿主真实 invocation 规则。
-- 最终 runtime plugin 只发现一个 `zhanggui` SKILL，不暴露第二入口。
-- 模型默认使用代码、工具、文档和同类产品消除事实缺口。
+- runtime plugin 发现一个 explicit-only 有状态根技能与八个可独立匹配的 leaf skills。
+- leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 delta。
 - 决策 owner 可按业务、技术、UI 等领域分别设置。
 - 严格 Owner/grill-me 路径保持一次一问、用户决策、明确共识。
 - UI 可通过视觉原型、文字讨论或既有设计直接推进。
@@ -33,27 +34,37 @@
 - 不强制每个任务创建 spec、CSV、Epic 或 HTML 原型。
 - 不同时运行两套默认强编排入口。
 - 不把 prototype 直接升级为未经正式流程的生产实现。
-- 不把 supporting stage 暴露成额外 slash command。
+- 不把依赖共享 WorkflowState、frontier 或 readiness 的有状态 stage 暴露成独立 skill；只有能提供真实 Direct 终态契约的过程才成为 leaf。
 - 不用文件行数替代行为验证；Skill/设计文档不设 300 行硬上限。
 
 ## 4. 核心设计
 
-### 4.1 一个 user-invoked skill，多个 supporting stages
+### 4.1 一个默认编排入口、五个内部 stage、八个 discoverable leaves
 
-`/zhanggui` 是唯一默认入口。它在一次 invocation 后保持为整个会话的 orchestration frame。
+`/zhanggui` 是唯一默认强编排入口。它在一次 invocation 后保持为整个会话的 orchestration frame。
 
-内部阶段存为 `stages/<name>/STAGE.md`，没有 `SKILL.md`：
+依赖共享 WorkflowState 的阶段保存在 `skills/zhanggui/stages/<name>/STAGE.md`，没有 `SKILL.md`：
 
-- 入口根据条件按需读取一个 stage。
-- stage 返回 state delta。
-- 入口合并 delta、重算 frontier 和 readiness。
-- stage 不 invoke sibling，不重新 invoke `/zhanggui`。
+- `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 只能由根按条件读取。
+- stage 返回 state delta；根合并 delta、重算 frontier 和 readiness。
+- stage 不 invoke sibling，也不重新 invoke `/zhanggui`。
 
-这同时满足“单入口”和宿主约束：user-only skill 不需要被模型二次调用，内部 stage 也不会在工作流外误触发。
+可复用且能独立闭环的工程过程保存在 sibling `skills/zhanggui-*/SKILL.md`：
 
-task-root ownership 与冷启动恢复细则位于入口旁的 `RECOVERY.md`，只在第一次写盘前或存在恢复候选信号时读取；它不参与 discovery。
+- `systematic-debugging`、`test-driven-development`、`verification-before-completion`。
+- `requesting-code-review` 与 `receiving-code-review`。
+- `using-git-worktrees`、`dispatching-parallel-agents`、`finishing-a-development-branch`。
 
-`stages/code-review/` 做质量轴 + 忠实轴双向审查；finishing-a-development-branch、using-git-worktrees、dispatching-parallel-agents 是按需 stage。路由导航型架构下未加载的 stage 不占上下文，保留即近零成本。
+每个 leaf 都有宿主可匹配的 `Use when ...` description，并定义两个明确模式：
+
+- **Direct**：从用户请求推导输入，不创建 WorkflowState、return point、tracker、readiness 或假恢复字段；在自身结果上终止。
+- **Zhanggui Embedded**：只接受根提供的真实 frame 字段，返回局部 delta；根仍拥有共享状态、问题分发、tracker 更新和最终完成声称。
+
+根通过确定的 sibling 路径读取 Embedded procedure，不依赖宿主支持 nested skill invocation。这样既保留单一默认编排 frame，也让窄任务能被宿主独立发现；leaf 不是要求用户手工接力的一组主线命令。
+
+完整可移植单元因此是整个 `skills/` collection，而不再只是 `skills/zhanggui/`。裸安装必须复制根与八个 sibling leaf 并保持布局。
+
+task-root ownership 与冷启动恢复细则仍位于根旁的 `RECOVERY.md`，只在第一次写盘前或存在恢复候选信号时读取；它不参与 discovery。Agent Skills 的渐进加载保证启动时只注入九个 frontmatter，实际匹配后才加载正文，未使用的 stage/leaf 不占完整上下文。
 
 ### 4.2 决策分权，而不是用户画像
 
@@ -279,10 +290,11 @@ DONE 必须有当前 validation 的新鲜证据。
 
 ## 10. Invocation 与隔离
 
-- plugin 只发现 `zhanggui/SKILL.md`；它同时设置 Claude `disable-model-invocation: true` 与 Codex `allow_implicit_invocation: false`。
-- skill 目录自包含（`stages/`、`RECOVERY.md` 在其内部）：同一份文件既作插件安装，也可整体复制到宿主 skills 目录作裸 skill 使用。Agent Skills 的三级渐进加载（启动只注入 frontmatter → 调用才加载 SKILL.md 正文 → 支撑文件按需 Read）保证未路由的 stage 不进上下文；两种形态不得同时启用。
-- explicit-only 是有意取舍：避免普通问答被重工作流接管。浅层 model router 无法调用 user-only 主入口，因此不新增第二入口。
-- 包括 TDD 在内的十二个主线阶段是 `STAGE.md`，不参与 discovery。
+- plugin 发现 `zhanggui/SKILL.md` 与八个 sibling leaf；只有根同时设置 Claude `disable-model-invocation: true` 与 Codex `allow_implicit_invocation: false`。
+- 根的 explicit-only 是有意取舍：避免普通问答被重工作流接管。用户启动完整流程后不需要再次输入命令。
+- leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过文件导航读取同一 leaf 的 `Zhanggui Embedded` 模式。
+- 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 sibling 布局。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
+- 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery；`RECOVERY.md` 同样只由根按需读取。
 - 不得同时启用另一套默认强编排入口。
 
 ### 10.1 Batch 与任务命名空间
@@ -295,13 +307,15 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 
 ## 11. 被否决方案
 
-### 模型可调用的内部 SKILL.md
+### 有状态内部 stage 直接注册为 model-invoked SKILL.md
 
-否决：只能靠 description 软门禁 active handoff，工作流外可能误触发；user-only router 也无法被 stage 二次调用。
+否决：依赖 active handoff、共享 WorkflowState 或返回 user-only router 的 stage 只能靠 description 软门禁，工作流外会误触发，宿主也无法强制 re-entry。
+
+这不排斥当前 dual-mode leaves：leaf 的 Direct 模式能在没有根 frame 时真实终结窄任务，Embedded 模式由根按文件加载且不夺取共享状态所有权。
 
 ### 多个 user-invoked 命令接力
 
-否决：用户需要反复输入 planning/execution 命令，违背单入口。
+否决作为默认主线：用户不应反复输入 planning/execution 命令。leaf 的独立调用是可选窄入口，不是 `/zhanggui` 阶段接力。
 
 ### Flat handoff
 
@@ -339,7 +353,7 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 12. 高风险/跨会话 -> Durable；多 deliverable -> Epic。
 13. 生产实现 -> TDD；throwaway prototype 排除；原型逻辑 lift 进生产走受控入口——先在生产模块写失败测试再接入，不以原型期验证抵扣。
 14. 完成声称 -> verification 使用新鲜证据。
-15. 运行 plugin discovery -> 只发现 `/zhanggui`，无其他入口。
+15. 运行 plugin discovery -> 发现 explicit-only `zhanggui` 与八个 dual-mode leaf；五个有状态 stage 不出现。
 16. Transient 小改 -> 只建立 minimal state，不生成空 decision graph。
 17. DESIGN cutover 中断 -> 删除前 DESIGN 仍胜出；SPEC 已存在后的 drift 只用 SPEC + PROGRESS。
 18. 冷启动有普通未完成 Durable/Epic -> 从 SPEC/EPIC + CSV + PROGRESS 恢复 execution。
@@ -365,12 +379,16 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 38. 宿主没有原生提问工具，或纯开放问题无法被其 schema 忠实表达 -> 记录明确 fallback reason 后只问一个文字问题，不伪造选项，不静默假装已弹框。
 39. Detached HEAD 的 finishing 选项删除 `local-merge` -> `recommended` 只能是仍存在的 `push-pr` 或 `keep`；无 PR 流程时推荐 `keep`，不得生成 schema 无效的推荐 id。
 40. finishing 收到无法等价到四个稳定 id 的自由输入 -> 保持同一 `finishing-choice` 未决并进入收敛循环；收敛前无动作、无临时第五 id，最终 `Choice` 仍是稳定 id。
+41. Direct leaf 在没有 Zhanggui frame 时 -> 从请求推导输入，不创建 WorkflowState/return point/readiness/tracker，输出自身终态。
+42. 同一 leaf 由根以 `Zhanggui Embedded` 加载 -> 只消费根提供的真实字段并返回 delta；根继续拥有共享状态、问题分发和完成声称。
+
 ## 13. 演进规则
-新增路由或 stage 前必须回答：
-1. 它解决的是新意图、新决策纪律，还是已有阶段实现细节？
-2. 能否作为 supporting stage 的条件分支，而不是新 skill？
-3. 是否会创建第二个状态真值？
-4. 是否会丢失 decision id、dependencies、owner、UI mode、consensus 或 return point？
-5. 是否把可查事实重新问给用户？
-6. 是否有失败场景证明当前设计不足？
-不能明确回答时不新增 skill。入口保持唯一，stage 保持局部，状态保持单一。
+新增路由、stage 或 leaf 前必须回答：
+1. 它解决的是新意图、新决策纪律，还是已有过程实现细节？
+2. 它是否依赖共享 WorkflowState、frontier、readiness、return point 或 tracker 所有权？依赖则保持内部 stage。
+3. 它能否在没有根 frame 时提供不造状态的真实 Direct 终态，同时在 Embedded 模式只返回 delta？不能则不建 leaf。
+4. 是否会创建第二个状态真值？
+5. 是否会丢失 decision id、dependencies、owner、UI mode、consensus 或 return point？
+6. 是否把可查事实重新问给用户？
+7. 是否有失败场景证明当前设计不足，并有 discovery、Direct、Embedded 和路径解析验证？
+不能明确回答时不新增入口。默认强编排器保持唯一，有状态 stage 保持局部，leaf 保持双模式与无状态所有权。
