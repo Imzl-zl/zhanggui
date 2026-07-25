@@ -147,7 +147,7 @@ Preserve `ReturnPhase` and `ReturnNode` unchanged in the output. Debug does not 
    - 不假装知道
    - 求助、研究
 
-永久生产 bugfix 在 Phase 4 写实现前同时遵守 `../zhanggui/stages/test-driven-development/STAGE.md`；先让回归测试以正确原因失败，再修根因。用于调查的临时 probe 不等于生产实现。
+永久生产 bugfix 在 Phase 4 写实现前同时遵守 `../zhanggui-test-driven-development/SKILL.md`；先让回归测试以正确原因失败，再修根因。用于调查的临时 probe 不等于生产实现。
 
 ### Phase 4：实现
 

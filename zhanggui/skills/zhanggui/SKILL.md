@@ -326,7 +326,7 @@ Owner/grill-me 领域内只能跳过：
 | 编排器接受 PrototypeRequest，`prototype.parent_id` 已写入 | `stages/prototype/STAGE.md` |
 | `phase = plan` ∧ `readiness ∈ {durable-plan, epic-plan}` | `stages/writing-plans/STAGE.md` |
 | `phase = execute`（Transient 直入；Durable/Epic 需 plan-ready） | `stages/executing-plans/STAGE.md` |
-| `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `stages/test-driven-development/STAGE.md` |
+| `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `../zhanggui-test-driven-development/SKILL.md`（Zhanggui Embedded） |
 | `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `../zhanggui-systematic-debugging/SKILL.md`（Zhanggui Embedded） |
 | `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `stages/verification-before-completion/STAGE.md` |
 | 完成门/任务级/ad-hoc 评审触发（同步子步骤，不占 return_point 单槽） | `stages/code-review/STAGE.md` |
@@ -334,7 +334,7 @@ Owner/grill-me 领域内只能跳过：
 | `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `stages/using-git-worktrees/STAGE.md` |
 | 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `stages/dispatching-parallel-agents/STAGE.md` |
 
-Transient 直接进入 execution stage；Durable/Epic 先进入 planning stage。执行 stage 对永久生产功能和 bugfix 必须在写实现前加载 TDD stage；throwaway prototype 不加载。
+Transient 直接进入 execution stage；Durable/Epic 先进入 planning stage。永久生产功能和 bugfix 在写实现前读取 `../zhanggui-test-driven-development/SKILL.md` 的 `Zhanggui Embedded` 模式；throwaway prototype 不加载。
 
 ### Design drift 唯一路径
 

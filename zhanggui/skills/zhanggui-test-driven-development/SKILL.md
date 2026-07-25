@@ -1,11 +1,29 @@
+---
+name: zhanggui-test-driven-development
+description: Use when implementing a production feature, bug fix, refactor, or behavior change before writing implementation code
+---
 
 # Test-Driven Development (TDD)
 
-这是 `/zhanggui` execution 的 supporting stage，不是独立 skill。永久生产功能、bugfix、refactor 或行为变化必须在写实现代码前读取本文件；throwaway prototype 不进入本 stage。
+## Invocation Modes
 
-输入包含当前 task id、observable contract、boundary 和 validation。Red/Green/Refactor 结果返回同一 execution task，不能改变 WorkflowState 的 owner、design decisions 或全局 readiness。
+### Direct
 
-## 概述
+Use this mode when the skill is activated from the catalog or invoked explicitly. Derive the observable contract and validation from the request and repository. Do not invent a Zhanggui task id, execution return envelope, `WorkflowState`, task notes, or readiness.
+
+Direct mode never grants a silent exemption. If the request explicitly establishes that the work is throwaway prototype code, generated output, or configuration with no production behavior, state that this skill does not apply and stop. If classification is uncertain, apply the full Red-Green-Refactor loop.
+
+### Zhanggui Embedded
+
+Use this mode only when `/zhanggui` loads this file with the current task id, observable contract, boundary, and validation. Return Red/Green/Refactor evidence to that same task; do not change owners, design decisions, return points, or global readiness.
+
+The orchestrator decides applicability before loading this procedure:
+
+- Throwaway prototype work is excluded before this skill loads.
+- Generated code or configuration may be exempted only from the task boundary and validation, with the assumption recorded by the orchestrator.
+- Lifting prototype logic into production is not exempt: write the failing production test before connecting the lifted module.
+
+## Overview
 
 先写测试。看它失败。再写最小实现让它通过。
 
@@ -15,18 +33,10 @@
 
 ## 适用范围
 
-**必须走 TDD：**
-
 - 新功能
 - Bug 修复
 - 重构
 - 行为变化
-
-**豁免（由编排器路由决定，不问用户）：**
-
-- Throwaway prototype——执行循环在加载前就排除，不会路由进本 stage。
-- 生成代码 / 配置文件——编排器按 task boundary 和 validation 豁免并记录 assumption；仅不可逆或高风险情形才升级给用户。
-- 原型逻辑 lift 不是豁免，是受控入口：验证过的原型纯逻辑模块进入生产前，先在生产模块按目标接口写失败测试（Red 因模块尚未接入而真实失败），再引入该模块使其通过（Green）。测试先于这段代码进入生产代码库，Iron Law 字面成立，无需按"删掉重来"处理；不带 Red 直接接线，或以原型期手动验证抵扣测试，都算违反。
 
 想着"就这一次跳过 TDD"？停。那是合理化。
 
@@ -327,4 +337,31 @@ PASS
 否则 → 不是 TDD
 ```
 
-豁免只由编排器按上文的路由和 boundary 规则授予并记入 task notes——绝不静默假设，也绝不默认推给用户。
+## Completion Contracts
+
+### Direct
+
+```text
+ObservableContract: 本次实现必须产生的行为
+RedEvidence: 测试名、预期失败及其确因功能缺失
+GreenEvidence: 最小实现与通过结果
+RefactorEvidence: 清理内容；无清理时写 none
+Validation: 相关测试与完整套件的新鲜结果
+Outcome: tdd-complete | blocked
+```
+
+报告实际证据后结束本次调用，不输出 task id、return fields 或 readiness。
+
+### Zhanggui Embedded
+
+```text
+TaskId: 编排器提供的原 task id
+ObservableContract: 原 contract
+RedEvidence: 测试名、预期失败及其确因功能缺失
+GreenEvidence: 最小实现与通过结果
+RefactorEvidence: 清理内容；无清理时写 none
+Validation: 原 task validation 的新鲜结果
+ProcedureStatus: tdd-complete | blocked
+```
+
+本 skill 只返回证据；`/zhanggui` 负责更新 task 状态和 task notes。

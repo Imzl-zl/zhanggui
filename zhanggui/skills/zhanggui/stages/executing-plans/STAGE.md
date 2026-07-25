@@ -57,7 +57,7 @@ TODO → IN_PROGRESS → DONE
 
 1. 重读磁盘真值（Durable 读 `TODO.csv`；Epic 读父 `SUBTASKS.csv` 与当前 child `TODO.csv`），再选择第一个依赖已满足的 `TODO` 或可重试 `FAILED`；不凭记忆中的行状态开工。
 2. 标记 `IN_PROGRESS`，同步磁盘真值和会话 plan。
-3. 永久生产功能、bugfix、refactor 或行为变化在写实现代码前读取 `../test-driven-development/STAGE.md`，按 Red-Green-Refactor 执行；throwaway prototype 不加载。
+3. 永久生产功能、bugfix、refactor 或行为变化在写实现代码前读取 `../../../zhanggui-test-driven-development/SKILL.md` 的 `Zhanggui Embedded` 模式，按 Red-Green-Refactor 执行；throwaway prototype 不加载。
 4. 按 boundary 实现，不做与目标无关的清理。
 5. 对每个 `sync_target` 使用符号 references、schema/route/config 搜索重新发现真实影响面；更新所有必要调用方。
 6. 运行该行 `validation`，阅读完整结果。

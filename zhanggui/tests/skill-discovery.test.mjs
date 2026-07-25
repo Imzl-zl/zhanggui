@@ -9,7 +9,7 @@ const skillsRoot = path.join(projectRoot, 'skills');
 
 const leafSkills = [
   { name: 'zhanggui-systematic-debugging', enabled: true },
-  { name: 'zhanggui-test-driven-development', enabled: false },
+  { name: 'zhanggui-test-driven-development', enabled: true },
   { name: 'zhanggui-verification-before-completion', enabled: false },
   { name: 'zhanggui-requesting-code-review', enabled: false },
   { name: 'zhanggui-receiving-code-review', enabled: false },
