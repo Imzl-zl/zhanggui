@@ -15,7 +15,7 @@ const leafSkills = [
   { name: 'zhanggui-receiving-code-review', enabled: true },
   { name: 'zhanggui-using-git-worktrees', enabled: true },
   { name: 'zhanggui-dispatching-parallel-agents', enabled: true },
-  { name: 'zhanggui-finishing-a-development-branch', enabled: false },
+  { name: 'zhanggui-finishing-a-development-branch', enabled: true },
 ];
 
 const statefulStages = [

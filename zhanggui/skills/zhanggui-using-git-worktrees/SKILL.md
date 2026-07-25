@@ -94,4 +94,4 @@ Baseline: 测试命令与结果，或 not available + evidence
 StageStatus: isolated | in-place | blocked
 ```
 
-`/zhanggui` resumes the same frame after merging this delta. Cleanup rules remain in `../zhanggui/stages/finishing-a-development-branch/STAGE.md` until that procedure is loaded.
+`/zhanggui` resumes the same frame after merging this delta. Branch integration and cleanup rules live in `../zhanggui-finishing-a-development-branch/SKILL.md`.

@@ -333,7 +333,7 @@ Owner/grill-me 领域内只能跳过：
 | `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `../zhanggui-verification-before-completion/SKILL.md`（Zhanggui Embedded） |
 | 完成门/任务级/ad-hoc 请求审查（同步子步骤，不占 return_point 单槽） | `../zhanggui-requesting-code-review/SKILL.md`（Zhanggui Embedded） |
 | 收到外部代码审查反馈（同步子步骤，不占 return_point 单槽） | `../zhanggui-receiving-code-review/SKILL.md`（Zhanggui Embedded） |
-| verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `stages/finishing-a-development-branch/STAGE.md` |
+| verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `../zhanggui-finishing-a-development-branch/SKILL.md`（Zhanggui Embedded） |
 | `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `../zhanggui-using-git-worktrees/SKILL.md`（Zhanggui Embedded） |
 | 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `../zhanggui-dispatching-parallel-agents/SKILL.md`（Zhanggui Embedded） |
 

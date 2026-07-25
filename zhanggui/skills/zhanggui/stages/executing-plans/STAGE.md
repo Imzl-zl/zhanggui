@@ -122,7 +122,7 @@ Next: 一个明确动作
 2. Durable/Epic 把 `FinalizationStatus` 设为 `pending-validation`；Transient 不创建该字段。随后根据会话验收或 SPEC/EPIC final validation 运行整体 smoke、相关测试、lint 或 build，只运行能证明本次声称的完整检查。
 3. 返回 `StageStatus: verification-required` 和完整证据；编排 frame 读取 `../../../zhanggui-verification-before-completion/SKILL.md` 的 `Zhanggui Embedded` 模式核对需求与证据。
 4. `not-verified` 记录 gaps 并回原 task/debug，Durable/Epic 保持 `pending-validation`；`verified` 恢复 execution 后，Durable/Epic 改为 `pending-cleanup`，Transient 继续完成会话交付。
-5. 未被用户要求时不自行 commit、push 或创建 PR；工作在独立分支/worktree 上或用户要求收尾时，读取 `../finishing-a-development-branch/STAGE.md` 呈现收尾选项并执行用户选择。
+5. 未被用户要求时不自行 commit、push 或创建 PR；工作在独立分支/worktree 上或用户要求收尾时，读取 `../../../zhanggui-finishing-a-development-branch/SKILL.md` 的 `Zhanggui Embedded` 模式呈现收尾选项并执行用户选择。
 6. 项目已有 memory/archive 约定时，将关键决策、根因和坑点写入该位置；没有约定但本次产生了可复用的领域决策或坑点时，问一次是否创建轻量沉淀文件（如 `docs/DECISIONS.md`），用户拒绝则本 effort 内不再问。`SPEC.md` / `EPIC.md` 是否保留遵循项目文档约定；清理临时 raw 和无价值恢复信息。
 7. Transient 确认会话 plan 全部 completed 后结束。Durable/Epic 还要确认 CSV 没有未完成/失败行且 cleanup 已结束，设置 `FinalizationStatus: complete`；只有此后才可删除临时 `TODO.csv` / `SUBTASKS.csv`。`complete` 的 PROGRESS 可按项目归档约定保留或删除。
 
