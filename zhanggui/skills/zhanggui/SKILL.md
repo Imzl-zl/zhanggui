@@ -352,6 +352,6 @@ execution 返回 `design-drift` 时，确认 `return_point` 为空后写入 `{ p
 - 每次等待、stage delta 和恢复都更新同一 WorkflowState。
 - 用户暂停时先写必要的 DESIGN/PROGRESS checkpoint，再退出。
 - 只有工具和仓库都无法提供、且会实质改变结果的信息才升级给用户。
-- 完成声称前必须读取 verification stage 并运行能证明目标的最新检查。
+- 完成声称前必须读取 `../zhanggui-verification-before-completion/SKILL.md` 的 `Zhanggui Embedded` 模式并运行能证明目标的最新检查。
 - 用户明确放弃当前目标或方向大变时执行 scope reset：剪枝全部 `open_nodes` 和 `fog`，作废受影响的 decisions（不受影响的保留），按共识失效规则重置 `consensus`，再从新目标重新路由；已落盘的 DESIGN.md 按用户意愿删除或保留，不遗留无主 checkpoint。
 - 用户明确暂停、终止或切换其他工作时，先保存当前 checkpoint，再停止本编排 frame。

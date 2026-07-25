@@ -59,6 +59,37 @@ async function discoverSkillNames() {
   return names.sort();
 }
 
+async function listMarkdownFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...await listMarkdownFiles(entryPath));
+    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      files.push(entryPath);
+    }
+  }
+
+  return files;
+}
+
+test('all relative skill navigation paths resolve', async () => {
+  const markdownFiles = await listMarkdownFiles(skillsRoot);
+  const navigationPath = /`((?:\.\.?\/)+[^`\r\n]*?(?:SKILL|STAGE)\.md)`/g;
+
+  for (const sourcePath of markdownFiles) {
+    const content = await readFile(sourcePath, 'utf8');
+    for (const match of content.matchAll(navigationPath)) {
+      if (match[1].includes('...') || match[1].includes('<')) continue;
+      const targetPath = path.resolve(path.dirname(sourcePath), match[1]);
+      const relation = `${path.relative(projectRoot, sourcePath)} -> ${match[1]}`;
+      await assert.doesNotReject(access(targetPath), relation);
+    }
+  }
+});
+
 test('plugin manifest registers the skills root', async () => {
   const manifest = JSON.parse(
     await readFile(path.join(projectRoot, '.codex-plugin', 'plugin.json'), 'utf8'),

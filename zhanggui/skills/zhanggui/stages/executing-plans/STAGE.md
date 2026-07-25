@@ -64,7 +64,7 @@ TODO → IN_PROGRESS → DONE
 7. 通过：写 `DONE`、`completed_at` 和关键 notes；更新 `PROGRESS.md` 恢复区。
    涉及安全、迁移或公开接口的高风险 task 可在标记 DONE 前读取 `../../../zhanggui-requesting-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式做任务级审查。
    所有任务尚未结束时保持 `FinalizationStatus: active`。
-8. 未通过：返回 `StageStatus: debug-required`、`ReturnPhase: execute`、当前 task id 和证据；编排 frame 读取 debugging stage，修复后恢复同一 task。
+8. 未通过：返回 `StageStatus: debug-required`、`ReturnPhase: execute`、当前 task id 和证据；编排 frame 读取 `../../../zhanggui-systematic-debugging/SKILL.md` 的 `Zhanggui Embedded` 模式，修复后恢复同一 task。
 9. 继续下一 dependency-ready 项。
 
 测试失败、依赖缺失或工具报错不是自动询问用户的理由。先调查并改变策略；只有工具和仓库都无法提供、且会实质改变设计的信息才升级给用户。
