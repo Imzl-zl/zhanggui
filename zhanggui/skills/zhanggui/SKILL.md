@@ -124,7 +124,8 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 | 情况 | 动作 | 初始阶段 |
 |---|---|---|
 | 继续/恢复、提供 checkpoint，或存在活动 tracker | 按冷启动优先序 hydrate 设计/drift/execution 真值 | checkpoint 对应 phase |
-| 问答、研究、解释、评审且不改文件 | 直接处理，不建 tracker；代码评审请求按 `code-review` stage 检查单出报告；完成后 `stop` | route |
+| 问答、研究、解释且不改文件 | 直接处理；完成后 `stop`，不建 tracker | route |
+| 请求代码审查且不改文件 | 读取 `../zhanggui-requesting-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式；报告后 `stop`，不建 tracker | route |
 | Bug、测试失败、异常行为 | 保存 return point；读取 `../zhanggui-systematic-debugging/SKILL.md` 的 `Zhanggui Embedded` 模式 | debug |
 | 已有可执行计划或明确任务清单 | 复用现有真值，不新建第二套 | execute |
 | 部分计划、笔记或不完整 TODO | 先做可执行性检查 | route |
@@ -329,7 +330,8 @@ Owner/grill-me 领域内只能跳过：
 | `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `../zhanggui-test-driven-development/SKILL.md`（Zhanggui Embedded） |
 | `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `../zhanggui-systematic-debugging/SKILL.md`（Zhanggui Embedded） |
 | `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `../zhanggui-verification-before-completion/SKILL.md`（Zhanggui Embedded） |
-| 完成门/任务级/ad-hoc 评审触发（同步子步骤，不占 return_point 单槽） | `stages/code-review/STAGE.md` |
+| 完成门/任务级/ad-hoc 请求审查（同步子步骤，不占 return_point 单槽） | `../zhanggui-requesting-code-review/SKILL.md`（Zhanggui Embedded） |
+| 收到外部代码审查反馈（同步子步骤，不占 return_point 单槽） | `stages/code-review/STAGE.md` |
 | verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `stages/finishing-a-development-branch/STAGE.md` |
 | `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `stages/using-git-worktrees/STAGE.md` |
 | 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `stages/dispatching-parallel-agents/STAGE.md` |

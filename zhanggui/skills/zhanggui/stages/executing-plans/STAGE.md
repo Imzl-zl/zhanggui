@@ -62,7 +62,7 @@ TODO → IN_PROGRESS → DONE
 5. 对每个 `sync_target` 使用符号 references、schema/route/config 搜索重新发现真实影响面；更新所有必要调用方。
 6. 运行该行 `validation`，阅读完整结果。
 7. 通过：写 `DONE`、`completed_at` 和关键 notes；更新 `PROGRESS.md` 恢复区。
-   涉及安全、迁移或公开接口的高风险 task 可在标记 DONE 前读取 `../code-review/STAGE.md` 做任务级审查。
+   涉及安全、迁移或公开接口的高风险 task 可在标记 DONE 前读取 `../../../zhanggui-requesting-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式做任务级审查。
    所有任务尚未结束时保持 `FinalizationStatus: active`。
 8. 未通过：返回 `StageStatus: debug-required`、`ReturnPhase: execute`、当前 task id 和证据；编排 frame 读取 debugging stage，修复后恢复同一 task。
 9. 继续下一 dependency-ready 项。
@@ -118,7 +118,7 @@ Next: 一个明确动作
 
 所有任务完成后：
 
-1. 命中 code-review 触发条件（安全、迁移、公开接口、存量数据、跨多文件、Epic child 完成、合并/交付前）时读取 `../code-review/STAGE.md`：Critical/Important findings 重开或新增任务行回执行循环（此时 `FinalizationStatus` 仍为 `active`），修复并重跑对应 validation；`review-passed` 或按该 stage 规则记录跳过理由后才继续。
+1. 命中 code-review 触发条件（安全、迁移、公开接口、存量数据、跨多文件、Epic child 完成、合并/交付前）时读取 `../../../zhanggui-requesting-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式：Critical/Important findings 重开或新增任务行回执行循环（此时 `FinalizationStatus` 仍为 `active`），修复并重跑对应 validation；`review-passed` 或按该 skill 规则记录跳过理由后才继续。
 2. Durable/Epic 把 `FinalizationStatus` 设为 `pending-validation`；Transient 不创建该字段。随后根据会话验收或 SPEC/EPIC final validation 运行整体 smoke、相关测试、lint 或 build，只运行能证明本次声称的完整检查。
 3. 返回 `StageStatus: verification-required` 和完整证据；编排 frame 读取 `../../../zhanggui-verification-before-completion/SKILL.md` 的 `Zhanggui Embedded` 模式核对需求与证据。
 4. `not-verified` 记录 gaps 并回原 task/debug，Durable/Epic 保持 `pending-validation`；`verified` 恢复 execution 后，Durable/Epic 改为 `pending-cleanup`，Transient 继续完成会话交付。

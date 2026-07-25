@@ -11,7 +11,7 @@ const leafSkills = [
   { name: 'zhanggui-systematic-debugging', enabled: true },
   { name: 'zhanggui-test-driven-development', enabled: true },
   { name: 'zhanggui-verification-before-completion', enabled: true },
-  { name: 'zhanggui-requesting-code-review', enabled: false },
+  { name: 'zhanggui-requesting-code-review', enabled: true },
   { name: 'zhanggui-receiving-code-review', enabled: false },
   { name: 'zhanggui-using-git-worktrees', enabled: false },
   { name: 'zhanggui-dispatching-parallel-agents', enabled: false },

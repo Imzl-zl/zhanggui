@@ -46,7 +46,7 @@ agents 返回后：
 
 ## 每任务审查（可选加强）
 
-高风险子任务完成后，在标记 DONE 前按 `../code-review/STAGE.md` 做任务级审查（忠实轴对照该行 goal+boundary），Critical/Important 修完再继续。避免问题在后续任务上层层复利。
+高风险子任务完成后，在标记 DONE 前按 `../../../zhanggui-requesting-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式做任务级审查（忠实轴对照该行 goal+boundary），Critical/Important 修完再继续。避免问题在后续任务上层层复利。
 
 ## 输出 delta
 
