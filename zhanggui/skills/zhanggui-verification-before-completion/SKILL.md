@@ -1,19 +1,29 @@
+---
+name: zhanggui-verification-before-completion
+description: Use when about to claim that work is complete, fixed, passing, or ready, before committing, pushing, opening a PR, or moving to the next task
+---
 
-# 完成前验证
+# Verification Before Completion
 
-这是 `/zhanggui` 的 supporting stage，不是独立 skill。它接收目标、验收条件、当前证据和调用方保存的 `return_point`，只负责判定声称是否成立；不能自行路由或扩大检查范围。
+## Invocation Modes
 
-进入前必须有：
+### Direct
+
+Use this mode when the skill is activated from the catalog or invoked explicitly. Establish the `Claim` and its `Acceptance` criteria from the request, plan, or observable contract, then gather fresh evidence. Do not require or invent `WorkflowState`, `return_point`, `ReturnPhase`, `ReturnNode`, or readiness.
 
 ```text
 Claim: 要声称的状态
-Acceptance: 对应验收条件
-Evidence: 已运行的命令/场景和当前结果
-ReturnPhase: 原阶段
-ReturnNode: 原 decision/prototype/task/validation id
+Evidence: 实际运行的命令/场景、exit code 和关键结果
+Coverage: 覆盖到的验收条件
+Gaps: 未验证或失败项
+Outcome: verified | not-verified
 ```
 
-输出固定为：
+`verified` allows the evidence-backed claim. `not-verified` reports the actual state and gaps, then ends this invocation without pretending another phase will resume it.
+
+### Zhanggui Embedded
+
+Use this mode only when `/zhanggui` supplies `Claim`, `Acceptance`, current `Evidence`, and a saved `return_point` containing `ReturnPhase` and `ReturnNode`.
 
 ```text
 Claim: 要声称的状态
@@ -21,11 +31,11 @@ Evidence: 实际运行的命令/场景、exit code 和关键结果
 Coverage: 覆盖到的验收条件
 Gaps: 未验证或失败项
 ReturnPhase: 原阶段
-ReturnNode: 原节点
+ReturnNode: 原 decision/prototype/task/validation id
 StageStatus: verified | not-verified
 ```
 
-只有 `verified` 才允许编排器作对应完成声称并清空 return point；`not-verified` 必须把 Gaps 合并回原 return point，恢复原阶段，不得成为死端。 
+Preserve the supplied return fields unchanged. On `verified`, `/zhanggui` may make the claim and clear the return point. On `not-verified`, `/zhanggui` merges `Gaps`, clears the detour slot, and restores the original work. This skill never routes, clears state, or expands verification beyond `Acceptance`.
 
 ## 核心原则
 

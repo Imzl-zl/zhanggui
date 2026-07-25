@@ -328,7 +328,7 @@ Owner/grill-me 领域内只能跳过：
 | `phase = execute`（Transient 直入；Durable/Epic 需 plan-ready） | `stages/executing-plans/STAGE.md` |
 | `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `../zhanggui-test-driven-development/SKILL.md`（Zhanggui Embedded） |
 | `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `../zhanggui-systematic-debugging/SKILL.md`（Zhanggui Embedded） |
-| `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `stages/verification-before-completion/STAGE.md` |
+| `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `../zhanggui-verification-before-completion/SKILL.md`（Zhanggui Embedded） |
 | 完成门/任务级/ad-hoc 评审触发（同步子步骤，不占 return_point 单槽） | `stages/code-review/STAGE.md` |
 | verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `stages/finishing-a-development-branch/STAGE.md` |
 | `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `stages/using-git-worktrees/STAGE.md` |
