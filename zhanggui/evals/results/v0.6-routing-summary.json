@@ -25,7 +25,7 @@
     {
       "name": "zhanggui-verification-before-completion",
       "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.16666666666666666,
+      "negative_trigger_rate": 0.1111111111111111,
       "failures": [
         {
           "kind": "negative",
@@ -38,13 +38,6 @@
           "kind": "negative",
           "prompt": "未验证分支现在直接合并",
           "run": 2,
-          "expected": "not zhanggui-verification-before-completion",
-          "actual": "zhanggui-verification-before-completion"
-        },
-        {
-          "kind": "negative",
-          "prompt": "未验证分支现在直接合并",
-          "run": 3,
           "expected": "not zhanggui-verification-before-completion",
           "actual": "zhanggui-verification-before-completion"
         }
@@ -82,6 +75,76 @@
     }
   ],
   "passed": true,
+  "catalog_snapshot": {
+    "source_head": "cfcace6c8e98483dcba282282a291b956cc62aa5",
+    "sha256": "bdb257ca31c84750624a1c452b7aba8d4ff85666cb83e86e58ebb706af7c9579",
+    "entries": [
+      {
+        "name": "zhanggui",
+        "description": "Use only when the user explicitly invokes /zhanggui; when present, this orchestrator MUST load before any leaf skill and own the complete stateful development workflow from design through verified delivery",
+        "implicit": false
+      },
+      {
+        "name": "zhanggui-systematic-debugging",
+        "description": "Use when encountering a bug, test failure, build failure, performance problem, or unexpected behavior before proposing or implementing a fix",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-test-driven-development",
+        "description": "Use when implementing a production feature, bug fix, refactor, or behavior change before writing implementation code",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-verification-before-completion",
+        "description": "Use when about to claim that work is complete, fixed, passing, or ready, before committing, pushing, opening a PR, or moving to the next task",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-requesting-code-review",
+        "description": "Use when a code change needs independent review before verification, merge, delivery, or continuing dependent work",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-receiving-code-review",
+        "description": "Use when receiving code review feedback before accepting, rejecting, or implementing reviewer suggestions",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-using-git-worktrees",
+        "description": "Use when starting isolated feature work, protecting a dirty checkout, separating parallel write scopes, or preparing to execute an implementation plan",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-dispatching-parallel-agents",
+        "description": "Use when two or more independent problem domains can be investigated or implemented concurrently without shared state or overlapping write scopes",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-finishing-a-development-branch",
+        "description": "Use when verified work on a branch or worktree needs an explicit decision to merge, push and open a PR, keep, or discard it",
+        "implicit": true
+      }
+    ]
+  },
+  "routing_evaluation": {
+    "model": "default",
+    "tool": "completion",
+    "scored_at": "2026-07-26T05:17:28.266069+00:00",
+    "scored_slots": 324,
+    "initial_attempts": 324,
+    "initial_successes": 317,
+    "initial_errors": 7,
+    "retry_waves": 1,
+    "retry_attempts": 7,
+    "retry_successes": 7,
+    "retry_errors_remaining_after_last_wave": 0,
+    "total_attempts": 331,
+    "transport_errors_scored": false,
+    "threshold": {
+      "positive_gt": 0.5,
+      "negative_lt": 0.5
+    }
+  },
   "host_acceptance": {
     "recorded_at": "2026-07-26T05:10:00Z",
     "cwd": "zhanggui",
