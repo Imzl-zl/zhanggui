@@ -200,5 +200,295 @@
       "root_false_positive_rate_lte": 0.1,
       "root_first_conflict_rate": 1
     }
+  },
+  "host_acceptance": {
+    "recorded_at": "2026-07-26T15:16:12.210Z",
+    "host": "omp",
+    "mode": "interactive-explicit-root+jsonl-hybrid+collection-fallback",
+    "profile": "existing authenticated profile",
+    "session_persistence": false,
+    "catalog_source_head": "987b432",
+    "catalog_digest": "ae68efe5da53352db28809611b44c2179077450e4d0e9f54b0a8d876c5f3d951",
+    "plugin_root": "C:/Users/zhanglu/Desktop/zhanggui/.worktrees/zhanggui-discoverable-leaf-skills/zhanggui",
+    "cases": [
+      {
+        "id": "native-root-explicit",
+        "kind": "native_activation_interactive",
+        "command": "omp --no-session --no-rules --plugin-dir <plugin-root> --skills zhanggui* --max-time 60",
+        "interactive_input": "/skill:zhanggui 设计并验证一个最小库存功能",
+        "expected_selected_skill": "zhanggui",
+        "session_id": null,
+        "session_id_reason": "--no-session interactive TUI does not expose a session id",
+        "temp_cwd": "C:/Users/zhanglu/AppData/Local/Temp/tmp.a44Kenz3AT",
+        "catalog_head_at_capture": "987b432",
+        "event_names": [
+          "tui_skill_injection"
+        ],
+        "activation_events": [
+          {
+            "event": "tui_skill_injection",
+            "display": "✦ skill zhanggui 设计并验证一个最小库存功能",
+            "path": "C:/Users/zhanglu/Desktop/zhanggui/.worktrees/zhanggui-discoverable-leaf-skills/zhanggui/skills/zhanggui/SKILL.md",
+            "lines": 434,
+            "timing": "before model work",
+            "mechanism": "host-direct body injection"
+          }
+        ],
+        "injected_skill": "zhanggui",
+        "injected_path": "skills/zhanggui/SKILL.md",
+        "first_skill": "zhanggui",
+        "root_first": true,
+        "pass": true,
+        "evidence_source": "Main interactive TUI run at head 987b432; file task-5-evidence/native-root-explicit-final.txt"
+      },
+      {
+        "id": "native-root-implicit",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --cwd <empty-temp> --plugin-dir <plugin-root> --skills \"zhanggui*\" --mode json --max-time 120 -p \"我只有一个模糊的库存产品想法，请先查清需求和约束，再设计、实现并验证交付\"",
+        "prompt": "我只有一个模糊的库存产品想法，请先查清需求和约束，再设计、实现并验证交付",
+        "expected_selected_skill": "zhanggui",
+        "session_id": "019f9ef6-d52f-7000-b89b-e0ce70f6b07e",
+        "temp_cwd": "C:\\Users\\zhanglu\\AppData\\Local\\Temp\\t5-final-host\\t5-implicit-xs9d5jml",
+        "event_names": [
+          "session",
+          "agent_start",
+          "turn_start",
+          "message_start",
+          "message_update",
+          "message_end",
+          "tool_execution_start",
+          "tool_execution_end",
+          "turn_end",
+          "agent_end"
+        ],
+        "activation_events": [
+          {
+            "event": "assistant_notice",
+            "text_prefix": "已自动进入 Zhanggui 完整工作流：",
+            "text": "已自动进入 Zhanggui 完整工作流：需求目前是模糊的库存产品想法，且明确要求从需求澄清、约束调查、设计、实现到验证交付的端到端闭环。我先加载工作流规范并盘点现有仓库与可运行形态，再基于证据收敛产品边界。",
+            "order_index": 107,
+            "timing": "before first non-skill tool"
+          },
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui",
+            "order_index": 108
+          }
+        ],
+        "first_skill": "zhanggui",
+        "announcement_observed": true,
+        "announcement_marker": "已自动进入 Zhanggui 完整工作流：",
+        "first_nonskill_tool": "todo",
+        "first_nonskill_order_index": 201,
+        "activated_skills": [
+          "zhanggui"
+        ],
+        "pass": true,
+        "evidence_file": "task-5-evidence/final-native-root-implicit.jsonl"
+      },
+      {
+        "id": "native-debug",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --cwd <empty-temp> --plugin-dir <plugin-root> --skills \"zhanggui*\" --mode json --max-time 120 -p \"这个单元测试失败了，先系统化调查根因\"",
+        "prompt": "这个单元测试失败了，先系统化调查根因",
+        "expected_selected_skill": "zhanggui-systematic-debugging",
+        "session_id": "019f9ef6-d70e-7000-824a-0a716220decf",
+        "temp_cwd": "C:\\Users\\zhanglu\\AppData\\Local\\Temp\\t5-final-host\\t5-debug-01j4ud5c",
+        "event_names": [
+          "session",
+          "agent_start",
+          "turn_start",
+          "message_start",
+          "message_update",
+          "message_end",
+          "tool_execution_start",
+          "tool_execution_end",
+          "turn_end",
+          "tool_execution_update",
+          "auto_retry_start",
+          "agent_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-systematic-debugging",
+            "order_index": 72
+          }
+        ],
+        "first_skill": "zhanggui-systematic-debugging",
+        "activated_skills": [
+          "zhanggui-systematic-debugging"
+        ],
+        "root_preceded": false,
+        "pass": true,
+        "evidence_file": "task-5-evidence/final-native-debug.jsonl"
+      },
+      {
+        "id": "native-root-conflict",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --cwd <empty-temp> --plugin-dir <plugin-root> --skills \"zhanggui*\" --mode json --max-time 120 -p \"Own this end-to-end permissions redesign: resolve the open decisions, implement it with TDD, and carry it through final verification.\"",
+        "prompt": "Own this end-to-end permissions redesign: resolve the open decisions, implement it with TDD, and carry it through final verification.",
+        "expected_selected_skill": "zhanggui",
+        "session_id": "019f9ef6-d72b-7000-8501-62472afe2231",
+        "temp_cwd": "C:\\Users\\zhanglu\\AppData\\Local\\Temp\\t5-final-host\\t5-conflict-zychi183",
+        "event_names": [
+          "session",
+          "agent_start",
+          "turn_start",
+          "message_start",
+          "message_update",
+          "message_end",
+          "tool_execution_start",
+          "tool_execution_end",
+          "turn_end",
+          "tool_execution_update",
+          "auto_retry_start",
+          "agent_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui",
+            "order_index": 100
+          }
+        ],
+        "first_skill": "zhanggui",
+        "activated_skills": [
+          "zhanggui"
+        ],
+        "leaf_before_root": false,
+        "pass": true,
+        "evidence_file": "task-5-evidence/final-native-root-conflict.jsonl"
+      },
+      {
+        "id": "native-review",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --cwd <empty-temp> --plugin-dir <plugin-root> --skills \"zhanggui*\" --mode json --max-time 120 -p \"Review this cross-module diff only; do not implement, plan, or own end-to-end delivery.\"",
+        "prompt": "Review this cross-module diff only; do not implement, plan, or own end-to-end delivery.",
+        "expected_selected_skill": "zhanggui-requesting-code-review",
+        "session_id": "019f9ef6-d5f1-7000-9523-3957d4d03fa9",
+        "temp_cwd": "C:\\Users\\zhanglu\\AppData\\Local\\Temp\\t5-final-host\\t5-review-wm4ilt28",
+        "event_names": [
+          "session",
+          "agent_start",
+          "turn_start",
+          "message_start",
+          "message_update",
+          "message_end",
+          "tool_execution_start",
+          "tool_execution_end",
+          "turn_end",
+          "tool_execution_update",
+          "auto_retry_start",
+          "agent_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-requesting-code-review",
+            "order_index": 70
+          }
+        ],
+        "first_skill": "zhanggui-requesting-code-review",
+        "activated_skills": [
+          "zhanggui-requesting-code-review"
+        ],
+        "root_preceded": false,
+        "pass": true,
+        "evidence_file": "task-5-evidence/final-native-review.jsonl"
+      },
+      {
+        "id": "fallback-debug",
+        "kind": "collection_fallback",
+        "command": "omp --no-session --no-rules --no-skills --cwd <empty-temp> --append-system-prompt <plugin-root>/skills/zhanggui/SKILL.md --add-dir <plugin-root>/skills --mode json --max-time 120 -p \"/zhanggui 调查一个测试失败；使用已安装 collection 的 fallback 加载调试流程。Installed collection root: <plugin-root>/skills\"",
+        "prompt": "/zhanggui 调查一个测试失败；使用已安装 collection 的 fallback 加载调试流程。Installed collection root: C:/Users/zhanglu/Desktop/zhanggui/.worktrees/zhanggui-discoverable-leaf-skills/zhanggui/skills",
+        "expected_selected_skill": "zhanggui-systematic-debugging",
+        "session_id": "019f9ef6-d67b-7000-a7ee-4fc66e9128c3",
+        "temp_cwd": "C:\\Users\\zhanglu\\AppData\\Local\\Temp\\t5-final-host\\t5-fallback-9swfk4vk",
+        "event_names": [
+          "session",
+          "agent_start",
+          "turn_start",
+          "message_start",
+          "message_update",
+          "message_end",
+          "tool_execution_start",
+          "tool_execution_end",
+          "tool_execution_update",
+          "turn_end",
+          "agent_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "C:/Users/zhanglu/Desktop/zhanggui/.worktrees/zhanggui-discoverable-leaf-skills/zhanggui/skills/zhanggui-systematic-debugging/SKILL.md",
+            "order_index": 81
+          },
+          {
+            "event": "tool_execution_end",
+            "toolName": "read",
+            "path": "C:/Users/zhanglu/Desktop/zhanggui/.worktrees/zhanggui-discoverable-leaf-skills/zhanggui/skills/zhanggui-systematic-debugging/SKILL.md",
+            "frontmatter_name": "zhanggui-systematic-debugging"
+          }
+        ],
+        "first_skill": "zhanggui-systematic-debugging",
+        "native_skill_uri_used": false,
+        "loaded_frontmatter_name": "zhanggui-systematic-debugging",
+        "pass": true,
+        "evidence_file": "task-5-evidence/final-fallback-debug.jsonl"
+      }
+    ],
+    "summary": {
+      "supported_cases_total": 6,
+      "supported_cases_passed": 6,
+      "supported_cases_failed": 0,
+      "unsupported_probes_recorded": 1,
+      "unsupported_probes_excluded_from_totals": true
+    },
+    "all_passed": true,
+    "known_host_limitations": {
+      "noninteractive_alias_probe": {
+        "id": "noninteractive-zhanggui-alias-probe",
+        "supported": false,
+        "excluded_from_supported_totals": true,
+        "command": "omp --no-session --no-rules --cwd <empty-temp> --plugin-dir <plugin-root> --skills \"zhanggui*\" --mode json --max-time 120 -p \"/zhanggui 设计并验证一个最小库存功能\"",
+        "prompt": "/zhanggui 设计并验证一个最小库存功能",
+        "session_id": "019f9ef6-d2ce-7000-9cbc-0e340fd52319",
+        "temp_cwd": "C:\\Users\\zhanglu\\AppData\\Local\\Temp\\t5-final-host\\t5-alias-993z6da6",
+        "event_names": [
+          "session",
+          "agent_start",
+          "turn_start",
+          "message_start",
+          "message_update",
+          "message_end",
+          "tool_execution_start",
+          "tool_execution_end",
+          "turn_end",
+          "auto_retry_start",
+          "agent_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui",
+            "order_index": 89
+          }
+        ],
+        "first_zhanggui_skill_event": "skill://zhanggui",
+        "activated_skills_in_order": [
+          "zhanggui"
+        ],
+        "pass": false,
+        "reason": "OMP noninteractive -p treats /zhanggui as plain model text, not host skill registration; not valid native-root evidence. Recorded only as known unsupported probe even when model later selects root.",
+        "evidence_file": "task-5-evidence/final-alias-probe.jsonl"
+      }
+    }
   }
 }

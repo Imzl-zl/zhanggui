@@ -283,3 +283,34 @@ test('v0.7 routing summary pins bounded transport retry policy', () => {
     );
   }
 });
+
+test('v0.7 host acceptance proves hybrid root and narrow leaf behavior', () => {
+  assert.ifError(summaryLoadError);
+  const host = summary.host_acceptance;
+  assert.equal(host.host, 'omp');
+  assert.equal(host.session_persistence, false);
+  assert.deepEqual(
+    host.cases.map(item => item.id),
+    [
+      'native-root-explicit',
+      'native-root-implicit',
+      'native-debug',
+      'native-root-conflict',
+      'native-review',
+      'fallback-debug',
+    ],
+  );
+  assert.ok(host.cases.every(item => item.pass === true));
+  assert.equal(host.cases.find(item => item.id === 'native-root-explicit').root_first, true);
+  assert.equal(host.cases.find(item => item.id === 'native-root-implicit').first_skill, 'zhanggui');
+  assert.equal(host.cases.find(item => item.id === 'native-root-implicit').announcement_observed, true);
+  assert.equal(host.cases.find(item => item.id === 'native-debug').first_skill, 'zhanggui-systematic-debugging');
+  assert.equal(host.cases.find(item => item.id === 'native-root-conflict').first_skill, 'zhanggui');
+  assert.equal(host.cases.find(item => item.id === 'native-review').first_skill, 'zhanggui-requesting-code-review');
+  assert.equal(host.summary.supported_cases_total, 6);
+  assert.equal(host.summary.supported_cases_passed, 6);
+  assert.equal(host.summary.supported_cases_failed, 0);
+  assert.equal(host.summary.unsupported_probes_recorded, 1);
+  assert.equal(host.summary.unsupported_probes_excluded_from_totals, true);
+  assert.equal(host.all_passed, true);
+});
