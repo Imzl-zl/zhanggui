@@ -26,7 +26,7 @@ const expectedThresholds = {
   root_first_conflict_rate: 1,
 };
 const APPROVED_CATALOG_SOURCE_HEAD =
-  'b6b7ee550ac2a38e6664ae0fe313988efc0e5a83';
+  '3df46d37c0d3c8c91cb633c38fb59f7b0d0cb1b1';
 const APPROVED_EVALUATOR_SYSTEM_PROMPT =
   'You are evaluating first-skill routing for an Agent Skills catalog. Based only on each catalog entry\'s name and description, the invocation source, and the user request, select the single skill that should load first. Return null when no skill applies. Do not execute any skill, solve the user\'s task, or select a later lifecycle substep. An explicit source means the user intentionally invoked the root named by the request; an implicit source contains no host command guarantee.';
 const APPROVED_EVALUATOR_USER_PROMPT_TEMPLATE = [

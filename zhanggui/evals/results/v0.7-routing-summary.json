@@ -4,51 +4,51 @@
   "total_cases": 122,
   "total_runs": 366,
   "rates": {
-    "explicit_root": 1,
-    "implicit_root": 1,
-    "root_false_positive": 0,
-    "root_first_conflict": 1
+    "explicit_root": 1.0,
+    "implicit_root": 1.0,
+    "root_false_positive": 0.0,
+    "root_first_conflict": 1.0
   },
   "leaf_baselines": [
     {
       "name": "zhanggui-systematic-debugging",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-test-driven-development",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-verification-before-completion",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-requesting-code-review",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-receiving-code-review",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-using-git-worktrees",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-dispatching-parallel-agents",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     },
     {
       "name": "zhanggui-finishing-a-development-branch",
-      "positive_trigger_rate": 1,
-      "negative_trigger_rate": 0
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
     }
   ],
   "failures": [],
@@ -58,12 +58,12 @@
     "case_count": 122
   },
   "catalog_snapshot": {
-    "source_head": "b6b7ee550ac2a38e6664ae0fe313988efc0e5a83",
-    "sha256": "a26ea522b801bcbe113ab4d1b980575a830ce8b904412694d51d4485e86b24b9",
+    "source_head": "3df46d37c0d3c8c91cb633c38fb59f7b0d0cb1b1",
+    "sha256": "656edda540e57379964315afd158fd221f05b48a027bf2088a82e505c13ec4ca",
     "entries": [
       {
         "name": "zhanggui",
-        "description": "Use when a development request is ambiguous, cross-module, multi-deliverable, checkpointed, or explicitly asks for end-to-end work from discovery or design through implementation and verified delivery. Also use when invoked explicitly. Do not use for isolated debugging, TDD, verification, review, review-feedback, worktree, parallel-agent, or branch-finishing requests handled by zhanggui-* skills.",
+        "description": "Use when a development request is ambiguous, cross-module, multi-deliverable, checkpointed, or explicitly asks for end-to-end work from discovery or design through implementation and verified delivery. Also use when invoked explicitly. Do not use for isolated debugging, TDD, verification, review, review-feedback, worktree, parallel-agent, or branch-finishing requests handled by zhanggui-* skills. When selected implicitly, begin with \"已自动进入 Zhanggui 完整工作流：\" plus the observed high-signal reason before any non-skill tool call.",
         "implicit": true
       },
       {
@@ -78,7 +78,7 @@
       },
       {
         "name": "zhanggui-verification-before-completion",
-        "description": "Use when an isolated claim of complete, fixed, passing, or ready needs fresh evidence before commit, push, PR, or task transition; do not use for requests that skip verification and merge or finish anyway; defer to the zhanggui root for explicit or end-to-end workflow ownership",
+        "description": "Use when an isolated claim of complete, fixed, passing, or ready needs fresh evidence before commit, push, PR, or task transition; do not use when the user explicitly skips verification, or when they state tests passed or verification completed and primarily request branch integration, because the finishing leaf owns its verification prerequisite; defer to the zhanggui root for explicit or end-to-end workflow ownership",
         "implicit": true
       },
       {
@@ -98,12 +98,12 @@
       },
       {
         "name": "zhanggui-dispatching-parallel-agents",
-        "description": "Use when two or more independent problem domains can run concurrently without shared state or overlapping writes; do not use when subagent capacity is unavailable or the user asks to pretend parallel work is finished; defer to the zhanggui root when parallel work belongs to an explicit, cross-module, or end-to-end workflow",
+        "description": "Use when two or more independent problem domains can run concurrently without shared state or overlapping writes, including separate root-cause investigations across different components; do not use when subagent capacity is unavailable or the user asks to pretend parallel work is finished; defer to the zhanggui root when parallel work belongs to an explicit, cross-module, or end-to-end workflow",
         "implicit": true
       },
       {
         "name": "zhanggui-finishing-a-development-branch",
-        "description": "Use when verified branch or worktree work only needs the explicit choice to merge, push a PR, keep, or discard; defer to the zhanggui root when finishing is the last step of an explicit or end-to-end workflow it owns",
+        "description": "Use when the user states tests passed or verification is complete, or verified branch or worktree work now needs the explicit choice to merge, push a PR, keep, or discard; do not use when the user explicitly says verification is missing; defer to the zhanggui root when finishing is the last step of an explicit or end-to-end workflow it owns",
         "implicit": true
       }
     ]
@@ -148,16 +148,16 @@
       ]
     },
     "evaluator_identity_sha256": "aab7a330719eb4a0ac6e585483351c350cc3c2d85eb564b808892132b8f4f12f",
-    "scored_at": "2026-07-26T07:54:54.070512+00:00",
+    "scored_at": "2026-07-26T11:24:21.872432+00:00",
     "scored_slots": 366,
     "initial_attempts": 366,
-    "initial_successes": 349,
-    "initial_errors": 17,
+    "initial_successes": 365,
+    "initial_errors": 1,
     "retry_waves": 1,
-    "retry_attempts": 17,
-    "retry_successes": 17,
+    "retry_attempts": 1,
+    "retry_successes": 1,
     "retry_errors_remaining_after_last_wave": 0,
-    "total_attempts": 383,
+    "total_attempts": 367,
     "transport_errors_scored": false,
     "thresholds": {
       "explicit_root_rate": 1,
