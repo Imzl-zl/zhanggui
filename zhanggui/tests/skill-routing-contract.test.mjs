@@ -76,3 +76,20 @@ test('root rejects invalid skill results instead of merging them', async () => {
     'state-ownership-violation',
   ]) assert.match(root, new RegExp(`\\b${code}\\b`));
 });
+
+test('internal stages request leaves through the root and contain no sibling skill loads', async () => {
+  const stagePath = path.join(skillsRoot, 'zhanggui', 'stages', 'executing-plans', 'STAGE.md');
+  const stage = await readFile(stagePath, 'utf8');
+  assert.doesNotMatch(stage, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
+  assert.match(stage, /StageStatus: skill-required/);
+  assert.match(stage, /SkillRequest:/);
+  for (const name of [
+    'zhanggui-using-git-worktrees',
+    'zhanggui-dispatching-parallel-agents',
+    'zhanggui-test-driven-development',
+    'zhanggui-requesting-code-review',
+    'zhanggui-systematic-debugging',
+    'zhanggui-verification-before-completion',
+    'zhanggui-finishing-a-development-branch',
+  ]) assert.match(stage, new RegExp(`\\b${name}\\b`));
+});
