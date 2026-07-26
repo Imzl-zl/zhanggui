@@ -15,6 +15,18 @@ Run the four phases through a standalone outcome. `resolved`, `blocked`, and `ar
 
 ### Zhanggui Embedded
 
+```text
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-systematic-debugging
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <actual procedure evidence-or-null>
+  delta: <existing procedure-specific output fields-or-null>
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
+```
+
 Use this mode only when `/zhanggui` loads this file as a supporting procedure and supplies:
 
 ```text
@@ -24,7 +36,7 @@ ReturnPhase: route | discovery | design | prototype | execute | verify
 ReturnNode: decision id | prototype parent id | task id | validation id
 ```
 
-Preserve `ReturnPhase` and `ReturnNode` unchanged in the output. Debug does not set global `Readiness`: design/prototype failures return to the original decision node, execution failures return to the original task, and a top-level bug uses `ReturnPhase: route` with an empty `ReturnNode`. The Zhanggui frame, not this skill, resumes routing.
+Preserve `ReturnPhase` and `ReturnNode` unchanged in the output delta. Debug does not set global `Readiness`: design/prototype failures return to the original decision node, execution failures return to the original task, and a top-level bug uses `ReturnPhase: route` with an empty `ReturnNode`. The Zhanggui frame, not this skill, resumes routing.
 
 ## 核心原则
 
@@ -43,7 +55,15 @@ Preserve `ReturnPhase` and `ReturnNode` unchanged in the output. Debug does not 
 - 构建失败
 - 集成问题
 
-多个互不相关的失败可读取 `../zhanggui-dispatching-parallel-agents/SKILL.md` 并行调查，每个失败域一个 agent。
+多个互不相关的失败可并行调查，每个失败域一个 agent：
+- Direct mode: activate the exact leaf name `zhanggui-dispatching-parallel-agents` through the host catalog; if the optional parallel capability is unavailable, execute serially and say so.
+- Embedded mode: return `SkillResult.status=skill-required` with `next_skill_request` set to the exact leaf; do not load sibling files directly.
+
+```text
+next_skill_request:
+  name: zhanggui-dispatching-parallel-agents
+  mode: zhanggui-embedded
+```
 
 **特别推荐**：
 - 时间压力下（紧急时猜测诱人但更慢）
@@ -147,7 +167,15 @@ Preserve `ReturnPhase` and `ReturnNode` unchanged in the output. Debug does not 
    - 不假装知道
    - 求助、研究
 
-永久生产 bugfix 在 Phase 4 写实现前同时遵守 `../zhanggui-test-driven-development/SKILL.md`；先让回归测试以正确原因失败，再修根因。用于调查的临时 probe 不等于生产实现。
+永久生产 bug fix 在 Phase 4 写实现前必须走 TDD；先让回归测试以正确原因失败，再修根因。用于调查的临时 probe 不等于生产实现。
+- Direct mode: activate the exact leaf name `zhanggui-test-driven-development` through the host catalog; TDD is required for production bug fix implementation and blocks if unavailable.
+- Embedded mode: return `SkillResult.status=skill-required` with `next_skill_request` set to the exact leaf; do not load sibling files directly.
+
+```text
+next_skill_request:
+  name: zhanggui-test-driven-development
+  mode: zhanggui-embedded
+```
 
 ### Phase 4：实现
 
@@ -264,12 +292,21 @@ Outcome: resolved | blocked | architecture-review-required
 ### Zhanggui Embedded
 
 ```text
-RootCause: 已证实的根因和证据
-Change: 修复或设计事实；未修改时明确写 none
-Validation: 新鲜命令/场景及结果
-ReturnPhase: 原阶段
-ReturnNode: 原 decision/prototype/task/validation id
-StageStatus: resolved | blocked | architecture-review-required
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-systematic-debugging
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <RootCause/Change/Validation 实际证据-or-null>
+  delta:
+    RootCause: 已证实的根因和证据
+    Change: 修复或设计事实；未修改时明确写 none
+    Validation: 新鲜命令/场景及结果
+    ReturnPhase: 原阶段
+    ReturnNode: 原 decision/prototype/task/validation id
+    StageStatus: resolved | blocked | architecture-review-required
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null；parallel 用 zhanggui-dispatching-parallel-agents，生产 bugfix 实现前用 zhanggui-test-driven-development>
 ```
 
-`resolved` 只表示本次 debug 闭环；`/zhanggui` 必须回到 `ReturnPhase` 继续原流程。本 skill 不自行切换 phase、清空 return point 或设置 readiness。
+`status: completed` with `delta.StageStatus: resolved` 只表示本次 debug 闭环；`/zhanggui` 必须回到 `ReturnPhase` 继续原流程。本 skill 不自行切换 phase、清空 return point 或设置 readiness。`skill-required` 时由根同步处理 `next_skill_request` 后恢复本 procedure。

@@ -15,6 +15,18 @@ Direct mode never grants a silent exemption. If the request explicitly establish
 
 ### Zhanggui Embedded
 
+```text
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-test-driven-development
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <actual procedure evidence-or-null>
+  delta: <existing procedure-specific output fields-or-null>
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
+```
+
 Use this mode only when `/zhanggui` loads this file with the current task id, observable contract, boundary, and validation. Return Red/Green/Refactor evidence to that same task; do not change owners, design decisions, return points, or global readiness.
 
 The orchestrator decides applicability before loading this procedure:
@@ -355,13 +367,22 @@ Outcome: tdd-complete | blocked
 ### Zhanggui Embedded
 
 ```text
-TaskId: 编排器提供的原 task id
-ObservableContract: 原 contract
-RedEvidence: 测试名、预期失败及其确因功能缺失
-GreenEvidence: 最小实现与通过结果
-RefactorEvidence: 清理内容；无清理时写 none
-Validation: 原 task validation 的新鲜结果
-ProcedureStatus: tdd-complete | blocked
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-test-driven-development
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <Red/Green/Refactor/Validation 实际证据-or-null>
+  delta:
+    TaskId: 编排器提供的原 task id
+    ObservableContract: 原 contract
+    RedEvidence: 测试名、预期失败及其确因功能缺失
+    GreenEvidence: 最小实现与通过结果
+    RefactorEvidence: 清理内容；无清理时写 none
+    Validation: 原 task validation 的新鲜结果
+    ProcedureStatus: tdd-complete | blocked
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
 ```
 
 本 skill 只返回证据；`/zhanggui` 负责更新 task 状态和 task notes。

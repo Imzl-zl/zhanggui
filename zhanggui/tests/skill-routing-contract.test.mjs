@@ -97,3 +97,30 @@ test('internal stages request leaves through the root and contain no sibling ski
     'zhanggui-finishing-a-development-branch',
   ]) assert.match(stage, new RegExp(`\\b${name}\\b`));
 });
+
+const coreLeafNames = [
+  'zhanggui-systematic-debugging',
+  'zhanggui-test-driven-development',
+  'zhanggui-verification-before-completion',
+  'zhanggui-requesting-code-review',
+  'zhanggui-receiving-code-review',
+];
+
+test('core leaves return identity-bearing Embedded SkillResult envelopes', async () => {
+  for (const name of coreLeafNames) {
+    const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
+    const embedded = section(content, '### Zhanggui Embedded', '\n## ');
+    for (const field of ['request_id', 'name', 'mode', 'status', 'evidence', 'delta', 'question_request', 'next_skill_request']) {
+      assert.match(embedded, new RegExp(`\\b${field}:`), `${name} missing ${field}`);
+    }
+    assert.match(embedded, new RegExp(`name: ${name}`));
+    assert.match(embedded, /mode: zhanggui-embedded/);
+  }
+});
+
+test('Embedded debugging requests parallel or TDD by name instead of loading sibling files', async () => {
+  const content = await readFile(path.join(skillsRoot, 'zhanggui-systematic-debugging', 'SKILL.md'), 'utf8');
+  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
+  assert.match(content, /next_skill_request:[\s\S]*zhanggui-dispatching-parallel-agents/);
+  assert.match(content, /next_skill_request:[\s\S]*zhanggui-test-driven-development/);
+});

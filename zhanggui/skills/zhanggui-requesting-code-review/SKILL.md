@@ -15,6 +15,18 @@ The review is read-only and ends with a human-facing report. Do not mutate the c
 
 ### Zhanggui Embedded
 
+```text
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-requesting-code-review
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <actual procedure evidence-or-null>
+  delta: <existing procedure-specific output fields-or-null>
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
+```
+
 Use this mode only when `/zhanggui` supplies:
 
 ```text
@@ -24,7 +36,7 @@ Trigger: completion-gate | per-task | ad-hoc | pre-merge
 ReturnPhase / ReturnNode: 从 execution 调用时提供
 ```
 
-This is a synchronous procedure, not a detour. Preserve supplied return fields, do not write `WorkflowState.return_point`, and leave `awaiting` and global readiness unchanged.
+This is a synchronous procedure, not a detour. Preserve supplied return fields inside `delta`, do not write `WorkflowState.return_point`, and leave `awaiting` and global readiness unchanged.
 
 ## When to Review
 
@@ -54,7 +66,7 @@ A single-file low-risk change, documentation-only edit, or throwaway prototype m
 - **Plan defect:** identify it explicitly; do not redesign inside the review.
 - **Incorrect reviewer claim:** rebut it with code, tests, or build evidence rather than accepting it performatively.
 
-All severities are report-only in this skill. In Embedded mode, emit the findings and `StageStatus`; `/zhanggui` or the execution loop decides which tasks to reopen, what notes to record, whether design drift applies, and when verification may begin.
+All severities are report-only in this skill. In Embedded mode, emit the findings and `delta.StageStatus`; `/zhanggui` or the execution loop decides which tasks to reopen, what notes to record, whether design drift applies, and when verification may begin.
 
 A passed review is not completion verification. Fresh verification remains mandatory.
 
@@ -75,11 +87,20 @@ Return the report and stop. Do not implement findings in this skill.
 ### Zhanggui Embedded
 
 ```text
-Scope: 实际审查范围
-Strengths: 做得好的具体点
-Findings: [{severity: critical|important|minor, file:line, what, why, fix}]
-ReturnPhase / ReturnNode: 原样返回（若调用方提供）
-StageStatus: review-passed | fixes-required | blocked
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-requesting-code-review
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <Scope/Strengths/Findings 实际证据-or-null>
+  delta:
+    Scope: 实际审查范围
+    Strengths: 做得好的具体点
+    Findings: [{severity: critical|important|minor, file:line, what, why, fix}]
+    ReturnPhase / ReturnNode: 原样返回（若调用方提供）
+    StageStatus: review-passed | fixes-required | blocked
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
 ```
 
 `/zhanggui` owns task reopening, design-drift routing, notes, and the transition to verification.

@@ -15,6 +15,18 @@ When feedback conflicts with a known user-owned architectural decision, identify
 
 ### Zhanggui Embedded
 
+```text
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-receiving-code-review
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <actual procedure evidence-or-null>
+  delta: <existing procedure-specific output fields-or-null>
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
+```
+
 Use this mode only when `/zhanggui` supplies:
 
 ```text
@@ -23,7 +35,7 @@ Context: 当前代码、约束和已确认设计
 ReturnPhase / ReturnNode: 从 execution 调用时提供
 ```
 
-This is a synchronous procedure, not a detour. Preserve supplied return fields, do not write `WorkflowState.return_point`, and leave `awaiting` and readiness unchanged. If feedback conflicts with an `owner:user` decision, return the conflict as `blocked`; `/zhanggui` owns recap and design changes.
+This is a synchronous procedure, not a detour. Preserve supplied return fields inside `delta`, do not write `WorkflowState.return_point`, and leave `awaiting` and readiness unchanged. If feedback conflicts with an `owner:user` decision, return the conflict as `blocked`; `/zhanggui` owns recap and design changes.
 
 ## Feedback Workflow
 
@@ -63,13 +75,22 @@ Return the technical resolution and stop without routing fields.
 ### Zhanggui Embedded
 
 ```text
-Clarifications: 仍需用户/审查者解释的条目
-Accepted: 核实正确的反馈及理由
-Rejected: 有证据反驳的反馈及理由
-Changes: 已完成的逐项改动
-Validation: 每项改动的新鲜验证
-ReturnPhase / ReturnNode: 原样返回
-StageStatus: feedback-resolved | changes-required | blocked
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-receiving-code-review
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <Clarifications/Accepted/Rejected/Changes/Validation 实际证据-or-null>
+  delta:
+    Clarifications: 仍需用户/审查者解释的条目
+    Accepted: 核实正确的反馈及理由
+    Rejected: 有证据反驳的反馈及理由
+    Changes: 已完成的逐项改动
+    Validation: 每项改动的新鲜验证
+    ReturnPhase / ReturnNode: 原样返回
+    StageStatus: feedback-resolved | changes-required | blocked
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
 ```
 
 This skill does not set readiness or privately change user-owned decisions. `/zhanggui` owns task state and subsequent routing.

@@ -23,19 +23,28 @@ Outcome: verified | not-verified
 
 ### Zhanggui Embedded
 
-Use this mode only when `/zhanggui` supplies `Claim`, `Acceptance`, current `Evidence`, and a saved `return_point` containing `ReturnPhase` and `ReturnNode`.
-
 ```text
-Claim: 要声称的状态
-Evidence: 实际运行的命令/场景、exit code 和关键结果
-Coverage: 覆盖到的验收条件
-Gaps: 未验证或失败项
-ReturnPhase: 原阶段
-ReturnNode: 原 decision/prototype/task/validation id
-StageStatus: verified | not-verified
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-verification-before-completion
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <Claim/Evidence/Coverage/Gaps 实际证据-or-null>
+  delta:
+    Claim: 要声称的状态
+    Evidence: 实际运行的命令/场景、exit code 和关键结果
+    Coverage: 覆盖到的验收条件
+    Gaps: 未验证或失败项
+    ReturnPhase: 原阶段
+    ReturnNode: 原 decision/prototype/task/validation id
+    StageStatus: verified | not-verified
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
 ```
 
-Preserve the supplied return fields unchanged. On `verified`, `/zhanggui` may make the claim and clear the return point. On `not-verified`, `/zhanggui` merges `Gaps`, clears the detour slot, and restores the original work. This skill never routes, clears state, or expands verification beyond `Acceptance`.
+Use this mode only when `/zhanggui` supplies `Claim`, `Acceptance`, current `Evidence`, and a saved `return_point` containing `ReturnPhase` and `ReturnNode`.
+
+Preserve the supplied return fields unchanged inside `delta`. On `delta.StageStatus: verified`, `/zhanggui` may make the claim and clear the return point. On `not-verified`, `/zhanggui` merges `Gaps`, clears the detour slot, and restores the original work. This skill never routes, clears state, or expands verification beyond `Acceptance`.
 
 ## 核心原则
 
