@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const datasetPath = path.join(projectRoot, 'evals', 'skill-triggering.json');
+const summaryPath = path.join(projectRoot, 'evals', 'results', 'v0.7-routing-summary.json');
 const expectedSkills = [
   'zhanggui',
   'zhanggui-systematic-debugging',
@@ -32,6 +33,14 @@ try {
 } catch (error) {
   loadError = error;
 }
+let summary;
+let summaryLoadError;
+try {
+  summary = JSON.parse(await readFile(summaryPath, 'utf8'));
+} catch (error) {
+  summaryLoadError = error;
+}
+
 
 function casesWithTag(tag) {
   return data.cases.filter(item => item.tags.includes(tag));
@@ -128,4 +137,52 @@ test('trigger v2 pins the complete ordered case matrix by digest', () => {
     /Expected values to be strictly equal|AssertionError/,
   );
   assertApprovedTriggerDataset(data.cases);
+});
+
+test('v0.7 routing summary matches the approved dataset and release gates', () => {
+  assert.ifError(summaryLoadError);
+  assert.equal(summary.version, '0.7');
+  assert.equal(summary.runs_per_case, 3);
+  assert.equal(summary.total_cases, 122);
+  assert.equal(summary.total_runs, 366);
+  assert.equal(summary.dataset_snapshot.sha256, APPROVED_TRIGGER_DATASET_SHA256);
+  assert.deepEqual(summary.routing_evaluation.thresholds, expectedThresholds);
+  assert.equal(summary.routing_evaluation.transport_errors_scored, false);
+  assert.equal(summary.rates.explicit_root, 1);
+  assert.ok(summary.rates.implicit_root >= 0.8);
+  assert.ok(summary.rates.root_false_positive <= 0.1);
+  assert.equal(summary.rates.root_first_conflict, 1);
+  assert.equal(summary.passed, true);
+});
+
+test('v0.7 routing summary preserves every leaf baseline rate', () => {
+  assert.ifError(summaryLoadError);
+  const negativeCeilings = new Map([
+    ['zhanggui-systematic-debugging', 0],
+    ['zhanggui-test-driven-development', 0],
+    ['zhanggui-verification-before-completion', 0.1111111111111111],
+    ['zhanggui-requesting-code-review', 0],
+    ['zhanggui-receiving-code-review', 0],
+    ['zhanggui-using-git-worktrees', 0],
+    ['zhanggui-dispatching-parallel-agents', 0],
+    ['zhanggui-finishing-a-development-branch', 0],
+  ]);
+  assert.deepEqual(summary.leaf_baselines.map(item => item.name), [...negativeCeilings.keys()]);
+  for (const item of summary.leaf_baselines) {
+    assert.equal(item.positive_trigger_rate, 1);
+    assert.ok(item.negative_trigger_rate <= negativeCeilings.get(item.name));
+  }
+});
+
+test('v0.7 catalog snapshot exactly matches current skill descriptions', async () => {
+  assert.ifError(summaryLoadError);
+  const entries = await Promise.all(expectedSkills.map(async name => {
+    const content = await readFile(path.join(projectRoot, 'skills', name, 'SKILL.md'), 'utf8');
+    const description = /^description:\s*(.+)$/m.exec(content)?.[1];
+    assert.ok(description, `${name} description missing`);
+    return { name, description, implicit: true };
+  }));
+  const digest = createHash('sha256').update(JSON.stringify(entries)).digest('hex');
+  assert.deepEqual(summary.catalog_snapshot.entries, entries);
+  assert.equal(summary.catalog_snapshot.sha256, digest);
 });

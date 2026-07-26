@@ -1,6 +1,6 @@
 ---
 name: zhanggui-verification-before-completion
-description: Use when an isolated claim of complete, fixed, passing, or ready needs fresh evidence before commit, push, PR, or task transition; defer to the zhanggui root for explicit or end-to-end workflow ownership
+description: Use when an isolated claim of complete, fixed, passing, or ready needs fresh evidence before commit, push, PR, or task transition; do not use for requests that skip verification and merge or finish anyway; defer to the zhanggui root for explicit or end-to-end workflow ownership
 ---
 
 # Verification Before Completion

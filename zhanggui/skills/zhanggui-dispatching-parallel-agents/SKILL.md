@@ -1,6 +1,6 @@
 ---
 name: zhanggui-dispatching-parallel-agents
-description: Use when two or more independent problem domains can run concurrently without shared state or overlapping writes; defer to the zhanggui root when parallel work belongs to an explicit, cross-module, or end-to-end workflow
+description: Use when two or more independent problem domains can run concurrently without shared state or overlapping writes; do not use when subagent capacity is unavailable or the user asks to pretend parallel work is finished; defer to the zhanggui root when parallel work belongs to an explicit, cross-module, or end-to-end workflow
 ---
 
 # Dispatching Parallel Agents

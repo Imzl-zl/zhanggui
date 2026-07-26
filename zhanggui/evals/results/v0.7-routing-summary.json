@@ -1,0 +1,132 @@
+{
+  "version": "0.7",
+  "runs_per_case": 3,
+  "total_cases": 122,
+  "total_runs": 366,
+  "rates": {
+    "explicit_root": 1.0,
+    "implicit_root": 1.0,
+    "root_false_positive": 0.0,
+    "root_first_conflict": 1.0
+  },
+  "leaf_baselines": [
+    {
+      "name": "zhanggui-systematic-debugging",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-test-driven-development",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-verification-before-completion",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-requesting-code-review",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-receiving-code-review",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-using-git-worktrees",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-dispatching-parallel-agents",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    },
+    {
+      "name": "zhanggui-finishing-a-development-branch",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0
+    }
+  ],
+  "failures": [],
+  "passed": true,
+  "dataset_snapshot": {
+    "sha256": "42b30e2b65a289a035b4f585f36ac053d110eaae2847e749329b347ba3eb6af5",
+    "case_count": 122
+  },
+  "catalog_snapshot": {
+    "source_head": "1e71e7dab11754208c7c247ea039ffb076d8d0dc",
+    "sha256": "a26ea522b801bcbe113ab4d1b980575a830ce8b904412694d51d4485e86b24b9",
+    "entries": [
+      {
+        "name": "zhanggui",
+        "description": "Use when a development request is ambiguous, cross-module, multi-deliverable, checkpointed, or explicitly asks for end-to-end work from discovery or design through implementation and verified delivery. Also use when invoked explicitly. Do not use for isolated debugging, TDD, verification, review, review-feedback, worktree, parallel-agent, or branch-finishing requests handled by zhanggui-* skills.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-systematic-debugging",
+        "description": "Use when an isolated bug, test failure, build failure, performance problem, or unexpected behavior needs root-cause investigation; defer to the zhanggui root when the user explicitly invokes it or requests an ambiguous or end-to-end workflow",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-test-driven-development",
+        "description": "Use when an isolated production feature, bug fix, refactor, or behavior change needs Red-Green-Refactor before implementation; defer to the zhanggui root for explicit, ambiguous, cross-module, or end-to-end workflows",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-verification-before-completion",
+        "description": "Use when an isolated claim of complete, fixed, passing, or ready needs fresh evidence before commit, push, PR, or task transition; do not use for requests that skip verification and merge or finish anyway; defer to the zhanggui root for explicit or end-to-end workflow ownership",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-requesting-code-review",
+        "description": "Use when an isolated code change needs independent review before verification, merge, delivery, or dependent work; defer to the zhanggui root for explicit, cross-module, or end-to-end workflow ownership",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-receiving-code-review",
+        "description": "Use when review feedback needs technical verification before acceptance, rejection, or implementation; defer to the zhanggui root when feedback belongs to an explicit or end-to-end workflow it already owns",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-using-git-worktrees",
+        "description": "Use when isolated feature work needs a protected checkout, separate write scope, or implementation-plan workspace; defer to the zhanggui root when worktree setup is one step in an explicit or end-to-end workflow",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-dispatching-parallel-agents",
+        "description": "Use when two or more independent problem domains can run concurrently without shared state or overlapping writes; do not use when subagent capacity is unavailable or the user asks to pretend parallel work is finished; defer to the zhanggui root when parallel work belongs to an explicit, cross-module, or end-to-end workflow",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-finishing-a-development-branch",
+        "description": "Use when verified branch or worktree work only needs the explicit choice to merge, push a PR, keep, or discard; defer to the zhanggui root when finishing is the last step of an explicit or end-to-end workflow it owns",
+        "implicit": true
+      }
+    ]
+  },
+  "routing_evaluation": {
+    "model": "default",
+    "tool": "completion",
+    "scored_at": "2026-07-26T07:54:54.070512+00:00",
+    "scored_slots": 366,
+    "initial_attempts": 366,
+    "initial_successes": 349,
+    "initial_errors": 17,
+    "retry_waves": 1,
+    "retry_attempts": 17,
+    "retry_successes": 17,
+    "retry_errors_remaining_after_last_wave": 0,
+    "total_attempts": 383,
+    "transport_errors_scored": false,
+    "thresholds": {
+      "explicit_root_rate": 1,
+      "implicit_root_rate_gte": 0.8,
+      "root_false_positive_rate_lte": 0.1,
+      "root_first_conflict_rate": 1
+    }
+  }
+}
