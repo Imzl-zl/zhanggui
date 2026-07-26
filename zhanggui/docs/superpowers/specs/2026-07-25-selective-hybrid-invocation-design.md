@@ -7,15 +7,15 @@
 
 ## 1. 问题与证据
 
-v0.6 已把 Zhanggui 拆成一个有状态根编排器、八个可独立发现的 leaf skills，以及五个不参与 discovery 的内部 stages。当前调用策略并不统一：
+v0.6 已把 Zhanggui 拆成一个有状态根编排器、八个可独立发现的 leaf skills，以及五个不参与 discovery 的内部 stages。v0.6 时 / 变更前的调用策略并不统一：
 
-- 根 `zhanggui` 的 frontmatter 设置 `disable-model-invocation: true`。
-- 根的 `agents/openai.yaml` 设置 `policy.allow_implicit_invocation: false`。
-- 八个 leaf 没有禁用自动调用，因此已经支持宿主按 description 自动匹配，也支持宿主提供的手动入口。
-- 当前 trigger dataset 明确要求根的六个正例全部包含 `/zhanggui` 或显式 Zhanggui workflow 表述；它不能证明隐式自动调用。
-- 当前 README、plugin metadata 和设计文档都把根描述为 explicit-only。
+- v0.6 时根 `zhanggui` 的 frontmatter 设置 `disable-model-invocation: true`。
+- v0.6 时根的 `agents/openai.yaml` 设置 `policy.allow_implicit_invocation: false`。
+- 八个 leaf 当时没有禁用自动调用，因此已经支持宿主按 description 自动匹配，也支持宿主提供的手动入口。
+- 变更前的 trigger dataset 明确要求根的六个正例全部包含 `/zhanggui` 或显式 Zhanggui workflow 表述；它不能证明隐式自动调用。
+- 变更前的 README、plugin metadata 和设计文档都把根描述为 explicit-only。
 
-因此，“Zhanggui 必须手动触发”只对根成立，而且是 v0.6 的主动策略，不是 Agent Skills 开放规范的限制。
+因此，“Zhanggui 必须手动触发”在 v0.6 时只对根成立，而且是当时的主动策略，不是 Agent Skills 开放规范的限制。
 
 开放 Agent Skills specification 只规定技能目录和标准 frontmatter。`description` 必须说明技能做什么以及何时使用；所有技能的 `name` 和 `description` 在启动时进入 catalog，完整正文只在激活后加载。规范不定义跨宿主统一的自动/手动开关、slash command 名称或多技能优先级。
 
