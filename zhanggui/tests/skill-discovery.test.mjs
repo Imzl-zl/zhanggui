@@ -131,6 +131,11 @@ test('root orchestrator remains explicit-only', async () => {
   const { metadata } = parseFrontmatter(rootSkill);
   assert.equal(metadata.name, 'zhanggui');
   assert.equal(metadata['disable-model-invocation'], 'true');
+  const standardFrontmatterFields = new Set([
+    'name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools',
+  ]);
+  const rootExtensions = Object.keys(metadata).filter(key => !standardFrontmatterFields.has(key));
+  assert.deepEqual(rootExtensions, ['disable-model-invocation']);
   assert.match(metadata.description ?? '', /^Use only when the user explicitly invokes \/zhanggui\b/);
   assert.match(metadata.compatibility ?? '', /explicit-only invocation/);
 
