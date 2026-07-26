@@ -18,18 +18,7 @@ An explicit root invocation wins over every leaf selection boundary. Start the e
 
 ### Implicit
 
-Implicit entry is valid only when the request itself provides a high-signal reason such as ambiguity requiring decisions, cross-module scope, multiple deliverables, checkpoint recovery, a high-risk migration, or explicit end-to-end ownership through verified delivery. Before the first tool call, emit exactly one of these notices, choosing the first statement supported by observed request or repository evidence:
-
-```text
-已自动进入 Zhanggui 完整工作流：该请求需要先澄清关键决策，再贯穿实现与验证。
-已自动进入 Zhanggui 完整工作流：该请求跨越多个模块，需要统一设计、实施与验证。
-已自动进入 Zhanggui 完整工作流：该请求包含多个交付物，需要一套可恢复的执行真值。
-已自动进入 Zhanggui 完整工作流：该请求要求从设计持续负责到验证交付。
-已自动进入 Zhanggui 完整工作流：该请求需要恢复已有 checkpoint 并继续到验证交付。
-已自动进入 Zhanggui 完整工作流：该高风险迁移需要统一处理设计、回滚、实施与验证。
-```
-
-Do not compose a new reason, do not ask whether to enable the skill, and do not emit a notice whose stated condition lacks evidence. If none applies, do not expand into discovery, design, or planning.
+Implicit entry is valid only when the request itself provides a high-signal reason such as ambiguity requiring decisions, cross-module scope, multiple deliverables, checkpoint recovery, a high-risk migration, or explicit end-to-end ownership through verified delivery. A skill activation read may precede the notice. Before the first non-skill tool call, emit exactly one notice that begins with the exact marker `已自动进入 Zhanggui 完整工作流：`, followed by one concise freeform high-signal reason grounded in request or repository evidence. Do not invent complexity, do not ask whether to enable the skill, do not repeat the notice, and do not restrict the reason to a fixed whitelist. If no grounded high-signal reason exists, do not expand into discovery, design, or planning.
 
 ### Root-first and narrow-task de-escalation
 

@@ -200,15 +200,15 @@ Explicit 模式不需要额外进入说明，直接按根的第 0 级路由执�
 
 ### 7.2 Implicit
 
-Implicit 根在调用任何工具前输出一条简短进入说明。catalog-visible exact announcement marker is:
+Implicit 根在首次 non-skill 工具调用前输出一条简短进入说明；skill activation read 可以先于该说明。catalog-visible exact announcement marker is:
 
 ```text
 已自动进入 Zhanggui 完整工作流：
 ```
 
-followed by the observed high-signal reason. 要求：
+followed by one concise freeform high-signal reason grounded in request or repository evidence. 要求：
 
-- 原因必须来自用户请求或仓库证据，不能捏造复杂度。
+- 原因必须来自用户请求或仓库证据，不能捏造复杂度，也不能固定白名单。
 - 不询问“是否启用 skill”。
 - 不创建永久 `EntryContext`。
 - 进入说明只出现一次，且 marker 与 catalog description 中的 exact prefix 一致。

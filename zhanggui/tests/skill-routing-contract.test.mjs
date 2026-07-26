@@ -109,12 +109,31 @@ test('root uses strict hybrid catalog metadata', async () => {
 test('root distinguishes explicit and implicit entry without persisting entry source', async () => {
   const root = await readFile(rootPath, 'utf8');
   const invocation = section(root, '## Invocation Modes', '## 核心纪律优先级');
+  const implicit = section(root, '### Implicit', '### Root-first and narrow-task de-escalation');
+  const marker = '已自动进入 Zhanggui 完整工作流：';
+  const markerOccurrences = implicit.split(marker).length - 1;
   assert.match(invocation, /### Explicit/);
   assert.match(invocation, /### Implicit/);
   assert.match(invocation, /host-provided invocation metadata/i);
-  assert.match(invocation, /已自动进入 Zhanggui 完整工作流/);
-  assert.match(invocation, /before the first tool call/i);
-  assert.match(invocation, /do not ask.*whether.*skill/i);
+  assert.equal(markerOccurrences, 1, 'Implicit body must contain the exact marker once');
+  assert.match(implicit, /freeform|concise freeform|observed high-signal reason/i);
+  assert.match(implicit, /grounded|request or repository evidence|request\/repository evidence/i);
+  assert.match(
+    implicit,
+    /skill activation read may precede|activation read may precede|skill:\/\/.*may precede|may precede (the )?notice/i,
+  );
+  assert.match(implicit, /before (the )?first non-skill tool/i);
+  assert.doesNotMatch(implicit, /before the first tool call/i);
+  assert.doesNotMatch(implicit, /Do not compose a new reason/);
+  assert.doesNotMatch(
+    implicit,
+    /emit exactly one of these notices|choosing the first statement supported/i,
+  );
+  assert.doesNotMatch(
+    implicit,
+    /该请求需要先澄清关键决策，再贯穿实现与验证|该请求跨越多个模块，需要统一设计、实施与验证|该请求包含多个交付物，需要一套可恢复的执行真值|该请求要求从设计持续负责到验证交付|该请求需要恢复已有 checkpoint 并继续到验证交付|该高风险迁移需要统一处理设计、回滚、实施与验证/,
+  );
+  assert.match(invocation, /do not ask.*whether.*skill|no.*enablement question|does not ask whether to enable/i);
   assert.match(invocation, /must not.*WorkflowState/i);
   assert.match(invocation, /minimal route state/i);
   assert.match(invocation, /SkillRequest/);
