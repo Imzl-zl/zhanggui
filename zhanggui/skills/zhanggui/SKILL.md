@@ -1,6 +1,6 @@
 ---
 name: zhanggui
-description: Use when a development request is ambiguous, cross-module, multi-deliverable, checkpointed, or explicitly asks for end-to-end work from discovery or design through implementation and verified delivery. Also use when invoked explicitly. Do not use for isolated debugging, TDD, verification, review, review-feedback, worktree, parallel-agent, or branch-finishing requests handled by zhanggui-* skills.
+description: Use when a development request is ambiguous, cross-module, multi-deliverable, checkpointed, or explicitly asks for end-to-end work from discovery or design through implementation and verified delivery. Also use when invoked explicitly. Do not use for isolated debugging, TDD, verification, review, review-feedback, worktree, parallel-agent, or branch-finishing requests handled by zhanggui-* skills. When selected implicitly, begin with "已自动进入 Zhanggui 完整工作流：" plus the observed high-signal reason before any non-skill tool call.
 compatibility: Requires the complete Zhanggui skill collection; automatic invocation requires a host that supports model-selected skills.
 ---
 

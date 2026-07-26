@@ -102,6 +102,7 @@ test('root uses strict hybrid catalog metadata', async () => {
   assert.match(root, /^description: Use when\b/m);
   assert.match(root, /^description:.*ambiguous.*cross-module.*multi-deliverable/im);
   assert.match(root, /^description:.*Do not use for isolated debugging/im);
+  assert.match(root, /^description:.*When selected implicitly, begin with "已自动进入 Zhanggui 完整工作流：" plus the observed high-signal reason before any non-skill tool call\./m);
   assert.match(root, /^compatibility: Requires the complete Zhanggui skill collection/m);
 });
 
