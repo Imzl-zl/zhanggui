@@ -190,6 +190,8 @@ for (const { name: skillName, enabled } of leafSkills) {
 
     assert.equal(metadata.name, skillName);
     assert.match(metadata.description ?? '', /^Use when\b/);
+    assert.match(metadata.description ?? '', /zhanggui root/i);
+    assert.match(metadata.description ?? '', /explicit|end-to-end|cross-module/i);
     assert.equal(metadata['disable-model-invocation'], undefined);
     assertDualModeContract(body);
   });

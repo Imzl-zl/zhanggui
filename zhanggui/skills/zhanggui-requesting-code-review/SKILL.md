@@ -1,6 +1,6 @@
 ---
 name: zhanggui-requesting-code-review
-description: Use when a code change needs independent review before verification, merge, delivery, or continuing dependent work
+description: Use when an isolated code change needs independent review before verification, merge, delivery, or dependent work; defer to the zhanggui root for explicit, cross-module, or end-to-end workflow ownership
 ---
 
 # Requesting Code Review

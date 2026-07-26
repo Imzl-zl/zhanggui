@@ -1,6 +1,6 @@
 ---
 name: zhanggui-receiving-code-review
-description: Use when receiving code review feedback before accepting, rejecting, or implementing reviewer suggestions
+description: Use when review feedback needs technical verification before acceptance, rejection, or implementation; defer to the zhanggui root when feedback belongs to an explicit or end-to-end workflow it already owns
 ---
 
 # Receiving Code Review Feedback

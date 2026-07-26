@@ -1,6 +1,6 @@
 ---
 name: zhanggui-test-driven-development
-description: Use when implementing a production feature, bug fix, refactor, or behavior change before writing implementation code
+description: Use when an isolated production feature, bug fix, refactor, or behavior change needs Red-Green-Refactor before implementation; defer to the zhanggui root for explicit, ambiguous, cross-module, or end-to-end workflows
 ---
 
 # Test-Driven Development (TDD)

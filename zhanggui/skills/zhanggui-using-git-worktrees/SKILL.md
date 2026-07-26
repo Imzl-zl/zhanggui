@@ -1,6 +1,6 @@
 ---
 name: zhanggui-using-git-worktrees
-description: Use when starting isolated feature work, protecting a dirty checkout, separating parallel write scopes, or preparing to execute an implementation plan
+description: Use when isolated feature work needs a protected checkout, separate write scope, or implementation-plan workspace; defer to the zhanggui root when worktree setup is one step in an explicit or end-to-end workflow
 ---
 
 # Using Git Worktrees

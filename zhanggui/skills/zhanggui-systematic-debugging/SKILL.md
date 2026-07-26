@@ -1,6 +1,6 @@
 ---
 name: zhanggui-systematic-debugging
-description: Use when encountering a bug, test failure, build failure, performance problem, or unexpected behavior before proposing or implementing a fix
+description: Use when an isolated bug, test failure, build failure, performance problem, or unexpected behavior needs root-cause investigation; defer to the zhanggui root when the user explicitly invokes it or requests an ambiguous or end-to-end workflow
 ---
 
 # Systematic Debugging
