@@ -152,29 +152,29 @@ test('plugin manifest pins v0.6 packaging contract', async () => {
   assertPluginManifestV06(manifest);
 });
 
-test('root orchestrator remains explicit-only', async () => {
+test('root orchestrator supports strict hybrid invocation', async () => {
   const rootSkill = await readFile(path.join(skillsRoot, 'zhanggui', 'SKILL.md'), 'utf8');
   const { metadata } = parseFrontmatter(rootSkill);
   assert.equal(metadata.name, 'zhanggui');
-  assert.equal(metadata['disable-model-invocation'], 'true');
+  assert.equal(metadata['disable-model-invocation'], undefined);
+
   const standardFrontmatterFields = new Set([
     'name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools',
   ]);
   const rootExtensions = Object.keys(metadata).filter(key => !standardFrontmatterFields.has(key));
-  assert.deepEqual(rootExtensions, ['disable-model-invocation']);
-  assert.match(metadata.description ?? '', /^Use only when the user explicitly invokes \/zhanggui\b/);
-  assert.match(
-    metadata.description ?? '',
-    /when present, this orchestrator MUST load before any leaf skill/i,
-  );
-  assert.match(metadata.compatibility ?? '', /explicit-only invocation/);
-
+  assert.deepEqual(rootExtensions, []);
+  assert.match(metadata.description ?? '', /^Use when\b/);
+  assert.match(metadata.description ?? '', /ambiguous|cross-module|multi-deliverable/i);
+  assert.match(metadata.description ?? '', /end-to-end/i);
+  assert.match(metadata.description ?? '', /Do not use for isolated debugging/i);
+  assert.match(metadata.compatibility ?? '', /complete Zhanggui skill collection/i);
+  assert.match(metadata.compatibility ?? '', /model-selected skills/i);
 
   const policy = await readFile(
     path.join(skillsRoot, 'zhanggui', 'agents', 'openai.yaml'),
     'utf8',
   );
-  assert.match(policy, /allow_implicit_invocation:\s*false/);
+  assert.match(policy, /allow_implicit_invocation:\s*true/);
 });
 
 for (const { name: skillName, enabled } of leafSkills) {

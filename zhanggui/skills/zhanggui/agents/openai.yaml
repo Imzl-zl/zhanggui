@@ -1,5 +1,5 @@
 interface:
   display_name: "Zhanggui（掌柜）"
-  short_description: "When /zhanggui is present, load this orchestrator before any leaf skill"
+  short_description: "Stateful end-to-end orchestrator for complex development work"
 policy:
-  allow_implicit_invocation: false
+  allow_implicit_invocation: true

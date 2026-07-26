@@ -1,13 +1,41 @@
 ---
 name: zhanggui
-description: Use only when the user explicitly invokes /zhanggui; when present, this orchestrator MUST load before any leaf skill and own the complete stateful development workflow from design through verified delivery
-compatibility: Requires a host profile that supports explicit-only invocation and the installed Zhanggui skill collection
-disable-model-invocation: true
+description: Use when a development request is ambiguous, cross-module, multi-deliverable, checkpointed, or explicitly asks for end-to-end work from discovery or design through implementation and verified delivery. Also use when invoked explicitly. Do not use for isolated debugging, TDD, verification, review, review-feedback, worktree, parallel-agent, or branch-finishing requests handled by zhanggui-* skills.
+compatibility: Requires the complete Zhanggui skill collection; automatic invocation requires a host that supports model-selected skills.
 ---
 
 # Zhanggui（掌柜）- 有状态编排器
 
-用户只显式调用一次根编排器。`/zhanggui` 是逻辑 alias；宿主原生显式命令可能不同（OMP 交互式为 `/skill:zhanggui`）。本 skill 是整个会话唯一拥有 `WorkflowState`、decision frontier、consensus、return point 和最终 readiness 的编排 frame。有状态设计/计划/执行步骤保留为内部 `STAGE.md`；可独立闭环的过程以 sibling leaf skill 暴露，直接调用时自行结束，由本编排器加载时只按 `Zhanggui Embedded` 契约返回局部 delta。
+`zhanggui` 是选择性 Hybrid 根编排器：宿主可为高信号完整生命周期请求自动加载，也可由用户通过宿主原生命令显式加载。它是整个会话唯一拥有 `WorkflowState`、decision frontier、consensus、return point 和最终 readiness 的编排 frame。有状态设计/计划/执行步骤保留为内部 `STAGE.md`；可独立闭环的过程以 sibling leaf skill 暴露，直接调用时自行结束，由本编排器加载时只按 `Zhanggui Embedded` 契约返回局部 delta。
+
+## Invocation Modes
+
+Determine the entry source once. Prefer real host-provided invocation metadata. When the host exposes no source metadata, treat an exact native root command or the logical `/zhanggui` alias in the current user request as explicit; otherwise treat the entry as implicit. Entry source is transient control information and must not be written to `WorkflowState`, a tracker, a checkpoint, or recovery state.
+
+### Explicit
+
+An explicit root invocation wins over every leaf selection boundary. Start the existing level-0 route immediately; do not emit a redundant activation notice. Explicit invocation may route a narrow request through minimal state and an Embedded leaf because the user intentionally selected the root.
+
+### Implicit
+
+Implicit entry is valid only when the request itself provides a high-signal reason such as ambiguity requiring decisions, cross-module scope, multiple deliverables, checkpoint recovery, a high-risk migration, or explicit end-to-end ownership through verified delivery. Before the first tool call, emit exactly one of these notices, choosing the first statement supported by observed request or repository evidence:
+
+```text
+已自动进入 Zhanggui 完整工作流：该请求需要先澄清关键决策，再贯穿实现与验证。
+已自动进入 Zhanggui 完整工作流：该请求跨越多个模块，需要统一设计、实施与验证。
+已自动进入 Zhanggui 完整工作流：该请求包含多个交付物，需要一套可恢复的执行真值。
+已自动进入 Zhanggui 完整工作流：该请求要求从设计持续负责到验证交付。
+已自动进入 Zhanggui 完整工作流：该请求需要恢复已有 checkpoint 并继续到验证交付。
+已自动进入 Zhanggui 完整工作流：该高风险迁移需要统一处理设计、回滚、实施与验证。
+```
+
+Do not compose a new reason, do not ask whether to enable the skill, and do not emit a notice whose stated condition lacks evidence. If none applies, do not expand into discovery, design, or planning.
+
+### Root-first and narrow-task de-escalation
+
+When the root and a leaf are both loaded in the same frame, the root wins and the leaf must not execute its Direct branch. The root may activate that leaf only through a real `SkillRequest` in `Zhanggui Embedded` mode.
+
+After implicit entry, re-run the existing level-0 intent route before expanding state. If the request is actually isolated debugging, TDD, verification, review, feedback handling, worktree setup, parallel dispatch, or branch finishing, keep only minimal route state, issue the corresponding Embedded `SkillRequest`, merge its result, and stop. This runtime de-escalation limits cost but does not turn the catalog selection into a successful root trigger for evaluation purposes.
 
 ## 核心纪律优先级
 

@@ -94,17 +94,31 @@ function assertLocalStatusUnderDelta(embedded, statusRegex, label = 'Embedded') 
   );
 }
 
-test('root uses one documented host extension and an explicit-only description', async () => {
+test('root uses strict hybrid catalog metadata', async () => {
   const root = await readFile(rootPath, 'utf8');
   const keys = frontmatterKeys(root);
   const standard = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
-  assert.deepEqual(keys.filter(key => !standard.has(key)), ['disable-model-invocation']);
-  assert.match(root, /^description: Use only when the user explicitly invokes \/zhanggui\b/m);
-  assert.match(
-    root,
-    /^description:.*when present, this orchestrator MUST load before any leaf skill/im,
-  );
-  assert.match(root, /^compatibility: Requires a host profile that supports explicit-only invocation/m);
+  assert.deepEqual(keys.filter(key => !standard.has(key)), []);
+  assert.match(root, /^description: Use when\b/m);
+  assert.match(root, /^description:.*ambiguous.*cross-module.*multi-deliverable/im);
+  assert.match(root, /^description:.*Do not use for isolated debugging/im);
+  assert.match(root, /^compatibility: Requires the complete Zhanggui skill collection/m);
+});
+
+test('root distinguishes explicit and implicit entry without persisting entry source', async () => {
+  const root = await readFile(rootPath, 'utf8');
+  const invocation = section(root, '## Invocation Modes', '## 核心纪律优先级');
+  assert.match(invocation, /### Explicit/);
+  assert.match(invocation, /### Implicit/);
+  assert.match(invocation, /host-provided invocation metadata/i);
+  assert.match(invocation, /已自动进入 Zhanggui 完整工作流/);
+  assert.match(invocation, /before the first tool call/i);
+  assert.match(invocation, /do not ask.*whether.*skill/i);
+  assert.match(invocation, /must not.*WorkflowState/i);
+  assert.match(invocation, /minimal route state/i);
+  assert.match(invocation, /SkillRequest/);
+  assert.match(invocation, /Zhanggui Embedded/);
+  assert.match(invocation, /root.*wins.*Direct/i);
 });
 
 test('root declares the complete SkillRequest and SkillResult contracts', async () => {
