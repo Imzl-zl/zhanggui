@@ -122,6 +122,45 @@ test('root distinguishes explicit and implicit entry without persisting entry so
   assert.match(invocation, /root.*wins.*Direct/i);
 });
 
+test('requesting and receiving review descriptions distinguish new review from existing feedback', async () => {
+  const requesting = await readFile(
+    path.join(skillsRoot, 'zhanggui-requesting-code-review', 'SKILL.md'),
+    'utf8',
+  );
+  const receiving = await readFile(
+    path.join(skillsRoot, 'zhanggui-receiving-code-review', 'SKILL.md'),
+    'utf8',
+  );
+
+  assert.match(requesting, /^description: Use when\b/m);
+  assert.match(
+    requesting,
+    /^description:.*(?:new independent review|new review).*(?:diff|code change)/im,
+  );
+  assert.match(
+    requesting,
+    /^description:.*Critical and Important/im,
+  );
+  assert.match(
+    requesting,
+    /^description:.*defer to the zhanggui root/im,
+  );
+
+  assert.match(receiving, /^description: Use when\b/m);
+  assert.match(
+    receiving,
+    /^description:.*existing (?:review )?feedback(?: or comments)?/im,
+  );
+  assert.match(
+    receiving,
+    /^description:.*do not use for a new review request of a diff or code change/im,
+  );
+  assert.match(
+    receiving,
+    /^description:.*defer to the zhanggui root/im,
+  );
+});
+
 test('root declares the complete SkillRequest and SkillResult contracts', async () => {
   const root = await readFile(rootPath, 'utf8');
   const activation = section(root, '## Skill Activation Contract', '## WorkflowState');

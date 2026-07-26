@@ -1,6 +1,6 @@
 ---
 name: zhanggui-receiving-code-review
-description: Use when review feedback needs technical verification before acceptance, rejection, or implementation; defer to the zhanggui root when feedback belongs to an explicit or end-to-end workflow it already owns
+description: Use when existing review feedback or comments need technical verification before acceptance, rejection, or implementation; do not use for a new review request of a diff or code change; defer to the zhanggui root when feedback belongs to an explicit or end-to-end workflow it already owns
 ---
 
 # Receiving Code Review Feedback
