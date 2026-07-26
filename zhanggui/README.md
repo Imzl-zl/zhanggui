@@ -160,7 +160,7 @@ omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "评审者建议删除这个锁，先核实反馈"
 ```
 
-期望：分别只激活 `zhanggui`、`zhanggui-systematic-debugging`、`zhanggui-test-driven-development`、`zhanggui-receiving-code-review`。以 JSONL `tool_execution_*` / `skill://` 事件为准，不用助手散文冒充证据。
+期望：`/zhanggui ...` 时首个 Zhanggui `skill://` 事件必须是 `zhanggui`，之后可出现 root 调度的下游 leaf；三个窄 leaf 提示各自只激活期望 leaf（`zhanggui-systematic-debugging`、`zhanggui-test-driven-development`、`zhanggui-receiving-code-review`）。以 JSONL `tool_execution_*` / `skill://` 事件为准，不用助手散文冒充证据。
 
 ### Collection fallback
 
