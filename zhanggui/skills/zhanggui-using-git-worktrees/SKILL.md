@@ -15,9 +15,21 @@ For manual creation, choose `BranchName` from an explicit user name first, then 
 
 ### Zhanggui Embedded
 
+```text
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-using-git-worktrees
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <actual procedure evidence-or-null>
+  delta: <existing procedure-specific output fields-or-null>
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
+```
+
 Use this mode only when `/zhanggui` supplies the current task goal and isolation trigger. Use the task goal for naming, return the workspace/baseline delta to the same execute or parallel-dispatch frame, and never set global readiness or select the next task.
 
-Any consent or failure-path decision follows mode ownership: Direct asks through the host and waits locally; Embedded returns a `QuestionRequest` with `StageStatus: awaiting-user`, then `/zhanggui` updates `awaiting` and owns native delivery before the wait. Embedded never asks the user directly.
+Any consent or failure-path decision follows mode ownership: Direct asks through the host and waits locally; Embedded returns `status: awaiting-user` with `question_request` set, then `/zhanggui` updates `awaiting` and owns native delivery before the wait. Embedded never asks the user directly.
 
 ## Core Principle
 
@@ -94,11 +106,19 @@ Report the workspace and stop. Do not claim that an unspecified task has started
 ### Zhanggui Embedded
 
 ```text
-Workspace: 路径与分支
-Baseline: 测试命令与结果，或 not available + evidence
-SetupChange: none | .gitignore modified-uncommitted
-QuestionRequest: worktree-consent | baseline-failure（仅 awaiting-user）
-StageStatus: isolated | in-place | blocked | awaiting-user
+SkillResult:
+  request_id: <supplied SkillRequest.request_id>
+  name: zhanggui-using-git-worktrees
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <Workspace/Baseline/SetupChange 实际证据-or-null>
+  delta:
+    Workspace: 路径与分支
+    Baseline: 测试命令与结果，或 not available + evidence
+    SetupChange: none | .gitignore modified-uncommitted
+    StageStatus: isolated | in-place | blocked | awaiting-user
+  question_request: worktree-consent | baseline-failure（仅 awaiting-user）
+  next_skill_request: <SkillRequest-or-null>
 ```
 
-`/zhanggui` resumes the same frame after merging this delta. Branch integration and cleanup rules live in `../zhanggui-finishing-a-development-branch/SKILL.md`.
+`/zhanggui` resumes the same frame after merging this delta. Branch integration and cleanup capability is named by the exact catalog skill `zhanggui-finishing-a-development-branch`; this leaf never loads sibling skill files and does not request finishing via `next_skill_request`.

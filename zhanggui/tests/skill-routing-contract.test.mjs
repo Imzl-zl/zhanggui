@@ -166,3 +166,78 @@ test('Embedded debugging requests parallel or TDD by name instead of loading sib
   assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-dispatching-parallel-agents[\s\S]{0,200}?serial/i);
   assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-test-driven-development[\s\S]{0,200}?(?:required[\s\S]{0,80}?block|block[\s\S]{0,80}?unavailable)/i);
 });
+
+const deliveryLeafNames = [
+  'zhanggui-using-git-worktrees',
+  'zhanggui-dispatching-parallel-agents',
+  'zhanggui-finishing-a-development-branch',
+];
+
+const deliveryLeafStatusInDelta = {
+  'zhanggui-using-git-worktrees': /StageStatus:\s*isolated\s*\|\s*in-place\s*\|\s*blocked\s*\|\s*awaiting-user/,
+  'zhanggui-dispatching-parallel-agents': /StageStatus:\s*integrated\s*\|\s*conflicts-found\s*\|\s*blocked\s*\|\s*serial-fallback/,
+  'zhanggui-finishing-a-development-branch': /StageStatus:\s*finished\s*\|\s*kept\s*\|\s*blocked/,
+};
+
+test('delivery leaves return identity-bearing Embedded SkillResult envelopes', async () => {
+  for (const name of deliveryLeafNames) {
+    const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
+    const sections = embeddedSections(content);
+    assert.ok(sections.length >= 1, `${name} missing ### Zhanggui Embedded`);
+    for (const [index, embedded] of sections.entries()) {
+      for (const field of ['request_id', 'name', 'mode', 'status', 'evidence', 'delta', 'question_request', 'next_skill_request']) {
+        assert.match(embedded, new RegExp(`\\b${field}:`), `${name} Embedded#${index + 1} missing ${field}`);
+      }
+      assert.match(embedded, new RegExp(`name: ${name}`), `${name} Embedded#${index + 1} missing exact name`);
+      assert.match(embedded, /mode: zhanggui-embedded/, `${name} Embedded#${index + 1} missing mode`);
+    }
+    const operational = sections.find(body => /(?:StageStatus|ProcedureStatus):/.test(body)) ?? sections.at(-1);
+    assert.match(
+      operational,
+      deliveryLeafStatusInDelta[name],
+      `${name} operational Embedded delta missing exact local status mapping`,
+    );
+  }
+});
+
+test('leaf business flow contains no hardcoded sibling SKILL paths', async () => {
+  for (const name of [...coreLeafNames, ...deliveryLeafNames]) {
+    const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
+    assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/, name);
+  }
+});
+
+test('Embedded parallel requests worktree or review by exact name instead of loading sibling files', async () => {
+  const content = await readFile(path.join(skillsRoot, 'zhanggui-dispatching-parallel-agents', 'SKILL.md'), 'utf8');
+  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
+  assert.match(
+    content,
+    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-using-git-worktrees/,
+  );
+  assert.match(
+    content,
+    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-requesting-code-review/,
+  );
+  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-using-git-worktrees[\s\S]{0,200}?(?:optional|fallback|unavailable)/i);
+  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-requesting-code-review[\s\S]{0,200}?(?:optional|fallback|unavailable)/i);
+});
+
+test('Embedded finishing requests verification by exact name when evidence is stale or missing', async () => {
+  const content = await readFile(path.join(skillsRoot, 'zhanggui-finishing-a-development-branch', 'SKILL.md'), 'utf8');
+  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
+  assert.match(
+    content,
+    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-verification-before-completion/,
+  );
+  assert.match(
+    content,
+    /Direct mode:[\s\S]{0,220}?zhanggui-verification-before-completion[\s\S]{0,220}?(?:required[\s\S]{0,80}?block|block[\s\S]{0,80}?unavailable)/i,
+  );
+});
+
+test('worktree names finishing as later cleanup capability without sibling path', async () => {
+  const content = await readFile(path.join(skillsRoot, 'zhanggui-using-git-worktrees', 'SKILL.md'), 'utf8');
+  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
+  assert.match(content, /\bzhanggui-finishing-a-development-branch\b/);
+  assert.doesNotMatch(content, /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-finishing-a-development-branch/);
+});
