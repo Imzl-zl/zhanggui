@@ -26,7 +26,13 @@ const expectedThresholds = {
   root_first_conflict_rate: 1,
 };
 const APPROVED_CATALOG_SOURCE_HEAD =
-  '3df46d37c0d3c8c91cb633c38fb59f7b0d0cb1b1';
+  'a3b6aea89aed9f2c371deb91240e298ba947cdd3';
+const APPROVED_TRANSPORT_RETRY_POLICY = {
+  max_waves: 3,
+  backoff_seconds: [0, 5, 15],
+  retry_scope: 'transport-errors-only',
+  valid_wrong_selections_retryable: false,
+};
 const APPROVED_EVALUATOR_SYSTEM_PROMPT =
   'You are evaluating first-skill routing for an Agent Skills catalog. Based only on each catalog entry\'s name and description, the invocation source, and the user request, select the single skill that should load first. Return null when no skill applies. Do not execute any skill, solve the user\'s task, or select a later lifecycle substep. An explicit source means the user intentionally invoked the root named by the request; an implicit source contains no host command guarantee.';
 const APPROVED_EVALUATOR_USER_PROMPT_TEMPLATE = [
@@ -248,4 +254,32 @@ test('v0.7 routing summary pins evaluator prompt identity', () => {
   );
   const digest = evaluatorIdentityDigest();
   assert.equal(summary.routing_evaluation.evaluator_identity_sha256, digest);
+});
+
+test('v0.7 routing summary pins bounded transport retry policy', () => {
+  assert.ifError(loadError);
+  assert.ifError(summaryLoadError);
+  assert.deepEqual(data.transport_retry_policy, APPROVED_TRANSPORT_RETRY_POLICY);
+  assert.deepEqual(summary.routing_evaluation.retry_policy, APPROVED_TRANSPORT_RETRY_POLICY);
+  assert.ok(summary.routing_evaluation.retry_waves <= APPROVED_TRANSPORT_RETRY_POLICY.max_waves);
+  assert.equal(summary.routing_evaluation.retry_errors_remaining_after_last_wave, 0);
+  assert.ok(Array.isArray(summary.routing_evaluation.retry_wave_results));
+  assert.equal(
+    summary.routing_evaluation.retry_wave_results.length,
+    summary.routing_evaluation.retry_waves,
+  );
+  for (const [index, wave] of summary.routing_evaluation.retry_wave_results.entries()) {
+    assert.equal(wave.wave, index + 1);
+    assert.equal(wave.backoff_seconds, APPROVED_TRANSPORT_RETRY_POLICY.backoff_seconds[index]);
+    assert.equal(typeof wave.attempts, 'number');
+    assert.equal(typeof wave.successes, 'number');
+    assert.equal(typeof wave.errors_remaining, 'number');
+    assert.ok(wave.attempts >= wave.successes);
+  }
+  if (summary.routing_evaluation.retry_wave_results.length > 0) {
+    assert.equal(
+      summary.routing_evaluation.retry_wave_results.at(-1).errors_remaining,
+      0,
+    );
+  }
 });

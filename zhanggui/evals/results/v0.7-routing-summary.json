@@ -58,8 +58,8 @@
     "case_count": 122
   },
   "catalog_snapshot": {
-    "source_head": "3df46d37c0d3c8c91cb633c38fb59f7b0d0cb1b1",
-    "sha256": "656edda540e57379964315afd158fd221f05b48a027bf2088a82e505c13ec4ca",
+    "source_head": "a3b6aea89aed9f2c371deb91240e298ba947cdd3",
+    "sha256": "ae68efe5da53352db28809611b44c2179077450e4d0e9f54b0a8d876c5f3d951",
     "entries": [
       {
         "name": "zhanggui",
@@ -83,12 +83,12 @@
       },
       {
         "name": "zhanggui-requesting-code-review",
-        "description": "Use when an isolated code change needs independent review before verification, merge, delivery, or dependent work; defer to the zhanggui root for explicit, cross-module, or end-to-end workflow ownership",
+        "description": "Use when asking for a new independent review of a diff or code change, including severity-scoped reports such as Critical and Important findings, before verification, merge, delivery, or dependent work; defer to the zhanggui root for explicit, cross-module, or end-to-end workflow ownership",
         "implicit": true
       },
       {
         "name": "zhanggui-receiving-code-review",
-        "description": "Use when review feedback needs technical verification before acceptance, rejection, or implementation; defer to the zhanggui root when feedback belongs to an explicit or end-to-end workflow it already owns",
+        "description": "Use when existing review feedback or comments need technical verification before acceptance, rejection, or implementation; do not use for a new review request of a diff or code change; defer to the zhanggui root when feedback belongs to an explicit or end-to-end workflow it already owns",
         "implicit": true
       },
       {
@@ -148,17 +148,52 @@
       ]
     },
     "evaluator_identity_sha256": "aab7a330719eb4a0ac6e585483351c350cc3c2d85eb564b808892132b8f4f12f",
-    "scored_at": "2026-07-26T11:24:21.872432+00:00",
+    "scored_at": "2026-07-26T14:16:23.499334+00:00",
     "scored_slots": 366,
     "initial_attempts": 366,
-    "initial_successes": 365,
-    "initial_errors": 1,
-    "retry_waves": 1,
-    "retry_attempts": 1,
-    "retry_successes": 1,
+    "initial_successes": 349,
+    "initial_errors": 17,
+    "retry_waves": 3,
+    "retry_attempts": 27,
+    "retry_successes": 17,
     "retry_errors_remaining_after_last_wave": 0,
-    "total_attempts": 367,
+    "total_attempts": 393,
     "transport_errors_scored": false,
+    "retry_policy": {
+      "max_waves": 3,
+      "backoff_seconds": [
+        0,
+        5,
+        15
+      ],
+      "retry_scope": "transport-errors-only",
+      "valid_wrong_selections_retryable": false
+    },
+    "retry_wave_results": [
+      {
+        "wave": 1,
+        "backoff_seconds": 0,
+        "attempts": 17,
+        "successes": 11,
+        "errors_remaining": 6
+      },
+      {
+        "wave": 2,
+        "backoff_seconds": 5,
+        "attempts": 6,
+        "successes": 2,
+        "errors_remaining": 4
+      },
+      {
+        "wave": 3,
+        "backoff_seconds": 15,
+        "attempts": 4,
+        "successes": 4,
+        "errors_remaining": 0
+      }
+    ],
+    "run_id": "a3b6aea-c8-20260726T130257Z",
+    "concurrency": 8,
     "thresholds": {
       "explicit_root_rate": 1,
       "implicit_root_rate_gte": 0.8,

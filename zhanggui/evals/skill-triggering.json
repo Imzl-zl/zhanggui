@@ -7,6 +7,16 @@
     "root_false_positive_rate_lte": 0.1,
     "root_first_conflict_rate": 1
   },
+  "transport_retry_policy": {
+    "max_waves": 3,
+    "backoff_seconds": [
+      0,
+      5,
+      15
+    ],
+    "retry_scope": "transport-errors-only",
+    "valid_wrong_selections_retryable": false
+  },
   "cases": [
     {
       "id": "root-baseline-positive-01",
