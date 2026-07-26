@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # Zhanggui（掌柜）- 有状态编排器
 
-用户只调用一次 `/zhanggui`。本 skill 是整个会话唯一拥有 `WorkflowState`、decision frontier、consensus、return point 和最终 readiness 的编排 frame。有状态设计/计划/执行步骤保留为内部 `STAGE.md`；可独立闭环的过程以 sibling leaf skill 暴露，直接调用时自行结束，由本编排器加载时只按 `Zhanggui Embedded` 契约返回局部 delta。
+用户只显式调用一次根编排器。`/zhanggui` 是逻辑 alias；宿主原生显式命令可能不同（OMP 交互式为 `/skill:zhanggui`）。本 skill 是整个会话唯一拥有 `WorkflowState`、decision frontier、consensus、return point 和最终 readiness 的编排 frame。有状态设计/计划/执行步骤保留为内部 `STAGE.md`；可独立闭环的过程以 sibling leaf skill 暴露，直接调用时自行结束，由本编排器加载时只按 `Zhanggui Embedded` 契约返回局部 delta。
 
 ## 核心纪律优先级
 
@@ -23,7 +23,7 @@ disable-model-invocation: true
 
 完整运行单元是 plugin 的整个 `skills/` collection：`zhanggui/SKILL.md`、`zhanggui/stages/`、`zhanggui/RECOVERY.md` 以及 Stage 导航表引用的 sibling leaf skill 缺一不可。内部 `stages/...` 与 `RECOVERY.md` 相对**本 SKILL.md 所在目录**（下称 `<skill-dir>`）解析；与项目根和当前工作目录无关，访问前先拼出绝对路径。Leaf skill 不通过任意目录搜索加载，只走下方 Skill Activation Contract。
 
-“返回编排器”表示继续执行已加载的本文件，绝不再次 invoke `/zhanggui`，也不要求用户输入下一条 slash command。Internal stages 与 Embedded leaves 返回请求或局部 delta；实际 phase、return point、readiness 与结果合并只由本编排器决定。
+“返回编排器”表示继续执行已加载的本文件，绝不再次 invoke 根入口（`/zhanggui` 或宿主原生等价命令），也不要求用户输入下一条 slash command。Internal stages 与 Embedded leaves 返回请求或局部 delta；实际 phase、return point、readiness 与结果合并只由本编排器决定。
 
 ## Skill Activation Contract
 

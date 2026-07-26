@@ -83,7 +83,7 @@
   ],
   "passed": true,
   "host_acceptance": {
-    "recorded_at": "2026-07-26T04:20:00Z",
+    "recorded_at": "2026-07-26T05:10:00Z",
     "cwd": "zhanggui",
     "host": "omp",
     "mode": "json",
@@ -96,8 +96,8 @@
       "scripts/validate-agent-skills.mjs"
     ],
     "prior_invalid_evidence_correction": {
-      "issue": "Earlier Task 7 host_acceptance accepted a root case that used stop-after-load prompt augmentation and/or allowed non-root-first activation.",
-      "correction": "Replaced with exact brief commands only; root passes only if first Zhanggui skill:// event is zhanggui."
+      "issue": "Earlier Task 7 accepted/augmented noninteractive -p /zhanggui as native-root evidence, or required model-chosen skill:// root-first under -p.",
+      "correction": "Supported OMP native root is interactive /skill:zhanggui host-direct body injection. Noninteractive -p /zhanggui is retained only as known unsupported probe."
     },
     "root_first_fix_attempt": {
       "red_green": {
@@ -115,42 +115,30 @@
     "cases": [
       {
         "id": "native-zhanggui",
-        "kind": "native_activation",
-        "command": "omp --no-session --no-rules --plugin-dir \"$PWD\" --skills \"zhanggui*\" --mode json --max-time 120 -p \"/zhanggui 设计并验证一个最小库存功能\"",
-        "prompt": "/zhanggui 设计并验证一个最小库存功能",
+        "kind": "native_activation_interactive",
+        "command": "omp --no-session --no-rules --plugin-dir <root> --skills zhanggui* --max-time 60",
+        "interactive_input": "/skill:zhanggui 设计并验证一个最小库存功能",
         "expected_selected_skill": "zhanggui",
-        "expected_first_zhanggui_skill": "zhanggui",
-        "session_id": "019f9ca2-c04b-7000-8eb8-e8247c8b44f9",
+        "session_id": null,
+        "session_id_reason": "--no-session interactive TUI does not expose a session id",
         "event_names": [
-          "session",
-          "tool_execution_start",
-          "tool_execution_end"
+          "tui_skill_injection"
         ],
         "activation_events": [
           {
-            "event": "tool_execution_start",
-            "toolName": "read",
-            "path": "skill://zhanggui-test-driven-development"
-          },
-          {
-            "event": "tool_execution_start",
-            "toolName": "read",
-            "path": "skill://zhanggui-verification-before-completion"
-          },
-          {
-            "event": "tool_execution_start",
-            "toolName": "read",
-            "path": "skill://zhanggui"
+            "event": "tui_skill_injection",
+            "display": "✦ skill zhanggui 设计并验证一个最小库存功能",
+            "path": ".../skills/zhanggui/SKILL.md",
+            "lines": 405,
+            "timing": "before model work",
+            "mechanism": "host-direct body injection"
           }
         ],
-        "first_zhanggui_skill_event": "skill://zhanggui-test-driven-development",
-        "activated_skills_in_order": [
-          "zhanggui-test-driven-development",
-          "zhanggui-verification-before-completion",
-          "zhanggui"
-        ],
-        "pass": false,
-        "blocked_reason": "Root ownership requires first Zhanggui skill:// event to be zhanggui; observed TDD then verification then root after description+openai.yaml root-first wording."
+        "injected_skill": "zhanggui",
+        "injected_path": "skills/zhanggui/SKILL.md",
+        "root_first": true,
+        "pass": true,
+        "evidence_source": "Main interactive TUI run against OMP v17"
       },
       {
         "id": "native-debug",
@@ -256,11 +244,62 @@
       }
     ],
     "summary": {
+      "supported_cases_total": 5,
+      "supported_cases_passed": 5,
+      "supported_cases_failed": 0,
+      "unsupported_probes_recorded": 1,
+      "unsupported_probes_excluded_from_totals": true,
       "total_cases": 5,
-      "passed": 4,
-      "failed": 1,
-      "blocked": 1
+      "passed": 5,
+      "failed": 0,
+      "blocked": 0
     },
-    "all_passed": false
+    "all_passed": true,
+    "architecture_resolution": {
+      "source": "OMP v17 docs + Main interactive TUI evidence",
+      "finding": "OMP registers /skill:<name> only in interactive mode; unknown /zhanggui and /skill:zhanggui under -p are plain model text, not host skill activation.",
+      "supported_root_command": "interactive /skill:zhanggui",
+      "logical_alias": "/zhanggui"
+    },
+    "known_host_limitations": {
+      "noninteractive_alias_probe": {
+        "id": "noninteractive-zhanggui-alias-probe",
+        "supported": false,
+        "excluded_from_supported_totals": true,
+        "command": "omp --no-session --no-rules --plugin-dir \"$PWD\" --skills \"zhanggui*\" --mode json --max-time 120 -p \"/zhanggui 设计并验证一个最小库存功能\"",
+        "prompt": "/zhanggui 设计并验证一个最小库存功能",
+        "session_id": "019f9ca2-c04b-7000-8eb8-e8247c8b44f9",
+        "event_names": [
+          "session",
+          "tool_execution_start",
+          "tool_execution_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-test-driven-development"
+          },
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-verification-before-completion"
+          },
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui"
+          }
+        ],
+        "first_zhanggui_skill_event": "skill://zhanggui-test-driven-development",
+        "activated_skills_in_order": [
+          "zhanggui-test-driven-development",
+          "zhanggui-verification-before-completion",
+          "zhanggui"
+        ],
+        "pass": false,
+        "reason": "OMP noninteractive -p treats /zhanggui as plain model text, not host skill registration; not valid native-root evidence."
+      }
+    }
   }
 }

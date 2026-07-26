@@ -16,10 +16,13 @@ Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestr
 
 ## 快速使用
 
-完整工作流只调用一次：
+完整工作流只显式调用一次根编排器。`/zhanggui` 是逻辑 alias；宿主原生显式命令可能不同。
+
+- **OMP 交互式**：`/skill:zhanggui`
+- **提供同名 alias 的宿主**：`/zhanggui`
 
 ```text
-/zhanggui
+/skill:zhanggui
 ```
 
 随后直接描述目标。入口在同一编排 frame 内完成：
@@ -36,7 +39,7 @@ Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestr
 
 阶段切换不需要再次输入 slash command。
 
-调试、TDD、完成验证、请求/接收审查、worktree、并行派发或分支收尾等窄任务也可单独描述，由宿主发现对应 leaf skill；Direct 模式不会虚构掌柜的 WorkflowState。完整工作流中，同一 leaf 由 `/zhanggui` 通过 `SkillRequest` 按 `Zhanggui Embedded` 契约激活并合并 `SkillResult`。
+调试、TDD、完成验证、请求/接收审查、worktree、并行派发或分支收尾等窄任务也可单独描述，由宿主发现对应 leaf skill；Direct 模式不会虚构掌柜的 WorkflowState。完整工作流中，同一 leaf 由根通过 `SkillRequest` 按 `Zhanggui Embedded` 契约激活并合并 `SkillResult`。
 
 ## 运行结构
 
@@ -82,7 +85,7 @@ zhanggui/
 
 - `skills/zhanggui/SKILL.md` 是唯一默认强编排入口：Claude 设置 `disable-model-invocation: true`，Codex 设置 `allow_implicit_invocation: false`。
 - 八个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和 `Use when ...` description，可由宿主发现或显式调用；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
-- 用户启动完整工作流时只调用一次 `/zhanggui`；阶段切换不要求继续输入命令。
+- 用户启动完整工作流时只显式调用一次根编排器（OMP 交互式为 `/skill:zhanggui`；逻辑 alias 为 `/zhanggui`）；阶段切换不要求继续输入命令。
 - Embedded 路径只接受根提供的 `SkillRequest`，leaf/stage 返回 `SkillResult` 或请求；根按 native activation → catalog location → collection fallback 激活，并校验 frontmatter 身份后合并 delta。
 - `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，只返回 `SkillRequest`；`RECOVERY.md` 也不参与 discovery。
 
@@ -151,16 +154,27 @@ node --test tests/skill-trigger-data.test.mjs
 
 ### Clean-host native activation
 
-从 `zhanggui/` 目录运行，使用已认证 profile、不落盘 session、限制 catalog 为 Zhanggui 名称：
+从 `zhanggui/` 目录运行，使用已认证 profile、不落盘 session、限制 catalog 为 Zhanggui 名称。
+
+**Root（OMP 交互式，host-direct injection）：**
 
 ```bash
-omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "/zhanggui 设计并验证一个最小库存功能"
+omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --max-time 60
+# then type interactively:
+# /skill:zhanggui 设计并验证一个最小库存功能
+```
+
+期望：宿主在模型工作前直接注入 `zhanggui` 正文（TUI 可见 `✦ skill zhanggui ...` 与 `skills/zhanggui/SKILL.md` 路径），即 root-first。`omp -p "/zhanggui ..."` 与 `omp -p "/skill:zhanggui ..."` 在 OMP 非交互 `-p` 下不是有效 native-root 证据（未知 slash 仅作普通文本）。
+
+**Leaf（非交互 JSONL）：**
+
+```bash
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "这个单元测试失败了，先系统化调查根因"
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "用 TDD 实现新的 API 行为"
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "评审者建议删除这个锁，先核实反馈"
 ```
 
-期望：`/zhanggui ...` 时首个 Zhanggui `skill://` 事件必须是 `zhanggui`，之后可出现 root 调度的下游 leaf；三个窄 leaf 提示各自只激活期望 leaf（`zhanggui-systematic-debugging`、`zhanggui-test-driven-development`、`zhanggui-receiving-code-review`）。以 JSONL `tool_execution_*` / `skill://` 事件为准，不用助手散文冒充证据。
+期望：三个窄 leaf 提示各自只激活期望 leaf（`zhanggui-systematic-debugging`、`zhanggui-test-driven-development`、`zhanggui-receiving-code-review`）。以 JSONL `tool_execution_*` / `skill://` 事件为准，不用助手散文冒充证据。
 
 ### Collection fallback
 

@@ -11,6 +11,7 @@
 - **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode，不把 sibling 路径当作唯一业务接口。
 - **内部 stage 只返回请求**：有状态 stage 不加载 leaf，只返回 `SkillRequest`；leaf 在 Embedded 模式返回 `SkillResult`，需要下游 skill 时写 `next_skill_request`。
 - **验证命令**：automated suite、trigger eval、clean-host native activation 与 collection fallback 命令见 README「验证与验收命令」；完整 `skills/` collection 仍是唯一安装单元。
+- **宿主显式入口**：`/zhanggui` 是逻辑 alias；OMP 交互式原生命令为 `/skill:zhanggui`（host-direct body injection）。`omp -p "/zhanggui ..."` 在 OMP 中不是有效 native-root 证据。
 
 ## 1. 背景
 
@@ -26,7 +27,7 @@
 
 ## 2. 目标
 
-- 用户启动完整工作流时只需调用 `/zhanggui` 一次。
+- 用户启动完整工作流时只需显式调用一次根编排器（逻辑 alias `/zhanggui`；OMP 交互式 `/skill:zhanggui`）。
 - 内部路由遵守宿主真实 invocation 规则。
 - runtime plugin 发现一个 explicit-only host-extended 根技能与八个可独立匹配的严格 leaf skills。
 - leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 `SkillResult`。
@@ -300,11 +301,12 @@ DONE 必须有当前 validation 的新鲜证据。
 
 - plugin 发现 `zhanggui/SKILL.md` 与八个严格 leaf；只有根同时设置 Claude `disable-model-invocation: true` 与 Codex `allow_implicit_invocation: false`。
 - 根的 explicit-only 是有意取舍：避免普通问答被重工作流接管。用户启动完整流程后不需要再次输入命令。
+- `/zhanggui` 是逻辑 alias；OMP 交互式原生显式入口为 `/skill:zhanggui`，在模型工作前 host-direct 注入根 `SKILL.md`。`omp -p "/zhanggui ..."` / `omp -p "/skill:zhanggui ..."` 将未知 slash 当作普通文本，不能作为 native-root 证据。
 - leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过 `SkillRequest` 激活同一 leaf 的 `Zhanggui Embedded` 模式。
 - 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 collection 布局。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
 - 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery，只返回 `SkillRequest`；`RECOVERY.md` 同样只由根按需读取。
 - 不得同时启用另一套默认强编排入口。
-- clean-host acceptance 以 OMP JSONL 事件为证据：native 路径记录 `skill://` 读取；fallback 路径在 `--no-skills` 下记录受控 collection 文件读取与 frontmatter 身份校验。
+- clean-host acceptance：OMP 交互式 root 以 TUI host-direct injection 为证据；leaf 非交互 JSONL 记录 `skill://` 读取；fallback 在 `--no-skills` 下记录受控 collection 文件读取与 frontmatter 身份校验。
 
 ### 10.1 Batch 与任务命名空间
 
