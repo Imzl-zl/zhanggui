@@ -7,8 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const datasetPath = path.join(projectRoot, 'evals', 'skill-triggering.json');
-
-const expected = [
+const expectedSkills = [
   'zhanggui',
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
@@ -19,123 +18,114 @@ const expected = [
   'zhanggui-dispatching-parallel-agents',
   'zhanggui-finishing-a-development-branch',
 ];
+const expectedThresholds = {
+  explicit_root_rate: 1,
+  implicit_root_rate_gte: 0.8,
+  root_false_positive_rate_lte: 0.1,
+  root_first_conflict_rate: 1,
+};
 
 let data;
 let loadError;
-
 try {
   data = JSON.parse(await readFile(datasetPath, 'utf8'));
 } catch (error) {
   loadError = error;
 }
 
-test('trigger dataset file exists and parses as JSON object', () => {
+function casesWithTag(tag) {
+  return data.cases.filter(item => item.tags.includes(tag));
+}
+
+function canonicalCaseProjection(cases) {
+  return cases.map(item => ({
+    id: item.id,
+    prompt: item.prompt,
+    source: item.source,
+    expected_skill: item.expected_skill,
+    expected_first: item.expected_first,
+    forbidden_skills: item.forbidden_skills,
+    tags: item.tags,
+  }));
+}
+
+function hashCases(cases) {
+  return createHash('sha256')
+    .update(JSON.stringify(canonicalCaseProjection(cases)))
+    .digest('hex');
+}
+
+const APPROVED_TRIGGER_DATASET_SHA256 =
+  '42b30e2b65a289a035b4f585f36ac053d110eaae2847e749329b347ba3eb6af5';
+
+function assertApprovedTriggerDataset(cases, expectedDigest = APPROVED_TRIGGER_DATASET_SHA256) {
+  assert.equal(hashCases(cases), expectedDigest);
+}
+
+test('trigger v2 file exists and exposes the approved schema', () => {
   assert.ifError(loadError);
-  assert.equal(typeof data, 'object');
-  assert.notEqual(data, null);
-  assert.equal(Array.isArray(data), false);
+  assert.equal(data.version, 2);
+  assert.equal(data.runs_per_case, 3);
+  assert.deepEqual(data.thresholds, expectedThresholds);
+  assert.ok(Array.isArray(data.cases));
+  assert.equal(data.cases.length, 122);
 });
 
-test('trigger dataset covers every skill with positive and near-miss cases', () => {
+test('every trigger case has a stable identity and valid routing expectations', () => {
   assert.ifError(loadError);
-  assert.equal(data.version, 1);
-  assert.equal(data.runs_per_query, 3);
-  assert.equal(data.trigger_threshold, 0.5);
-  assert.ok(Number.isFinite(data.version));
-  assert.ok(Number.isFinite(data.runs_per_query));
-  assert.ok(Number.isFinite(data.trigger_threshold));
-  assert.ok(Array.isArray(data.skills));
-  assert.equal(data.skills.length, expected.length);
-  assert.deepEqual(
-    data.skills.map((item) => item.name),
-    expected,
-  );
-  assert.deepEqual(new Set(data.skills.map((item) => item.name)), new Set(expected));
-
-  for (const item of data.skills) {
-    assert.equal(typeof item.name, 'string');
-    assert.ok(Array.isArray(item.should_trigger), `${item.name} should_trigger must be array`);
-    assert.ok(Array.isArray(item.should_not_trigger), `${item.name} should_not_trigger must be array`);
-    assert.equal(item.should_trigger.length, 6, `${item.name} needs exactly 6 positives`);
-    assert.equal(item.should_not_trigger.length, 6, `${item.name} needs exactly 6 negatives`);
-    for (const prompt of item.should_trigger) {
-      assert.equal(typeof prompt, 'string');
-      assert.ok(prompt.length > 0, `${item.name} positive prompt must be non-empty`);
-    }
-    for (const prompt of item.should_not_trigger) {
-      assert.equal(typeof prompt, 'string');
-      assert.ok(prompt.length > 0, `${item.name} negative prompt must be non-empty`);
+  const ids = new Set();
+  for (const item of data.cases) {
+    assert.equal(typeof item.id, 'string');
+    assert.ok(item.id.length > 0);
+    assert.equal(ids.has(item.id), false, `duplicate case id: ${item.id}`);
+    ids.add(item.id);
+    assert.equal(typeof item.prompt, 'string');
+    assert.ok(item.prompt.length > 0);
+    assert.ok(['explicit', 'implicit'].includes(item.source));
+    assert.ok(item.expected_skill === null || expectedSkills.includes(item.expected_skill));
+    assert.ok(item.expected_first === null || expectedSkills.includes(item.expected_first));
+    assert.ok(Array.isArray(item.forbidden_skills));
+    assert.ok(item.forbidden_skills.every(name => expectedSkills.includes(name)));
+    assert.ok(Array.isArray(item.tags));
+    assert.ok(item.tags.length > 0);
+    assert.equal(new Set(item.tags).size, item.tags.length);
+    if (item.expected_skill !== null) {
+      assert.equal(item.forbidden_skills.includes(item.expected_skill), false);
     }
   }
 });
 
-// Pins approved boundary prompt text via a stable digest of the ordered
-// {name, should_trigger, should_not_trigger} projection. Per-skill uniqueness
-// remains required; global cross-skill near-miss reuse is accepted.
-const APPROVED_TRIGGER_DATASET_SHA256 =
-  '8843d9a27cb133591b90b00f63892bed5f1361dc871943605c5e30c851ee0e03';
-
-function canonicalTriggerProjection(skills) {
-  return skills.map((item) => ({
-    name: item.name,
-    should_trigger: item.should_trigger,
-    should_not_trigger: item.should_not_trigger,
-  }));
-}
-
-function hashTriggerProjection(skills) {
-  return createHash('sha256')
-    .update(JSON.stringify(canonicalTriggerProjection(skills)))
-    .digest('hex');
-}
-
-function assertApprovedTriggerDataset(skills, expectedDigest = APPROVED_TRIGGER_DATASET_SHA256) {
-  assert.equal(hashTriggerProjection(skills), expectedDigest);
-}
-
-test('trigger dataset pins approved prompt boundaries by digest', () => {
+test('trigger v2 preserves every v0.6 leaf baseline and adds hybrid root coverage', () => {
   assert.ifError(loadError);
+  for (const name of expectedSkills) {
+    const baselinePositives = data.cases.filter(item =>
+      item.tags.includes('baseline-positive') && item.expected_skill === name,
+    );
+    const baselineNegatives = data.cases.filter(item =>
+      item.tags.includes('baseline-negative') && item.forbidden_skills.includes(name),
+    );
+    assert.equal(baselinePositives.length, 6, `${name} needs 6 baseline positives`);
+    assert.equal(baselineNegatives.length, 6, `${name} needs 6 baseline negatives`);
+  }
+  assert.equal(casesWithTag('explicit-root').length, 6);
+  assert.equal(casesWithTag('implicit-root').length, 8);
+  assert.equal(casesWithTag('root-near-miss').length, 12);
+  assert.ok(casesWithTag('root-first-conflict').length >= 4);
+  assert.ok(casesWithTag('reverse-conflict').length >= 4);
+  assert.ok(casesWithTag('explicit-root').every(item => item.source === 'explicit'));
+  assert.ok(casesWithTag('implicit-root').every(item => item.source === 'implicit'));
+  assert.ok(casesWithTag('implicit-root').every(item => item.expected_first === 'zhanggui'));
+  assert.ok(casesWithTag('root-near-miss').every(item => item.forbidden_skills.includes('zhanggui')));
+});
 
-  // Mutation probe: any prompt substitution must fail the digest pin.
-  const mutated = structuredClone(data.skills);
-  mutated[0] = {
-    ...mutated[0],
-    should_trigger: mutated[0].should_trigger.map((prompt, index) =>
-      index === 0 ? `${prompt} [mutated-placeholder]` : prompt,
-    ),
-  };
-  assert.notEqual(hashTriggerProjection(mutated), APPROVED_TRIGGER_DATASET_SHA256);
+test('trigger v2 pins the complete ordered case matrix by digest', () => {
+  assert.ifError(loadError);
+  const mutated = structuredClone(data.cases);
+  mutated[0] = { ...mutated[0], prompt: `${mutated[0].prompt} [mutation-probe]` };
+  assert.notEqual(hashCases(mutated), APPROVED_TRIGGER_DATASET_SHA256);
   assert.throws(
     () => assertApprovedTriggerDataset(mutated),
     /Expected values to be strictly equal|AssertionError/,
   );
-
-  // Exact current ordered projection is green.
-  assertApprovedTriggerDataset(data.skills);
-
-  const prompts = data.skills.flatMap((item) => [...item.should_trigger, ...item.should_not_trigger]);
-  assert.equal(prompts.length, 108);
-
-  // Each skill keeps unique local positives/negatives; the brief reuses a few
-  // near-miss phrasings across adjacent skills, so uniqueness is per skill.
-  for (const item of data.skills) {
-    const local = [...item.should_trigger, ...item.should_not_trigger];
-    assert.equal(new Set(local).size, local.length, `${item.name} prompts must be unique within the skill`);
-    assert.equal(new Set(item.should_trigger).size, item.should_trigger.length);
-    assert.equal(new Set(item.should_not_trigger).size, item.should_not_trigger.length);
-    for (const prompt of item.should_trigger) {
-      assert.ok(!item.should_not_trigger.includes(prompt), `${item.name} cannot list the same prompt as positive and negative`);
-    }
-  }
-
-  const root = data.skills.find((item) => item.name === 'zhanggui');
-  assert.ok(root, 'root skill entry required');
-  assert.ok(
-    root.should_trigger.every((prompt) => /\/zhanggui|Zhanggui workflow/i.test(prompt)),
-    'root positives must be explicit',
-  );
-  assert.ok(
-    root.should_not_trigger.every((prompt) => !/\/zhanggui/i.test(prompt)),
-    'root negatives must remain implicit',
-  );
+  assertApprovedTriggerDataset(data.cases);
 });
