@@ -36,6 +36,31 @@ function section(content, heading, nextHeading) {
   return content.slice(from, end === -1 ? content.length : end);
 }
 
+function embeddedSections(content) {
+  const heading = '### Zhanggui Embedded';
+  const bodies = [];
+  let from = 0;
+  while (true) {
+    const start = content.indexOf(heading, from);
+    if (start === -1) break;
+    const bodyStart = start + heading.length;
+    const rest = content.slice(bodyStart);
+    const next = rest.search(/\n#{2,3} /);
+    const bodyEnd = next === -1 ? content.length : bodyStart + next;
+    bodies.push(content.slice(bodyStart, bodyEnd));
+    from = bodyStart;
+  }
+  return bodies;
+}
+
+const coreLeafStatusInDelta = {
+  'zhanggui-systematic-debugging': /StageStatus:\s*resolved\s*\|\s*blocked\s*\|\s*architecture-review-required/,
+  'zhanggui-test-driven-development': /ProcedureStatus:\s*tdd-complete\s*\|\s*blocked/,
+  'zhanggui-verification-before-completion': /StageStatus:\s*verified\s*\|\s*not-verified/,
+  'zhanggui-requesting-code-review': /StageStatus:\s*review-passed\s*\|\s*fixes-required\s*\|\s*blocked/,
+  'zhanggui-receiving-code-review': /StageStatus:\s*feedback-resolved\s*\|\s*changes-required\s*\|\s*blocked/,
+};
+
 test('root uses one documented host extension and an explicit-only description', async () => {
   const root = await readFile(rootPath, 'utf8');
   const keys = frontmatterKeys(root);
@@ -109,18 +134,35 @@ const coreLeafNames = [
 test('core leaves return identity-bearing Embedded SkillResult envelopes', async () => {
   for (const name of coreLeafNames) {
     const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
-    const embedded = section(content, '### Zhanggui Embedded', '\n## ');
-    for (const field of ['request_id', 'name', 'mode', 'status', 'evidence', 'delta', 'question_request', 'next_skill_request']) {
-      assert.match(embedded, new RegExp(`\\b${field}:`), `${name} missing ${field}`);
+    const sections = embeddedSections(content);
+    assert.ok(sections.length >= 1, `${name} missing ### Zhanggui Embedded`);
+    for (const [index, embedded] of sections.entries()) {
+      for (const field of ['request_id', 'name', 'mode', 'status', 'evidence', 'delta', 'question_request', 'next_skill_request']) {
+        assert.match(embedded, new RegExp(`\\b${field}:`), `${name} Embedded#${index + 1} missing ${field}`);
+      }
+      assert.match(embedded, new RegExp(`name: ${name}`), `${name} Embedded#${index + 1} missing exact name`);
+      assert.match(embedded, /mode: zhanggui-embedded/, `${name} Embedded#${index + 1} missing mode`);
     }
-    assert.match(embedded, new RegExp(`name: ${name}`));
-    assert.match(embedded, /mode: zhanggui-embedded/);
+    const operational = sections.find(body => /(?:StageStatus|ProcedureStatus):/.test(body)) ?? sections.at(-1);
+    assert.match(
+      operational,
+      coreLeafStatusInDelta[name],
+      `${name} operational Embedded delta missing exact local status mapping`,
+    );
   }
 });
 
 test('Embedded debugging requests parallel or TDD by name instead of loading sibling files', async () => {
   const content = await readFile(path.join(skillsRoot, 'zhanggui-systematic-debugging', 'SKILL.md'), 'utf8');
   assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
-  assert.match(content, /next_skill_request:[\s\S]*zhanggui-dispatching-parallel-agents/);
-  assert.match(content, /next_skill_request:[\s\S]*zhanggui-test-driven-development/);
+  assert.match(
+    content,
+    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-dispatching-parallel-agents/,
+  );
+  assert.match(
+    content,
+    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-test-driven-development/,
+  );
+  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-dispatching-parallel-agents[\s\S]{0,200}?serial/i);
+  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-test-driven-development[\s\S]{0,200}?(?:required[\s\S]{0,80}?block|block[\s\S]{0,80}?unavailable)/i);
 });
