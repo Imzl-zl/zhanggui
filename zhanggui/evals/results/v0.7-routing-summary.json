@@ -4,51 +4,51 @@
   "total_cases": 122,
   "total_runs": 366,
   "rates": {
-    "explicit_root": 1.0,
-    "implicit_root": 1.0,
-    "root_false_positive": 0.0,
-    "root_first_conflict": 1.0
+    "explicit_root": 1,
+    "implicit_root": 1,
+    "root_false_positive": 0,
+    "root_first_conflict": 1
   },
   "leaf_baselines": [
     {
       "name": "zhanggui-systematic-debugging",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-test-driven-development",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-verification-before-completion",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-requesting-code-review",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-receiving-code-review",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-using-git-worktrees",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-dispatching-parallel-agents",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     },
     {
       "name": "zhanggui-finishing-a-development-branch",
-      "positive_trigger_rate": 1.0,
-      "negative_trigger_rate": 0.0
+      "positive_trigger_rate": 1,
+      "negative_trigger_rate": 0
     }
   ],
   "failures": [],
@@ -58,7 +58,7 @@
     "case_count": 122
   },
   "catalog_snapshot": {
-    "source_head": "1e71e7dab11754208c7c247ea039ffb076d8d0dc",
+    "source_head": "b6b7ee550ac2a38e6664ae0fe313988efc0e5a83",
     "sha256": "a26ea522b801bcbe113ab4d1b980575a830ce8b904412694d51d4485e86b24b9",
     "entries": [
       {
@@ -111,6 +111,43 @@
   "routing_evaluation": {
     "model": "default",
     "tool": "completion",
+    "system_prompt": "You are evaluating first-skill routing for an Agent Skills catalog. Based only on each catalog entry's name and description, the invocation source, and the user request, select the single skill that should load first. Return null when no skill applies. Do not execute any skill, solve the user's task, or select a later lifecycle substep. An explicit source means the user intentionally invoked the root named by the request; an implicit source contains no host command guarantee.",
+    "user_prompt_template": "Catalog: ${JSON.stringify(catalog)}\nInvocation source: ${item.source}\nUser request: ${item.prompt}",
+    "result_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selected_skill": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": [
+                "zhanggui",
+                "zhanggui-systematic-debugging",
+                "zhanggui-test-driven-development",
+                "zhanggui-verification-before-completion",
+                "zhanggui-requesting-code-review",
+                "zhanggui-receiving-code-review",
+                "zhanggui-using-git-worktrees",
+                "zhanggui-dispatching-parallel-agents",
+                "zhanggui-finishing-a-development-branch"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "selected_skill",
+        "reason"
+      ]
+    },
+    "evaluator_identity_sha256": "aab7a330719eb4a0ac6e585483351c350cc3c2d85eb564b808892132b8f4f12f",
     "scored_at": "2026-07-26T07:54:54.070512+00:00",
     "scored_slots": 366,
     "initial_attempts": 366,

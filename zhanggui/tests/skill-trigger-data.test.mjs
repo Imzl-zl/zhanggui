@@ -25,6 +25,53 @@ const expectedThresholds = {
   root_false_positive_rate_lte: 0.1,
   root_first_conflict_rate: 1,
 };
+const APPROVED_CATALOG_SOURCE_HEAD =
+  'b6b7ee550ac2a38e6664ae0fe313988efc0e5a83';
+const APPROVED_EVALUATOR_SYSTEM_PROMPT =
+  'You are evaluating first-skill routing for an Agent Skills catalog. Based only on each catalog entry\'s name and description, the invocation source, and the user request, select the single skill that should load first. Return null when no skill applies. Do not execute any skill, solve the user\'s task, or select a later lifecycle substep. An explicit source means the user intentionally invoked the root named by the request; an implicit source contains no host command guarantee.';
+const APPROVED_EVALUATOR_USER_PROMPT_TEMPLATE = [
+  'Catalog: ${JSON.stringify(catalog)}',
+  'Invocation source: ${item.source}',
+  'User request: ${item.prompt}',
+].join('\n');
+const APPROVED_EVALUATOR_RESULT_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    selected_skill: {
+      anyOf: [
+        {
+          type: 'string',
+          enum: [
+            'zhanggui',
+            'zhanggui-systematic-debugging',
+            'zhanggui-test-driven-development',
+            'zhanggui-verification-before-completion',
+            'zhanggui-requesting-code-review',
+            'zhanggui-receiving-code-review',
+            'zhanggui-using-git-worktrees',
+            'zhanggui-dispatching-parallel-agents',
+            'zhanggui-finishing-a-development-branch',
+          ],
+        },
+        { type: 'null' },
+      ],
+    },
+    reason: { type: 'string' },
+  },
+  required: ['selected_skill', 'reason'],
+};
+
+function evaluatorIdentityDigest() {
+  return createHash('sha256')
+    .update(JSON.stringify({
+      system_prompt: APPROVED_EVALUATOR_SYSTEM_PROMPT,
+      user_prompt_template: APPROVED_EVALUATOR_USER_PROMPT_TEMPLATE,
+      result_schema: APPROVED_EVALUATOR_RESULT_SCHEMA,
+    }))
+    .digest('hex');
+}
+
 
 let data;
 let loadError;
@@ -185,4 +232,20 @@ test('v0.7 catalog snapshot exactly matches current skill descriptions', async (
   const digest = createHash('sha256').update(JSON.stringify(entries)).digest('hex');
   assert.deepEqual(summary.catalog_snapshot.entries, entries);
   assert.equal(summary.catalog_snapshot.sha256, digest);
+  assert.equal(summary.catalog_snapshot.source_head, APPROVED_CATALOG_SOURCE_HEAD);
+});
+
+test('v0.7 routing summary pins evaluator prompt identity', () => {
+  assert.ifError(summaryLoadError);
+  assert.equal(summary.routing_evaluation.system_prompt, APPROVED_EVALUATOR_SYSTEM_PROMPT);
+  assert.equal(
+    summary.routing_evaluation.user_prompt_template,
+    APPROVED_EVALUATOR_USER_PROMPT_TEMPLATE,
+  );
+  assert.deepEqual(
+    summary.routing_evaluation.result_schema,
+    APPROVED_EVALUATOR_RESULT_SCHEMA,
+  );
+  const digest = evaluatorIdentityDigest();
+  assert.equal(summary.routing_evaluation.evaluator_identity_sha256, digest);
 });
