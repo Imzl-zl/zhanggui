@@ -100,6 +100,10 @@ test('root uses one documented host extension and an explicit-only description',
   const standard = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
   assert.deepEqual(keys.filter(key => !standard.has(key)), ['disable-model-invocation']);
   assert.match(root, /^description: Use only when the user explicitly invokes \/zhanggui\b/m);
+  assert.match(
+    root,
+    /^description:.*when present, this orchestrator MUST load before any leaf skill/im,
+  );
   assert.match(root, /^compatibility: Requires a host profile that supports explicit-only invocation/m);
 });
 

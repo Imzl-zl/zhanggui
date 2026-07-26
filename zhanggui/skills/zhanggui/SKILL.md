@@ -1,6 +1,6 @@
 ---
 name: zhanggui
-description: Use only when the user explicitly invokes /zhanggui to run the complete stateful development workflow from design through verified delivery
+description: Use only when the user explicitly invokes /zhanggui; when present, this orchestrator MUST load before any leaf skill and own the complete stateful development workflow from design through verified delivery
 compatibility: Requires a host profile that supports explicit-only invocation and the installed Zhanggui skill collection
 disable-model-invocation: true
 ---

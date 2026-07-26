@@ -137,6 +137,10 @@ test('root orchestrator remains explicit-only', async () => {
   const rootExtensions = Object.keys(metadata).filter(key => !standardFrontmatterFields.has(key));
   assert.deepEqual(rootExtensions, ['disable-model-invocation']);
   assert.match(metadata.description ?? '', /^Use only when the user explicitly invokes \/zhanggui\b/);
+  assert.match(
+    metadata.description ?? '',
+    /when present, this orchestrator MUST load before any leaf skill/i,
+  );
   assert.match(metadata.compatibility ?? '', /explicit-only invocation/);
 
 

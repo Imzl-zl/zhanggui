@@ -1,5 +1,5 @@
 interface:
   display_name: "Zhanggui（掌柜）"
-  short_description: "Route one request from idea to verified result"
+  short_description: "When /zhanggui is present, load this orchestrator before any leaf skill"
 policy:
   allow_implicit_invocation: false
