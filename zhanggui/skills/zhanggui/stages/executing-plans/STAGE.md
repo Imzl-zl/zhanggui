@@ -149,9 +149,9 @@ Next: 一个明确动作
 ```text
 TaskDelta: 本轮更新的任务行/子任务状态与关键 notes
 Evidence: 最新 validation 命令与结果
-ReturnPhase / ReturnNode: debug-required、design-drift、verification-required、skill-required 时必填（execute + 当前 task id）
-StageStatus: finalization-complete | debug-required | design-drift | verification-required | skill-required | awaiting-user | blocked
-SkillRequest: skill-required 时必填（完整 Embedded SkillRequest）
+ReturnPhase / ReturnNode: design-drift 时必填（execute + 当前 task id）
+StageStatus: finalization-complete | design-drift | skill-required | awaiting-user | blocked
+SkillRequest: skill-required 时必填（完整 Embedded SkillRequest）；`SkillRequest.return_to` is the sole resume target / only resume channel for skill-required
 Next: 对编排器的一个建议动作
 ```
 

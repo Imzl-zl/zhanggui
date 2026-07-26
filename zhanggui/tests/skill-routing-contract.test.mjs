@@ -81,8 +81,12 @@ test('internal stages request leaves through the root and contain no sibling ski
   const stagePath = path.join(skillsRoot, 'zhanggui', 'stages', 'executing-plans', 'STAGE.md');
   const stage = await readFile(stagePath, 'utf8');
   assert.doesNotMatch(stage, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
+  assert.doesNotMatch(stage, /\bdebug-required\b/);
+  assert.doesNotMatch(stage, /\bverification-required\b/);
   assert.match(stage, /StageStatus: skill-required/);
   assert.match(stage, /SkillRequest:/);
+  assert.match(stage, /SkillRequest\.return_to/);
+  assert.match(stage, /SkillRequest\.return_to[\s\S]*sole resume target|sole resume target[\s\S]*SkillRequest\.return_to|only resume channel[\s\S]*SkillRequest\.return_to|SkillRequest\.return_to[\s\S]*only resume channel/i);
   for (const name of [
     'zhanggui-using-git-worktrees',
     'zhanggui-dispatching-parallel-agents',
