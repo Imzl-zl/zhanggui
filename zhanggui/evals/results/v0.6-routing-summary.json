@@ -1,0 +1,85 @@
+{
+  "version": "0.6",
+  "runs_per_query": 3,
+  "total_queries": 108,
+  "total_runs": 324,
+  "skills": [
+    {
+      "name": "zhanggui",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-systematic-debugging",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-test-driven-development",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-verification-before-completion",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.16666666666666666,
+      "failures": [
+        {
+          "kind": "negative",
+          "prompt": "未验证分支现在直接合并",
+          "run": 1,
+          "expected": "not zhanggui-verification-before-completion",
+          "actual": "zhanggui-verification-before-completion"
+        },
+        {
+          "kind": "negative",
+          "prompt": "未验证分支现在直接合并",
+          "run": 2,
+          "expected": "not zhanggui-verification-before-completion",
+          "actual": "zhanggui-verification-before-completion"
+        },
+        {
+          "kind": "negative",
+          "prompt": "未验证分支现在直接合并",
+          "run": 3,
+          "expected": "not zhanggui-verification-before-completion",
+          "actual": "zhanggui-verification-before-completion"
+        }
+      ]
+    },
+    {
+      "name": "zhanggui-requesting-code-review",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-receiving-code-review",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-using-git-worktrees",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-dispatching-parallel-agents",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    },
+    {
+      "name": "zhanggui-finishing-a-development-branch",
+      "positive_trigger_rate": 1.0,
+      "negative_trigger_rate": 0.0,
+      "failures": []
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,178 @@
+{
+  "version": 1,
+  "runs_per_query": 3,
+  "trigger_threshold": 0.5,
+  "skills": [
+    {
+      "name": "zhanggui",
+      "should_trigger": [
+        "/zhanggui 帮我从需求澄清到验证交付设计一个库存系统",
+        "Invoke /zhanggui and run the complete workflow for this product idea",
+        "请显式启动 /zhanggui，完整处理这个跨模块功能",
+        "Use /zhanggui to take this ambiguous project from design through delivery",
+        "/zhanggui 恢复这个有 checkpoint 的长期任务",
+        "Start the stateful Zhanggui workflow explicitly for this migration"
+      ],
+      "should_not_trigger": [
+        "这个单元测试失败了，先调查根因",
+        "用 TDD 实现这个 API 行为",
+        "帮我审查当前 diff",
+        "评审者建议删锁，先核实反馈",
+        "创建隔离 worktree",
+        "已验证的分支接下来怎么处理"
+      ]
+    },
+    {
+      "name": "zhanggui-systematic-debugging",
+      "should_trigger": [
+        "这个测试偶发失败，先稳定复现并定位根因",
+        "构建失败了，读完整错误并调查，不要先猜修复",
+        "生产接口返回了意外状态，追踪数据流找到根因",
+        "最近性能退化，请先建立证据和单一假设",
+        "依赖升级后集成异常，系统化排查边界",
+        "上次修复没有效果，重新从根因调查开始"
+      ],
+      "should_not_trigger": [
+        "从失败测试开始实现一个新的 API 行为",
+        "工作完成前运行最终验证",
+        "对当前实现做独立代码审查",
+        "评审者给了修改建议，判断是否接受",
+        "把三个互不相关的问题派给不同 agent",
+        "已验证分支应该 merge 还是开 PR"
+      ]
+    },
+    {
+      "name": "zhanggui-test-driven-development",
+      "should_trigger": [
+        "用红绿重构实现新的订单折扣行为",
+        "修复这个生产 bug，先写能正确失败的回归测试",
+        "重构解析器但保持可观察行为，按 TDD 执行",
+        "给公开 API 增加新的错误处理合同，测试先行",
+        "实现数据库迁移后的新读取行为，先证明 RED",
+        "修改权限判断逻辑，先用失败测试锁定边界"
+      ],
+      "should_not_trigger": [
+        "测试失败但还不知道根因，先调查",
+        "检查现有测试是否全部通过并证明完成",
+        "只审查这个 diff，不修改文件",
+        "评审者要求改实现，先核实建议",
+        "这是一次性 throwaway prototype",
+        "只修改没有生产行为的格式配置"
+      ]
+    },
+    {
+      "name": "zhanggui-verification-before-completion",
+      "should_trigger": [
+        "准备声称修复完成，先运行新鲜验证",
+        "提交前证明所有验收条件都满足",
+        "要推送了，检查完整命令输出和失败数",
+        "在进入下一任务前核对当前交付是否真的完成",
+        "准备开 PR，先用实际证据验证 ready",
+        "不要说应该能过，运行能证明这个 claim 的检查"
+      ],
+      "should_not_trigger": [
+        "实现一个新的生产功能",
+        "测试失败，先找根因",
+        "请求独立代码审查",
+        "处理评审者反馈",
+        "创建隔离 worktree",
+        "未验证分支现在直接合并"
+      ]
+    },
+    {
+      "name": "zhanggui-requesting-code-review",
+      "should_trigger": [
+        "实现完成了，合并前做独立代码审查",
+        "这个安全改动需要质量和规格双轴评审",
+        "审查 BASE 到 HEAD 的完整变更",
+        "公开 API 修改后先找 reviewer 检查",
+        "Epic child 完成，继续依赖任务前做 review",
+        "只报告当前 diff 的 Critical 和 Important 问题"
+      ],
+      "should_not_trigger": [
+        "评审者已经留言，判断建议是否正确",
+        "运行测试证明功能完成",
+        "测试失败，调查根因",
+        "解释这段代码做什么，不做 review",
+        "创建 worktree 保护脏工作区",
+        "选择 merge、PR、keep 或 discard"
+      ]
+    },
+    {
+      "name": "zhanggui-receiving-code-review",
+      "should_trigger": [
+        "评审者建议删除这个锁，先技术核实再改",
+        "收到六条 code review feedback，逐项判断",
+        "review comment 和既定架构冲突，先找证据",
+        "不要盲目接受 reviewer 的重构建议",
+        "外部评审说测试没价值，验证这个意见",
+        "处理 PR feedback，正确的实施，错误的说明理由"
+      ],
+      "should_not_trigger": [
+        "实现完成，请发起新的独立审查",
+        "检查当前工作是否已验证完成",
+        "测试失败，找根因",
+        "从失败测试开始修 bug",
+        "创建隔离 worktree",
+        "准备把验证后的分支开 PR"
+      ]
+    },
+    {
+      "name": "zhanggui-using-git-worktrees",
+      "should_trigger": [
+        "当前 checkout 很脏，开始功能前创建隔离 worktree",
+        "两个并行写范围需要独立工作区",
+        "执行这个高风险计划前保护当前分支",
+        "请明确用 worktree 开始这个功能",
+        "主目录有未提交改动，不要在原地实现",
+        "执行计划前检测是否已经处于 linked worktree"
+      ],
+      "should_not_trigger": [
+        "验证后的功能分支应该 merge 还是开 PR",
+        "只创建一个普通 git branch，不需要隔离目录",
+        "审查当前 diff",
+        "调查测试失败根因",
+        "列出当前 worktree 状态，不开始工作",
+        "处理评审者反馈"
+      ]
+    },
+    {
+      "name": "zhanggui-dispatching-parallel-agents",
+      "should_trigger": [
+        "三个互不相关的问题域写范围不重叠，并行调查",
+        "把独立的前端、后端和文档任务一次派发",
+        "两个失败来自不同组件，可以分别找根因",
+        "按明确 scope 同时派发多个只读 research agent",
+        "这些 Epic children 依赖已满足且互不写同一文件",
+        "并行实现这些没有共享状态的机械更新"
+      ],
+      "should_not_trigger": [
+        "三个测试失败但看起来共享同一个根因",
+        "两个任务都会修改同一个核心文件",
+        "先完成 schema，后面的 API 才能开始",
+        "只有一个小任务需要执行",
+        "没有 subagent 能力，假装并行完成",
+        "一个 bug 还没定位根因，先系统化调查"
+      ]
+    },
+    {
+      "name": "zhanggui-finishing-a-development-branch",
+      "should_trigger": [
+        "分支已经验证，选择 merge、PR、keep 或 discard",
+        "测试通过了，把 feature branch 本地合并回 main",
+        "验证完成，推送并实际创建 PR",
+        "工作已验证但我想保留分支稍后处理",
+        "列出丢弃这个已验证 worktree 的精确影响并确认",
+        "完成开发分支收尾并按选择清理 owned worktree"
+      ],
+      "should_not_trigger": [
+        "功能还没验证，现在直接合并",
+        "开始功能前创建隔离 worktree",
+        "实现一个新的生产行为",
+        "请求代码审查",
+        "测试失败，调查根因",
+        "收到 PR feedback，判断是否接受"
+      ]
+    }
+  ]
+}
