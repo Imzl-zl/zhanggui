@@ -402,4 +402,4 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 5. 是否会丢失 decision id、dependencies、owner、UI mode、consensus 或 return point？
 6. 是否把可查事实重新问给用户？
 7. 是否有失败场景证明当前设计不足，并有 discovery、Direct、Embedded 和路径解析验证？
-不能明确回答时不新增入口。默认强编排器保持唯一，有状态 stage 保持局部并只返回请求，leaf 保持双模式与无状态所有权。
+不能明确回答时不新增入口。默认强编排器保持唯一；有状态 stage 保持局部、返回 local delta，并仅在 leaf handoff 时返回 `SkillRequest`；leaf 保持双模式与无状态所有权。
