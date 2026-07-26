@@ -1,6 +1,6 @@
 ---
 name: zhanggui-finishing-a-development-branch
-description: Use when verified branch or worktree work only needs the explicit choice to merge, push a PR, keep, or discard; defer to the zhanggui root when finishing is the last step of an explicit or end-to-end workflow it owns
+description: Use when the user states tests passed or verification is complete, or verified branch or worktree work now needs the explicit choice to merge, push a PR, keep, or discard; do not use when the user explicitly says verification is missing; defer to the zhanggui root when finishing is the last step of an explicit or end-to-end workflow it owns
 ---
 
 # Finishing a Development Branch
