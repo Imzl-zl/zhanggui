@@ -61,6 +61,39 @@ const coreLeafStatusInDelta = {
   'zhanggui-receiving-code-review': /StageStatus:\s*feedback-resolved\s*\|\s*changes-required\s*\|\s*blocked/,
 };
 
+// Structural: local StageStatus/ProcedureStatus must be indented under delta, not a SkillResult peer (T3-1).
+function assertLocalStatusUnderDelta(embedded, statusRegex, label = 'Embedded') {
+  const fenceMatch = /```(?:text|yaml)?\r?\n([\s\S]*?)```/.exec(embedded);
+  const block = fenceMatch ? fenceMatch[1] : embedded;
+  const skillResultIdx = block.search(/^\s*SkillResult:\s*$/m);
+  const searchFrom = skillResultIdx === -1 ? 0 : skillResultIdx;
+  const skillSlice = block.slice(searchFrom);
+
+  const deltaLine = /^( *)delta:\s*(.*)$/m.exec(skillSlice);
+  assert.ok(deltaLine, `${label}: missing delta: inside SkillResult block`);
+  const deltaIndent = deltaLine[1].length;
+  const afterDeltaHeader = skillSlice.slice(deltaLine.index + deltaLine[0].length);
+  // Next top-level SkillResult field at the same indent as delta (e.g. question_request / next_skill_request).
+  const peerField = new RegExp(`\\n {${deltaIndent}}[a-z_][a-z0-9_]*:`, 'm').exec(afterDeltaHeader);
+  const deltaBody = peerField ? afterDeltaHeader.slice(0, peerField.index) : afterDeltaHeader;
+
+  const statusLine = /^( +)((?:Stage|Procedure)Status:\s*.+)$/m.exec(deltaBody);
+  assert.ok(statusLine, `${label}: local status missing under delta`);
+  assert.ok(
+    statusLine[1].length > deltaIndent,
+    `${label}: local status must be indented under delta, not a top-level/peer field`,
+  );
+  assert.match(statusLine[2], statusRegex, `${label}: exact local status mapping missing under delta`);
+
+  // Reject any StageStatus/ProcedureStatus that is a column-peer of delta (same indent) or less indented.
+  const peerStatus = new RegExp(`(?:^|\\n) {0,${deltaIndent}}(?:Stage|Procedure)Status:`, 'm');
+  assert.doesNotMatch(
+    skillSlice,
+    peerStatus,
+    `${label}: local status must not appear as SkillResult root-level/column-peer field`,
+  );
+}
+
 test('root uses one documented host extension and an explicit-only description', async () => {
   const root = await readFile(rootPath, 'utf8');
   const keys = frontmatterKeys(root);
@@ -144,10 +177,10 @@ test('core leaves return identity-bearing Embedded SkillResult envelopes', async
       assert.match(embedded, /mode: zhanggui-embedded/, `${name} Embedded#${index + 1} missing mode`);
     }
     const operational = sections.find(body => /(?:StageStatus|ProcedureStatus):/.test(body)) ?? sections.at(-1);
-    assert.match(
+    assertLocalStatusUnderDelta(
       operational,
       coreLeafStatusInDelta[name],
-      `${name} operational Embedded delta missing exact local status mapping`,
+      `${name} operational Embedded`,
     );
   }
 });
@@ -165,6 +198,32 @@ test('Embedded debugging requests parallel or TDD by name instead of loading sib
   );
   assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-dispatching-parallel-agents[\s\S]{0,200}?serial/i);
   assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-test-driven-development[\s\S]{0,200}?(?:required[\s\S]{0,80}?block|block[\s\S]{0,80}?unavailable)/i);
+});
+
+test('local status mapping must live under delta, not as SkillResult peer (T3-1)', () => {
+  const hoisted = `
+\`\`\`text
+SkillResult:
+  request_id: SR-mutation
+  name: zhanggui-using-git-worktrees
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <Workspace/Baseline/SetupChange 实际证据-or-null>
+  delta:
+    Workspace: 路径与分支
+    Baseline: 测试命令与结果
+    SetupChange: none
+  StageStatus: isolated | in-place | blocked | awaiting-user
+  question_request: null
+  next_skill_request: null
+\`\`\`
+`;
+  const statusRegex = /StageStatus:\s*isolated\s*\|\s*in-place\s*\|\s*blocked\s*\|\s*awaiting-user/;
+  assert.throws(
+    () => assertLocalStatusUnderDelta(hoisted, statusRegex, 'hoisted-status mutation'),
+    /delta|peer|top-level|under delta/i,
+    'validator must reject a valid local status hoisted out of delta',
+  );
 });
 
 const deliveryLeafNames = [
@@ -192,10 +251,10 @@ test('delivery leaves return identity-bearing Embedded SkillResult envelopes', a
       assert.match(embedded, /mode: zhanggui-embedded/, `${name} Embedded#${index + 1} missing mode`);
     }
     const operational = sections.find(body => /(?:StageStatus|ProcedureStatus):/.test(body)) ?? sections.at(-1);
-    assert.match(
+    assertLocalStatusUnderDelta(
       operational,
       deliveryLeafStatusInDelta[name],
-      `${name} operational Embedded delta missing exact local status mapping`,
+      `${name} operational Embedded`,
     );
   }
 });
