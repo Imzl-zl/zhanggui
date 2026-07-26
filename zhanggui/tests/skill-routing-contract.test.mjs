@@ -127,8 +127,7 @@ test('fallback registry contains exactly the eight discovered leaves', async () 
   assert.equal((registry.match(/\.\.\/zhanggui-[^`\s]+\/SKILL\.md/g) ?? []).length, 8);
 });
 
-test('root rejects invalid skill results instead of merging them', async () => {
-  const root = await readFile(rootPath, 'utf8');
+function assertRootFailureAndQuestionCodes(rootText) {
   for (const code of [
     'missing-skill',
     'skill-identity-mismatch',
@@ -136,7 +135,53 @@ test('root rejects invalid skill results instead of merging them', async () => {
     'invalid-embedded-input',
     'invalid-skill-result',
     'state-ownership-violation',
-  ]) assert.match(root, new RegExp(`\\b${code}\\b`));
+    'no-native-question-tool',
+    'unsupported-question-shape',
+  ]) assert.match(rootText, new RegExp(`\\b${code}\\b`));
+}
+
+function assertOperationalSkillRequestRows(rootText) {
+  // Operational routing rows use the compact SkillRequest(...) form.
+  // Sibling path loads remain confined to the Fallback Registry section.
+  const operational = rootText
+    .replace(section(rootText, '### Fallback Registry', '## WorkflowState'), '')
+    .replace(section(rootText, '## Skill Activation Contract', '## WorkflowState'), '');
+  assert.doesNotMatch(operational, /\.\.\/zhanggui-[^`\s]+\/SKILL\.md/);
+
+  for (const name of leafNames) {
+    assert.match(
+      rootText,
+      new RegExp(
+        `SkillRequest\\(name=${name}, mode=zhanggui-embedded(?:, [a-z_]+=[^)]*)*\\)`,
+      ),
+      `operational SkillRequest row missing for ${name}`,
+    );
+  }
+}
+
+test('root rejects invalid skill results instead of merging them', async () => {
+  const root = await readFile(rootPath, 'utf8');
+
+  // Mutation probes: missing question-fallback codes or operational rows must fail.
+  const withoutQuestionCodes = root
+    .replaceAll('no-native-question-tool', 'missing-native-question-tool')
+    .replaceAll('unsupported-question-shape', 'unsupported-question-form');
+  assert.throws(
+    () => assertRootFailureAndQuestionCodes(withoutQuestionCodes),
+    /AssertionError|does not match/,
+  );
+
+  const withoutOperationalRows = root.replaceAll(
+    /SkillRequest\(name=zhanggui-[^,]+, mode=zhanggui-embedded[^)]*\)/g,
+    'activate-leaf-by-name',
+  );
+  assert.throws(
+    () => assertOperationalSkillRequestRows(withoutOperationalRows),
+    /AssertionError|does not match|operational SkillRequest/,
+  );
+
+  assertRootFailureAndQuestionCodes(root);
+  assertOperationalSkillRequestRows(root);
 });
 
 test('internal stages request leaves through the root and contain no sibling skill loads', async () => {

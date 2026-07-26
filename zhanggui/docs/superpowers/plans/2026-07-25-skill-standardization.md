@@ -1033,7 +1033,7 @@ README and `docs/skill-fusion-design.md` must document:
 - Strict leaf / host root distinction.
 - SkillRequest/SkillResult as Zhanggui’s internal protocol, not an Agent Skills standard.
 - Native activation → catalog location → collection fallback.
-- Internal stages only return SkillRequest.
+- Internal stages never load sibling skills; they return local state/task/node deltas and, when a leaf is required, SkillRequest for root consumption.
 - Trigger eval and clean-host acceptance commands.
 - The full collection remains the install unit.
 
@@ -1051,10 +1051,29 @@ Expected: zero test failures/todos; validator final line says 8 strict leaves an
 
 - [ ] **Step 3: Run native OMP plugin activation smoke cases**
 
-Use the existing authenticated profile without saving sessions, restrict the catalog to Zhanggui names, and allow enough startup/model time:
+Use the existing authenticated profile without saving sessions, restrict the catalog to Zhanggui names, and allow enough startup/model time.
+
+**Native root (interactive, host-direct injection only):**
+
+```bash
+omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --max-time 60
+# interactive TUI input (no --mode json):
+/skill:zhanggui 设计并验证一个最小库存功能
+```
+
+Expected evidence before model work: TUI host-direct injection of `skills/zhanggui/SKILL.md` (e.g. `✦ skill zhanggui ...` with exact path). This is the only supported OMP native-root case. `session_id` may be null under `--no-session` TUI.
+
+**Unsupported noninteractive alias probe (do not count as native root):**
 
 ```bash
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "/zhanggui 设计并验证一个最小库存功能"
+```
+
+Expected: OMP treats `/zhanggui` as plain model text under `-p`; may leaf-first. Record as known unsupported probe only.
+
+**Leaf JSONL cases (noninteractive):**
+
+```bash
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "这个单元测试失败了，先系统化调查根因"
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "用 TDD 实现新的 API 行为"
 omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "评审者建议删除这个锁，先核实反馈"
@@ -1062,10 +1081,11 @@ omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json
 
 Read the JSONL tool/skill events. Expected:
 
-- Explicit prompt loads `zhanggui`.
+- Interactive `/skill:zhanggui` injects root `zhanggui` host-direct.
 - Bug prompt loads only `zhanggui-systematic-debugging`.
 - Implementation prompt loads only `zhanggui-test-driven-development`.
 - Feedback prompt loads only `zhanggui-receiving-code-review`.
+- `-p /zhanggui` remains an unsupported probe, not a required green root case.
 
 Record actual event names, session ids and pass/fail in `evals/results/v0.6-routing-summary.json`. If current OMP cannot expose activation events, mark host acceptance blocked with the exact output; do not substitute assistant text claims.
 

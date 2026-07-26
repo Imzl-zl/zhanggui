@@ -11,7 +11,7 @@ Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestr
 - **Strict leaf / host root**：八个 `zhanggui-*` leaf 是严格 Agent Skills；`zhanggui` 是唯一 host-extended 编排器，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
 - **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段。
 - **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode。
-- **内部 stage 只返回请求**：`design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 不加载 leaf，只返回 `SkillRequest`。
+- **内部 stage 不加载 sibling**：`design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费。
 - **验证命令**：trigger eval 与 clean-host acceptance 见下方命令；完整 collection 仍是唯一安装单元。
 
 ## 快速使用
@@ -87,7 +87,7 @@ zhanggui/
 - 八个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和 `Use when ...` description，可由宿主发现或显式调用；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
 - 用户启动完整工作流时只显式调用一次根编排器（OMP 交互式为 `/skill:zhanggui`；逻辑 alias 为 `/zhanggui`）；阶段切换不要求继续输入命令。
 - Embedded 路径只接受根提供的 `SkillRequest`，leaf/stage 返回 `SkillResult` 或请求；根按 native activation → catalog location → collection fallback 激活，并校验 frontmatter 身份后合并 delta。
-- `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，只返回 `SkillRequest`；`RECOVERY.md` 也不参与 discovery。
+- `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 也不参与 discovery。
 
 ## 核心概念地图
 

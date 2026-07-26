@@ -86,7 +86,7 @@
     "recorded_at": "2026-07-26T05:10:00Z",
     "cwd": "zhanggui",
     "host": "omp",
-    "mode": "json",
+    "mode": "interactive-root+jsonl-leaf-fallback",
     "profile": "existing authenticated profile",
     "session_persistence": false,
     "static_contract_evidence": [

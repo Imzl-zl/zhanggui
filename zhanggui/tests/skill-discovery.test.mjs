@@ -119,11 +119,37 @@ test('all relative skill navigation paths resolve', async () => {
   }
 });
 
-test('plugin manifest registers the skills root', async () => {
+function assertPluginManifestV06(manifest) {
+  assert.equal(manifest.skills, './skills/');
+  assert.equal(manifest.version, '0.6.0');
+  assert.equal(
+    manifest.description,
+    'Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator.',
+  );
+  assert.match(manifest.interface.shortDescription, /eight strict leaves/i);
+  assert.match(manifest.interface.shortDescription, /host-extended orchestrator/i);
+  assert.match(manifest.interface.longDescription, /Eight strict Agent Skills/i);
+  assert.match(manifest.interface.longDescription, /explicit-only host-extended Zhanggui orchestrator/i);
+  assert.match(manifest.interface.longDescription, /eight zhanggui-\* leaves/i);
+}
+
+test('plugin manifest pins v0.6 packaging contract', async () => {
   const manifest = JSON.parse(
     await readFile(path.join(projectRoot, '.codex-plugin', 'plugin.json'), 'utf8'),
   );
-  assert.equal(manifest.skills, './skills/');
+
+  // Mutation probe: 0.5 / old packaging wording must fail the strict check.
+  const mutated = structuredClone(manifest);
+  mutated.version = '0.5.0';
+  mutated.description = 'Zhanggui workflow plugin';
+  mutated.interface.shortDescription = 'Workflow helper';
+  mutated.interface.longDescription = 'Legacy packaging description without leaf contract.';
+  assert.throws(
+    () => assertPluginManifestV06(mutated),
+    /Expected values to be strictly equal|AssertionError/,
+  );
+
+  assertPluginManifestV06(manifest);
 });
 
 test('root orchestrator remains explicit-only', async () => {

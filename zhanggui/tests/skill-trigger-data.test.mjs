@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import test from 'node:test';
@@ -68,8 +69,50 @@ test('trigger dataset covers every skill with positive and near-miss cases', () 
   }
 });
 
-test('trigger prompts are unique and root positives are explicit', () => {
+// Pins approved boundary prompt text via a stable digest of the ordered
+// {name, should_trigger, should_not_trigger} projection. Per-skill uniqueness
+// remains required; global cross-skill near-miss reuse is accepted.
+const APPROVED_TRIGGER_DATASET_SHA256 =
+  '8843d9a27cb133591b90b00f63892bed5f1361dc871943605c5e30c851ee0e03';
+
+function canonicalTriggerProjection(skills) {
+  return skills.map((item) => ({
+    name: item.name,
+    should_trigger: item.should_trigger,
+    should_not_trigger: item.should_not_trigger,
+  }));
+}
+
+function hashTriggerProjection(skills) {
+  return createHash('sha256')
+    .update(JSON.stringify(canonicalTriggerProjection(skills)))
+    .digest('hex');
+}
+
+function assertApprovedTriggerDataset(skills, expectedDigest = APPROVED_TRIGGER_DATASET_SHA256) {
+  assert.equal(hashTriggerProjection(skills), expectedDigest);
+}
+
+test('trigger dataset pins approved prompt boundaries by digest', () => {
   assert.ifError(loadError);
+
+  // Mutation probe: any prompt substitution must fail the digest pin.
+  const mutated = structuredClone(data.skills);
+  mutated[0] = {
+    ...mutated[0],
+    should_trigger: mutated[0].should_trigger.map((prompt, index) =>
+      index === 0 ? `${prompt} [mutated-placeholder]` : prompt,
+    ),
+  };
+  assert.notEqual(hashTriggerProjection(mutated), APPROVED_TRIGGER_DATASET_SHA256);
+  assert.throws(
+    () => assertApprovedTriggerDataset(mutated),
+    /Expected values to be strictly equal|AssertionError/,
+  );
+
+  // Exact current ordered projection is green.
+  assertApprovedTriggerDataset(data.skills);
+
   const prompts = data.skills.flatMap((item) => [...item.should_trigger, ...item.should_not_trigger]);
   assert.equal(prompts.length, 108);
 

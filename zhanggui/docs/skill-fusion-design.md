@@ -9,7 +9,7 @@
 - **Strict leaf / host root**：八个 `zhanggui-*` leaf 是严格 Agent Skills；`zhanggui` 是唯一 explicit-only host-extended 编排器，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权。
 - **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段。
 - **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode，不把 sibling 路径当作唯一业务接口。
-- **内部 stage 只返回请求**：有状态 stage 不加载 leaf，只返回 `SkillRequest`；leaf 在 Embedded 模式返回 `SkillResult`，需要下游 skill 时写 `next_skill_request`。
+- **内部 stage 不加载 sibling**：有状态 stage 永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；leaf 在 Embedded 模式返回 `SkillResult`，需要下游 skill 时写 `next_skill_request`。
 - **验证命令**：automated suite、trigger eval、clean-host native activation 与 collection fallback 命令见 README「验证与验收命令」；完整 `skills/` collection 仍是唯一安装单元。
 - **宿主显式入口**：`/zhanggui` 是逻辑 alias；OMP 交互式原生命令为 `/skill:zhanggui`（host-direct body injection）。`omp -p "/zhanggui ..."` 在 OMP 中不是有效 native-root 证据。
 
@@ -304,7 +304,7 @@ DONE 必须有当前 validation 的新鲜证据。
 - `/zhanggui` 是逻辑 alias；OMP 交互式原生显式入口为 `/skill:zhanggui`，在模型工作前 host-direct 注入根 `SKILL.md`。`omp -p "/zhanggui ..."` / `omp -p "/skill:zhanggui ..."` 将未知 slash 当作普通文本，不能作为 native-root 证据。
 - leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过 `SkillRequest` 激活同一 leaf 的 `Zhanggui Embedded` 模式。
 - 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 collection 布局。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
-- 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery，只返回 `SkillRequest`；`RECOVERY.md` 同样只由根按需读取。
+- 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 同样只由根按需读取。
 - 不得同时启用另一套默认强编排入口。
 - clean-host acceptance：OMP 交互式 root 以 TUI host-direct injection 为证据；leaf 非交互 JSONL 记录 `skill://` 读取；fallback 在 `--no-skills` 下记录受控 collection 文件读取与 frontmatter 身份校验。
 
