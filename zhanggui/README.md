@@ -1,8 +1,18 @@
-# Zhanggui（掌柜）v0.5
+# Zhanggui（掌柜）v0.6
 
-面向强模型、对非专业用户友好的开发工作流：一个 explicit-only 有状态编排器，加八个可独立发现、可复用的工程 leaf skills。运行实现位于本目录，无构建依赖。
+Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator.
+
+面向强模型、对非专业用户友好的开发工作流：一个 explicit-only 有状态编排器，加八个可独立发现、可复用的严格工程 leaf skills。运行实现位于本目录，无构建依赖。
 
 > 本 README 只是导览，不参与运行，也不复述规则细节——避免出现第三份会漂移的“真值”。运行契约以 [`skills/zhanggui/SKILL.md`](skills/zhanggui/SKILL.md)、各 leaf `SKILL.md` 与内部 `STAGE.md` 为准；完整设计论证见 [Skill 融合工作流设计](docs/skill-fusion-design.md)。
+
+## v0.6 架构要点
+
+- **Strict leaf / host root**：八个 `zhanggui-*` leaf 是严格 Agent Skills；`zhanggui` 是唯一 host-extended 编排器，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
+- **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段。
+- **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode。
+- **内部 stage 只返回请求**：`design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 不加载 leaf，只返回 `SkillRequest`。
+- **验证命令**：trigger eval 与 clean-host acceptance 见下方命令；完整 collection 仍是唯一安装单元。
 
 ## 快速使用
 
@@ -26,7 +36,7 @@
 
 阶段切换不需要再次输入 slash command。
 
-调试、TDD、完成验证、请求/接收审查、worktree、并行派发或分支收尾等窄任务也可单独描述，由宿主发现对应 leaf skill；Direct 模式不会虚构掌柜的 WorkflowState。完整工作流中，同一 leaf 由 `/zhanggui` 按 `Zhanggui Embedded` 契约加载。
+调试、TDD、完成验证、请求/接收审查、worktree、并行派发或分支收尾等窄任务也可单独描述，由宿主发现对应 leaf skill；Direct 模式不会虚构掌柜的 WorkflowState。完整工作流中，同一 leaf 由 `/zhanggui` 通过 `SkillRequest` 按 `Zhanggui Embedded` 契约激活并合并 `SkillResult`。
 
 ## 运行结构
 
@@ -35,12 +45,15 @@ zhanggui/
 ├── .codex-plugin/plugin.json     # skills root -> ./skills/
 ├── README.md
 ├── docs/skill-fusion-design.md
+├── evals/                        # trigger datasets + routing summary
+├── scripts/validate-agent-skills.mjs
+├── tests/                        # discovery / routing / trigger contracts
 └── skills/
-    ├── zhanggui/                 # explicit-only 有状态编排器
+    ├── zhanggui/                 # explicit-only host-extended orchestrator
     │   ├── SKILL.md
     │   ├── RECOVERY.md
     │   ├── agents/openai.yaml
-    │   └── stages/               # 共享状态步骤，不参与 discovery
+    │   └── stages/               # shared-state steps, undiscoverable
     │       ├── design-assist/STAGE.md
     │       ├── grilling/STAGE.md
     │       ├── prototype/{STAGE,UI,LOGIC}.md
@@ -56,22 +69,22 @@ zhanggui/
     └── zhanggui-finishing-a-development-branch/SKILL.md
 ```
 
-### 两种安装形态（同一 collection）
+### 安装单元：完整 collection
 
-完整可移植单元是 `skills/` 下的 `zhanggui/` 与全部 `zhanggui-*` sibling 目录，无需构建：
+完整可移植单元是 `skills/` 下的 `zhanggui/` 与全部 `zhanggui-*` 目录，无需构建：
 
 1. **插件形态**：宿主加载 `.codex-plugin/plugin.json`（skills root 指向 `./skills/`）。
-2. **裸 collection 形态**：把 `skills/zhanggui/` 和全部 `skills/zhanggui-*` 目录一起复制到宿主 skills 根（如 `~/.claude/skills/` 或 `~/.agents/skills/`），保持 sibling 布局。
+2. **裸 collection 形态**：把 `skills/zhanggui/` 和全部 `skills/zhanggui-*` 目录一起复制到宿主 skills 根（如 `~/.claude/skills/` 或 `~/.agents/skills/`），保持 collection 布局。
 
-只复制 `skills/zhanggui/` 会缺少 Embedded leaf 依赖，不是完整安装。Agent Skills 仍是渐进加载：启动只注入九个技能的 frontmatter；实际匹配后才加载对应 `SKILL.md`；根编排器也只按导航表读取当前内部 stage 或 leaf。不要同时启用插件与裸 collection，也不要同时启用另一套默认强编排入口。
+只复制 `skills/zhanggui/` 会缺少 Embedded leaf 依赖，不是完整安装。Agent Skills 仍是渐进加载：启动只注入九个技能的 frontmatter；实际匹配后才加载对应 `SKILL.md`。根编排器通过 Skill Activation Contract 激活 leaf，而不是把 sibling 路径当作业务接口。不要同时启用插件与裸 collection，也不要同时启用另一套默认强编排入口。
 
 ### 宿主调用模型
 
 - `skills/zhanggui/SKILL.md` 是唯一默认强编排入口：Claude 设置 `disable-model-invocation: true`，Codex 设置 `allow_implicit_invocation: false`。
 - 八个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和 `Use when ...` description，可由宿主发现或显式调用；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
 - 用户启动完整工作流时只调用一次 `/zhanggui`；阶段切换不要求继续输入命令。
-- 不增加浅层 auto-router：root 保持整段会话 frame，直接读取内部 stage 或 sibling leaf 并合并 delta。
-- `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`；`RECOVERY.md` 也不参与 discovery。
+- Embedded 路径只接受根提供的 `SkillRequest`，leaf/stage 返回 `SkillResult` 或请求；根按 native activation → catalog location → collection fallback 激活，并校验 frontmatter 身份后合并 delta。
+- `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，只返回 `SkillRequest`；`RECOVERY.md` 也不参与 discovery。
 
 ## 核心概念地图
 
@@ -80,6 +93,7 @@ zhanggui/
 | 概念 | 一句话 | 规则出处 |
 |---|---|---|
 | WorkflowState | 全会话唯一状态对象；简单任务只用最小投影 | SKILL.md「WorkflowState」 |
+| SkillRequest/Result | 根拥有的 Embedded 激活/合并协议 | SKILL.md「Skill Activation Contract」 |
 | 意图路由 | 恢复/问答/bug/计划/局部改动/想法/fog 的入口分流 | SKILL.md「第 0 级」 |
 | Decision owner | 以决策节点为单位分权：Assisted / Owner / Mixed | SKILL.md「第 1 级」 |
 | UI mode | Prototype-Assisted / Design-Owner / Direct / Text-Only，与业务 owner 正交 | SKILL.md「第 1.5 级」 |
@@ -96,7 +110,7 @@ zhanggui/
 
 ### 可发现技能
 
-- `zhanggui`（explicit-only 有状态编排器）
+- `zhanggui`（explicit-only host-extended orchestrator）
 - `zhanggui-systematic-debugging`
 - `zhanggui-test-driven-development`
 - `zhanggui-verification-before-completion`
@@ -108,12 +122,56 @@ zhanggui/
 
 ### 任务目录与迁移
 
-v0.5 继续使用 `zhanggui/v0.4` WorkflowState 与 task-root schema。默认根仍为 `.tasks/`：不存在/空目录可采用并创建 `.zhanggui-root`；非空目录只有 marker 版本匹配才自动视为本工作流所有。默认根不可用时，项目根 `.zhanggui/config.yaml` 可用 `version` + 项目内相对 `task_root` 声明自定义根；否则使用确定性后备 `.zhanggui/tasks/`。完整细则见入口旁 [`RECOVERY.md`](skills/zhanggui/RECOVERY.md)。已有项目的旧任务目录只能显式采用、一次性导入或保留隔离，禁止静默合并和双写。
+v0.6 继续使用 `zhanggui/v0.4` WorkflowState 与 task-root schema。默认根仍为 `.tasks/`：不存在/空目录可采用并创建 `.zhanggui-root`；非空目录只有 marker 版本匹配才自动视为本工作流所有。默认根不可用时，项目根 `.zhanggui/config.yaml` 可用 `version` + 项目内相对 `task_root` 声明自定义根；否则使用确定性后备 `.zhanggui/tasks/`。完整细则见入口旁 [`RECOVERY.md`](skills/zhanggui/RECOVERY.md)。已有项目的旧任务目录只能显式采用、一次性导入或保留隔离，禁止静默合并和双写。
 
 ### 文档维护
 
 生产代码的文件行数可作为拆分信号；Skill、STAGE 和设计文档不设 300 行硬上限。必要时按职责做 progressive disclosure，但不得为满足数字删除约束、示例或可读空白。
 
+## 验证与验收命令
+
+### Automated verification
+
+```bash
+node --check tests/skill-discovery.test.mjs
+node --check tests/skill-routing-contract.test.mjs
+node --check tests/skill-trigger-data.test.mjs
+node --test
+node scripts/validate-agent-skills.mjs
+```
+
+Expected: zero test failures/todos；validator 最终行报告 8 strict leaves and 1 host-extended root。
+
+### Trigger eval
+
+```bash
+node --test tests/skill-trigger-data.test.mjs
+# catalog routing summary is recorded in evals/results/v0.6-routing-summary.json
+```
+
+### Clean-host native activation
+
+从 `zhanggui/` 目录运行，使用已认证 profile、不落盘 session、限制 catalog 为 Zhanggui 名称：
+
+```bash
+omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "/zhanggui 设计并验证一个最小库存功能"
+omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "这个单元测试失败了，先系统化调查根因"
+omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "用 TDD 实现新的 API 行为"
+omp --no-session --no-rules --plugin-dir "$PWD" --skills "zhanggui*" --mode json --max-time 120 -p "评审者建议删除这个锁，先核实反馈"
+```
+
+期望：分别只激活 `zhanggui`、`zhanggui-systematic-debugging`、`zhanggui-test-driven-development`、`zhanggui-receiving-code-review`。以 JSONL `tool_execution_*` / `skill://` 事件为准，不用助手散文冒充证据。
+
+### Collection fallback
+
+禁用 native skill discovery，只追加根说明并允许 collection 目录：
+
+```bash
+omp --no-session --no-rules --no-skills --append-system-prompt skills/zhanggui/SKILL.md --add-dir skills --mode json --max-time 120 -p "/zhanggui 调查一个测试失败；使用已安装 collection 的 fallback 加载调试流程。Installed collection root: $PWD/skills"
+```
+
+期望：native skill 不可用时，根通过受控 collection fallback 读取 `zhanggui-systematic-debugging`，frontmatter `name` 精确匹配；缺失/身份错误以稳定 blocked code 暴露。
+
 ## 验收场景
 
-42 条权威验收场景见 [设计文档 §12](docs/skill-fusion-design.md)。建议的冒烟子集：Assisted 冷启动、Mixed 一次一问、原生提问分发、prototype detour 合并、design-drift、冷启动恢复、leaf Direct/Embedded 边界。
+42 条权威验收场景见 [设计文档 §12](docs/skill-fusion-design.md)。建议的冒烟子集：Assisted 冷启动、Mixed 一次一问、原生提问分发、prototype detour 合并、design-drift、冷启动恢复、leaf Direct/Embedded 边界、native clean-host activation、collection fallback identity。

@@ -1,8 +1,16 @@
 # Skill 融合工作流设计
 
-**状态：** v0.5 权威设计文档  
+**状态：** v0.6 权威设计文档  
 **日期：** 2026-07-25  
 **实现入口：** [`zhanggui/`](../README.md)
+
+## 0. v0.6 运行架构摘要
+
+- **Strict leaf / host root**：八个 `zhanggui-*` leaf 是严格 Agent Skills；`zhanggui` 是唯一 explicit-only host-extended 编排器，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权。
+- **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段。
+- **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode，不把 sibling 路径当作唯一业务接口。
+- **内部 stage 只返回请求**：有状态 stage 不加载 leaf，只返回 `SkillRequest`；leaf 在 Embedded 模式返回 `SkillResult`，需要下游 skill 时写 `next_skill_request`。
+- **验证命令**：automated suite、trigger eval、clean-host native activation 与 collection fallback 命令见 README「验证与验收命令」；完整 `skills/` collection 仍是唯一安装单元。
 
 ## 1. 背景
 
@@ -20,8 +28,8 @@
 
 - 用户启动完整工作流时只需调用 `/zhanggui` 一次。
 - 内部路由遵守宿主真实 invocation 规则。
-- runtime plugin 发现一个 explicit-only 有状态根技能与八个可独立匹配的 leaf skills。
-- leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 delta。
+- runtime plugin 发现一个 explicit-only host-extended 根技能与八个可独立匹配的严格 leaf skills。
+- leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 `SkillResult`。
 - 决策 owner 可按业务、技术、UI 等领域分别设置。
 - 严格 Owner/grill-me 路径保持一次一问、用户决策、明确共识。
 - UI 可通过视觉原型、文字讨论或既有设计直接推进。
@@ -46,10 +54,10 @@
 依赖共享 WorkflowState 的阶段保存在 `skills/zhanggui/stages/<name>/STAGE.md`，没有 `SKILL.md`：
 
 - `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 只能由根按条件读取。
-- stage 返回 state delta；根合并 delta、重算 frontier 和 readiness。
-- stage 不 invoke sibling，也不重新 invoke `/zhanggui`。
+- stage 返回 state delta 或 `SkillRequest`；根合并 delta、重算 frontier 和 readiness，并消费全部 Embedded `SkillRequest`。
+- stage 不加载 leaf、不 invoke sibling skill，也不重新 invoke `/zhanggui`。
 
-可复用且能独立闭环的工程过程保存在 sibling `skills/zhanggui-*/SKILL.md`：
+可复用且能独立闭环的工程过程保存在 collection 内的 `skills/zhanggui-*/SKILL.md`：
 
 - `systematic-debugging`、`test-driven-development`、`verification-before-completion`。
 - `requesting-code-review` 与 `receiving-code-review`。
@@ -58,11 +66,11 @@
 每个 leaf 都有宿主可匹配的 `Use when ...` description，并定义两个明确模式：
 
 - **Direct**：从用户请求推导输入，不创建 WorkflowState、return point、tracker、readiness 或假恢复字段；在自身结果上终止。
-- **Zhanggui Embedded**：只接受根提供的真实 frame 字段，返回局部 delta；根仍拥有共享状态、问题分发、tracker 更新和最终完成声称。
+- **Zhanggui Embedded**：只接受根提供的真实 `SkillRequest` 字段，返回局部 `SkillResult`；根仍拥有共享状态、问题分发、tracker 更新和最终完成声称。
 
-根通过确定的 sibling 路径读取 Embedded procedure，不依赖宿主支持 nested skill invocation。这样既保留单一默认编排 frame，也让窄任务能被宿主独立发现；leaf 不是要求用户手工接力的一组主线命令。
+根是唯一 Embedded `SkillRequest` 消费者，按固定顺序激活目标 skill：native activation → catalog location → controlled collection fallback。激活后校验 frontmatter `name` 与请求名一致，再按保留的 request input 执行 Embedded contract 并合并 `SkillResult`。这样既保留单一默认编排 frame，也让窄任务能被宿主独立发现；leaf 不是要求用户手工接力的一组主线命令。
 
-完整可移植单元因此是整个 `skills/` collection，而不再只是 `skills/zhanggui/`。裸安装必须复制根与八个 sibling leaf 并保持布局。
+完整可移植单元因此是整个 `skills/` collection，而不再只是 `skills/zhanggui/`。裸安装必须复制根与八个 leaf 并保持 collection 布局。
 
 task-root ownership 与冷启动恢复细则仍位于根旁的 `RECOVERY.md`，只在第一次写盘前或存在恢复候选信号时读取；它不参与 discovery。Agent Skills 的渐进加载保证启动时只注入九个 frontmatter，实际匹配后才加载正文，未使用的 stage/leaf 不占完整上下文。
 
@@ -238,7 +246,7 @@ Minimal 投影只含 `goal / intent / phase / readiness / next`，用于问答�
 | using-git-worktrees leaf | 隔离触发条件 | workspace/baseline + isolated/in-place |
 | dispatching-parallel-agents leaf | 独立域划分 + 每 agent scope | 派发计划/结果核实/冲突/集成验证 |
 
-内部 stage 和 leaf 的 `Zhanggui Embedded` 模式只返回局部 delta，不创建新的全局 ledger；leaf 的 Direct 模式按自身 Completion Contract 终止。
+内部 stage 只返回局部 delta 或 `SkillRequest`；leaf 的 `Zhanggui Embedded` 模式返回 `SkillResult`，不创建新的全局 ledger；leaf 的 Direct 模式按自身 Completion Contract 终止。
 design-drift 必须重开受影响 nodes，并按全局规则使旧 consensus 失效；设计收敛、重新 recap（如需）和 planning 后才能恢复原 execution task。任何新增/重开 node 或 fog 都把 confirmed 重置为 pending（仍有 user-owned decisions）或 not-required（没有）；只改事实文字属于 fact drift。
 
 ## 8. Readiness
@@ -290,12 +298,13 @@ DONE 必须有当前 validation 的新鲜证据。
 
 ## 10. Invocation 与隔离
 
-- plugin 发现 `zhanggui/SKILL.md` 与八个 sibling leaf；只有根同时设置 Claude `disable-model-invocation: true` 与 Codex `allow_implicit_invocation: false`。
+- plugin 发现 `zhanggui/SKILL.md` 与八个严格 leaf；只有根同时设置 Claude `disable-model-invocation: true` 与 Codex `allow_implicit_invocation: false`。
 - 根的 explicit-only 是有意取舍：避免普通问答被重工作流接管。用户启动完整流程后不需要再次输入命令。
-- leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过文件导航读取同一 leaf 的 `Zhanggui Embedded` 模式。
-- 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 sibling 布局。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
-- 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery；`RECOVERY.md` 同样只由根按需读取。
+- leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过 `SkillRequest` 激活同一 leaf 的 `Zhanggui Embedded` 模式。
+- 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 collection 布局。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
+- 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery，只返回 `SkillRequest`；`RECOVERY.md` 同样只由根按需读取。
 - 不得同时启用另一套默认强编排入口。
+- clean-host acceptance 以 OMP JSONL 事件为证据：native 路径记录 `skill://` 读取；fallback 路径在 `--no-skills` 下记录受控 collection 文件读取与 frontmatter 身份校验。
 
 ### 10.1 Batch 与任务命名空间
 
@@ -311,7 +320,7 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 
 否决：依赖 active handoff、共享 WorkflowState 或返回 user-only router 的 stage 只能靠 description 软门禁，工作流外会误触发，宿主也无法强制 re-entry。
 
-这不排斥当前 dual-mode leaves：leaf 的 Direct 模式能在没有根 frame 时真实终结窄任务，Embedded 模式由根按文件加载且不夺取共享状态所有权。
+这不排斥当前 dual-mode leaves：leaf 的 Direct 模式能在没有根 frame 时真实终结窄任务，Embedded 模式由根按 `SkillRequest` 激活且不夺取共享状态所有权。
 
 ### 多个 user-invoked 命令接力
 
@@ -391,4 +400,4 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 5. 是否会丢失 decision id、dependencies、owner、UI mode、consensus 或 return point？
 6. 是否把可查事实重新问给用户？
 7. 是否有失败场景证明当前设计不足，并有 discovery、Direct、Embedded 和路径解析验证？
-不能明确回答时不新增入口。默认强编排器保持唯一，有状态 stage 保持局部，leaf 保持双模式与无状态所有权。
+不能明确回答时不新增入口。默认强编排器保持唯一，有状态 stage 保持局部并只返回请求，leaf 保持双模式与无状态所有权。

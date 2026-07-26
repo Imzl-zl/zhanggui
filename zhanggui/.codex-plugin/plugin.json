@@ -1,7 +1,7 @@
 {
   "name": "zhanggui",
-  "version": "0.5.0",
-  "description": "有状态单入口编排器与八个可独立发现的调试、TDD、验证、审查及交付技能",
+  "version": "0.6.0",
+  "description": "Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator.",
   "author": {
     "name": "zhanglu"
   },
@@ -19,8 +19,8 @@
   "hooks": {},
   "interface": {
     "displayName": "Zhanggui（掌柜）",
-    "shortDescription": "单入口编排与八个可复用工程技能",
-    "longDescription": "完整开发工作流只需调用一次 /zhanggui；explicit-only 根入口在同一 frame 内维护可恢复 WorkflowState。八个 sibling leaf skills 可由宿主独立发现，也可按 Zhanggui Embedded 契约复用于调试、TDD、完成验证、请求/接收审查、worktree、并行派发和分支收尾。",
+    "shortDescription": "Eight strict leaves plus one host-extended orchestrator",
+    "longDescription": "Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator. /zhanggui owns WorkflowState and Embedded SkillRequest/SkillResult routing; eight zhanggui-* leaves stay discoverable Agent Skills with Direct and Zhanggui Embedded contracts. Activation order is native activation, catalog location, then controlled collection fallback.",
     "developerName": "zhanglu",
     "category": "Developer Tools",
     "capabilities": [

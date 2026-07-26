@@ -81,5 +81,165 @@
       "failures": []
     }
   ],
-  "passed": true
+  "passed": true,
+  "host_acceptance": {
+    "recorded_at": "2026-07-26T03:50:00Z",
+    "cwd": "zhanggui",
+    "host": "omp",
+    "mode": "json",
+    "profile": "existing authenticated profile",
+    "session_persistence": false,
+    "static_contract_evidence": [
+      "tests/skill-routing-contract.test.mjs",
+      "tests/skill-discovery.test.mjs",
+      "tests/skill-trigger-data.test.mjs",
+      "scripts/validate-agent-skills.mjs"
+    ],
+    "cases": [
+      {
+        "id": "native-zhanggui",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --plugin-dir \"$PWD\" --skills \"zhanggui*\" --mode json --max-time 120 --auto-approve -p \"/zhanggui 设计并验证一个最小库存功能。第一步只加载 zhanggui skill 后立即停止：输出 frontmatter name 后不要再读任何其他 skill:// 或文件。\"",
+        "prompt": "/zhanggui 设计并验证一个最小库存功能",
+        "expected_selected_skill": "zhanggui",
+        "session_id": "019f9c8d-0252-7000-a27e-265bf8b36f5f",
+        "event_names": [
+          "session",
+          "tool_execution_start",
+          "tool_execution_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui",
+            "intent": "读取编排器技能"
+          }
+        ],
+        "activated_skills": [
+          "zhanggui"
+        ],
+        "artifact": "artifacts/host-acceptance/native-zhanggui.jsonl",
+        "pass": true,
+        "notes": "Reran with stop-after-load instruction so the host case only records the expected root activation; first unrestricted run also activated downstream leaves after root load."
+      },
+      {
+        "id": "native-debug",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --plugin-dir \"$PWD\" --skills \"zhanggui*\" --mode json --max-time 120 --auto-approve -p \"这个单元测试失败了，先系统化调查根因\"",
+        "prompt": "这个单元测试失败了，先系统化调查根因",
+        "expected_selected_skill": "zhanggui-systematic-debugging",
+        "session_id": "019f9c8a-6051-7000-9203-b69344240b6a",
+        "event_names": [
+          "session",
+          "tool_execution_start",
+          "tool_execution_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-systematic-debugging",
+            "intent": "读取调试流程"
+          }
+        ],
+        "activated_skills": [
+          "zhanggui-systematic-debugging"
+        ],
+        "artifact": "artifacts/host-acceptance/native-debug.jsonl",
+        "pass": true
+      },
+      {
+        "id": "native-tdd",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --plugin-dir \"$PWD\" --skills \"zhanggui*\" --mode json --max-time 120 --auto-approve -p \"用 TDD 实现新的 API 行为\"",
+        "prompt": "用 TDD 实现新的 API 行为",
+        "expected_selected_skill": "zhanggui-test-driven-development",
+        "session_id": "019f9c8a-60b3-7000-8805-c96b7873584b",
+        "event_names": [
+          "session",
+          "tool_execution_start",
+          "tool_execution_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-test-driven-development",
+            "intent": "读取 TDD 规范"
+          }
+        ],
+        "activated_skills": [
+          "zhanggui-test-driven-development"
+        ],
+        "artifact": "artifacts/host-acceptance/native-tdd.jsonl",
+        "pass": true
+      },
+      {
+        "id": "native-review",
+        "kind": "native_activation",
+        "command": "omp --no-session --no-rules --plugin-dir \"$PWD\" --skills \"zhanggui*\" --mode json --max-time 120 --auto-approve -p \"评审者建议删除这个锁，先核实反馈\"",
+        "prompt": "评审者建议删除这个锁，先核实反馈",
+        "expected_selected_skill": "zhanggui-receiving-code-review",
+        "session_id": "019f9c8a-5dfa-7000-a0a9-44abab58ea2f",
+        "event_names": [
+          "session",
+          "tool_execution_start",
+          "tool_execution_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skill://zhanggui-receiving-code-review",
+            "intent": "Reading review workflow"
+          }
+        ],
+        "activated_skills": [
+          "zhanggui-receiving-code-review"
+        ],
+        "artifact": "artifacts/host-acceptance/native-review.jsonl",
+        "pass": true
+      },
+      {
+        "id": "fallback-debug",
+        "kind": "collection_fallback",
+        "command": "omp --no-session --no-rules --no-skills --append-system-prompt skills/zhanggui/SKILL.md --add-dir skills --mode json --max-time 120 --auto-approve -p \"/zhanggui 调查一个测试失败；使用已安装 collection 的 fallback 加载调试流程。Installed collection root: $PWD/skills。Native skill discovery is disabled. Do not use skill://. Resolve zhanggui-systematic-debugging only via controlled collection fallback relative to the root skill directory (skills/zhanggui/../zhanggui-systematic-debugging/SKILL.md), read that file once, verify frontmatter name equals zhanggui-systematic-debugging, then stop.\"",
+        "prompt": "/zhanggui 调查一个测试失败；使用已安装 collection 的 fallback 加载调试流程。Installed collection root: $PWD/skills",
+        "expected_selected_skill": "zhanggui-systematic-debugging",
+        "session_id": "019f9c8d-016b-7000-ad7d-828ad1fda047",
+        "event_names": [
+          "session",
+          "tool_execution_start",
+          "tool_execution_end"
+        ],
+        "activation_events": [
+          {
+            "event": "tool_execution_start",
+            "toolName": "read",
+            "path": "skills/zhanggui/../zhanggui-systematic-debugging/SKILL.md:raw",
+            "intent": "Loading fallback debugging skill"
+          },
+          {
+            "event": "tool_execution_end",
+            "toolName": "read",
+            "path": "skills/zhanggui/../zhanggui-systematic-debugging/SKILL.md:raw",
+            "frontmatter_name": "zhanggui-systematic-debugging"
+          }
+        ],
+        "native_skill_uri_used": false,
+        "loaded_frontmatter_name": "zhanggui-systematic-debugging",
+        "artifact": "artifacts/host-acceptance/fallback-debug.jsonl",
+        "pass": true,
+        "notes": "Native skills disabled with --no-skills; actual file read from controlled collection path, not assistant text substitution."
+      }
+    ],
+    "summary": {
+      "total_cases": 5,
+      "passed": 5,
+      "failed": 0,
+      "blocked": 0
+    },
+    "all_passed": true
+  }
 }
