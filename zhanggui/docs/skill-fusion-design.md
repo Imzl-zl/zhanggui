@@ -1,17 +1,18 @@
 # Skill 融合工作流设计
 
-**状态：** v0.6 权威设计文档  
+**状态：** v0.7 权威设计文档  
 **日期：** 2026-07-25  
 **实现入口：** [`zhanggui/`](../README.md)
 
-## 0. v0.6 运行架构摘要
+## 0. v0.7 运行架构摘要
 
-- **Strict leaf / host root**：八个 `zhanggui-*` leaf 是严格 Agent Skills；`zhanggui` 是唯一 explicit-only host-extended 编排器，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权。
+- **Nine strict catalog entries**：九个技能均使用 strict Agent Skills frontmatter；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权。
+- **选择性 Hybrid 根**：高信号完整生命周期请求可自动进入；任何时候也可用宿主原生命令手动进入。八个 `zhanggui-*` leaf 继续 dual-mode。
 - **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段。
 - **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode，不把 sibling 路径当作唯一业务接口。
 - **内部 stage 不加载 sibling**：有状态 stage 永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；leaf 在 Embedded 模式返回 `SkillResult`，需要下游 skill 时写 `next_skill_request`。
 - **验证命令**：automated suite、trigger eval、clean-host native activation 与 collection fallback 命令见 README「验证与验收命令」；完整 `skills/` collection 仍是唯一安装单元。
-- **宿主显式入口**：`/zhanggui` 是逻辑 alias；OMP 交互式原生命令为 `/skill:zhanggui`（host-direct body injection）。`omp -p "/zhanggui ..."` 在 OMP 中不是有效 native-root 证据。
+- **宿主入口**：`/zhanggui` 是逻辑 alias；OMP 交互式原生命令为 `/skill:zhanggui`（host-direct body injection）。`omp -p "/zhanggui ..."` 在 OMP 中不是有效 native-root 证据。
 
 ## 1. 背景
 
@@ -27,9 +28,9 @@
 
 ## 2. 目标
 
-- 用户启动完整工作流时只需显式调用一次根编排器（逻辑 alias `/zhanggui`；OMP 交互式 `/skill:zhanggui`）。
-- 内部路由遵守宿主真实 invocation 规则。
-- runtime plugin 发现一个 explicit-only host-extended 根技能与八个可独立匹配的严格 leaf skills。
+- 高信号复杂、跨模块、多交付物、checkpoint 恢复或明确端到端请求可自动进入根；熟悉用户仍可通过宿主原生命令确定性进入。
+- 内部路由遵守宿主真实 invocation 规则；root-first 是唯一入口优先级。
+- runtime plugin 发现九个 strict Agent Skills：一个 selective-hybrid 有状态根与八个可独立匹配的 dual-mode leaf skills。
 - leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 `SkillResult`。
 - 决策 owner 可按业务、技术、UI 等领域分别设置。
 - 严格 Owner/grill-me 路径保持一次一问、用户决策、明确共识。
@@ -41,6 +42,7 @@
 
 - 不替用户决定业务规则、安全边界或不可逆迁移。
 - 不强制每个任务创建 spec、CSV、Epic 或 HTML 原型。
+- 不让所有开发请求都自动进入根；窄工程过程继续由 leaf 闭环。
 - 不同时运行两套默认强编排入口。
 - 不把 prototype 直接升级为未经正式流程的生产实现。
 - 不把依赖共享 WorkflowState、frontier 或 readiness 的有状态 stage 暴露成独立 skill；只有能提供真实 Direct 终态契约的过程才成为 leaf。
@@ -48,9 +50,9 @@
 
 ## 4. 核心设计
 
-### 4.1 一个默认编排入口、五个内部 stage、八个 discoverable leaves
+### 4.1 一个 selective-hybrid 根、五个内部 stage、八个 discoverable leaves
 
-`/zhanggui` 是唯一默认强编排入口。它在一次 invocation 后保持为整个会话的 orchestration frame。
+`zhanggui` 是唯一默认强编排入口：支持 model-selected skills 的宿主可在高信号请求上自动加载它；用户也可通过宿主原生命令显式加载。它在一次 invocation 后保持为整个会话的 orchestration frame。
 
 依赖共享 WorkflowState 的阶段保存在 `skills/zhanggui/stages/<name>/STAGE.md`，没有 `SKILL.md`：
 
@@ -74,6 +76,13 @@
 完整可移植单元因此是整个 `skills/` collection，而不再只是 `skills/zhanggui/`。裸安装必须复制根与八个 leaf 并保持 collection 布局。
 
 task-root ownership 与冷启动恢复细则仍位于根旁的 `RECOVERY.md`，只在第一次写盘前或存在恢复候选信号时读取；它不参与 discovery。Agent Skills 的渐进加载保证启动时只注入九个 frontmatter，实际匹配后才加载正文，未使用的 stage/leaf 不占完整上下文。
+
+### 4.1.1 Explicit / Implicit / root-first / de-escalation
+
+- **Explicit**：宿主原生命令或逻辑 alias 显式调用根时，root-first 覆盖全部 leaf 边界；窄意图也可由根通过最小 state + Embedded leaf 处理。
+- **Implicit**：无命令但请求满足高信号完整生命周期条件时，根自动进入；首次工具调用前输出一次真实进入原因，不询问是否启用。
+- **Root-first**：同一帧根与 leaf 同时加载时，根拥有入口与状态；leaf 不得执行 Direct 分支，只能由根经 `SkillRequest` 进入 Embedded。
+- **Narrow-task de-escalation**：隐式误匹配后发现窄意图时，可降级到最小 route state + Embedded leaf；trigger eval 仍计为 root false positive。
 
 ### 4.2 决策分权，而不是用户画像
 
@@ -180,7 +189,7 @@ DESIGN→SPEC/EPIC 是单次 cutover：候选工件核对期间 DESIGN 仍胜出
 ## 5. 总体架构
 
 ```text
-user invokes /zhanggui once
+host auto-matches or user invokes zhanggui once
   |
   +-- resume DESIGN/drift/tracker --> hydrate truth --> prior node/task/phase
   +-- answer/research/review ----------------------> stop
@@ -299,14 +308,15 @@ DONE 必须有当前 validation 的新鲜证据。
 
 ## 10. Invocation 与隔离
 
-- plugin 发现 `zhanggui/SKILL.md` 与八个严格 leaf；只有根同时设置 Claude `disable-model-invocation: true` 与 Codex `allow_implicit_invocation: false`。
-- 根的 explicit-only 是有意取舍：避免普通问答被重工作流接管。用户启动完整流程后不需要再次输入命令。
+- plugin 发现九个 strict Agent Skills：selective-hybrid 根 `zhanggui` 与八个 dual-mode leaf；全部 `name` + `description` catalog-visible。
+- 根支持选择性自动与手动进入：Codex profile 设置 `allow_implicit_invocation: true`；高信号请求可自动进入，任何时候也可用宿主原生命令手动进入。
 - `/zhanggui` 是逻辑 alias；OMP 交互式原生显式入口为 `/skill:zhanggui`，在模型工作前 host-direct 注入根 `SKILL.md`。`omp -p "/zhanggui ..."` / `omp -p "/skill:zhanggui ..."` 将未知 slash 当作普通文本，不能作为 native-root 证据。
 - leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过 `SkillRequest` 激活同一 leaf 的 `Zhanggui Embedded` 模式。
 - 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 collection 布局。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
 - 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 同样只由根按需读取。
 - 不得同时启用另一套默认强编排入口。
-- clean-host acceptance：OMP 交互式 root 以 TUI host-direct injection 为证据；leaf 非交互 JSONL 记录 `skill://` 读取；fallback 在 `--no-skills` 下记录受控 collection 文件读取与 frontmatter 身份校验。
+- trigger eval 证据：`evals/results/v0.7-routing-summary.json`（122 cases / 366 slots / 393 attempts；max 3 transport-only retry waves）。
+- clean-host acceptance：6/6 supported Task 5 cases；每个 finite JSONL case 使用独立空 temp cwd；OMP 交互式 root 以 TUI host-direct injection 为证据；leaf 非交互 JSONL 记录 `skill://` 读取；fallback 在 `--no-skills` 下记录受控 collection 文件读取与 frontmatter 身份校验；unsupported noninteractive `/zhanggui` alias probe 记录但排除在 totals 之外。
 
 ### 10.1 Batch 与任务命名空间
 
@@ -364,7 +374,7 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 12. 高风险/跨会话 -> Durable；多 deliverable -> Epic。
 13. 生产实现 -> TDD；throwaway prototype 排除；原型逻辑 lift 进生产走受控入口——先在生产模块写失败测试再接入，不以原型期验证抵扣。
 14. 完成声称 -> verification 使用新鲜证据。
-15. 运行 plugin discovery -> 发现 explicit-only `zhanggui` 与八个 dual-mode leaf；五个有状态 stage 不出现。
+15. 运行 plugin discovery -> 发现 selective-hybrid 根 `zhanggui` 与八个 dual-mode leaf；九个均为 strict Agent Skills；五个有状态 stage 不出现。
 16. Transient 小改 -> 只建立 minimal state，不生成空 decision graph。
 17. DESIGN cutover 中断 -> 删除前 DESIGN 仍胜出；SPEC 已存在后的 drift 只用 SPEC + PROGRESS。
 18. 冷启动有普通未完成 Durable/Epic -> 从 SPEC/EPIC + CSV + PROGRESS 恢复 execution。
@@ -392,6 +402,12 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 40. finishing 收到无法等价到四个稳定 id 的自由输入 -> 保持同一 `finishing-choice` 未决并进入收敛循环；收敛前无动作、无临时第五 id，最终 `Choice` 仍是稳定 id。
 41. Direct leaf 在没有 Zhanggui frame 时 -> 从请求推导输入，不创建 WorkflowState/return point/readiness/tracker，输出自身终态。
 42. 同一 leaf 由根以 `Zhanggui Embedded` 加载 -> 只消费根提供的真实字段并返回 delta；根继续拥有共享状态、问题分发和完成声称。
+43. 无命令的模糊、跨模块或端到端请求 -> 自动加载 `zhanggui`，首次工具调用前说明真实进入原因，不额外询问是否启用。
+44. 无命令的孤立 debugging/TDD/verification/review/feedback/worktree/parallel/finishing 请求 -> 对应 leaf 以 Direct 模式先执行，根不抢占。
+45. 宿主原生命令显式调用根 -> root-first；窄意图也由根通过最小 state + Embedded leaf 处理。
+46. 端到端请求包含 bug、TDD、review 或 worktree 子步骤 -> 根先加载；leaf 不得先以 Direct 模式产生动作。
+47. 根隐式误匹配后发现窄意图 -> 可降级到最小 route state + Embedded leaf，但 trigger eval 仍计为 root false positive。
+
 
 ## 13. 演进规则
 新增路由、stage 或 leaf 前必须回答：

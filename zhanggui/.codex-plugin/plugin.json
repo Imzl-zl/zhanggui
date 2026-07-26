@@ -1,7 +1,7 @@
 {
   "name": "zhanggui",
-  "version": "0.6.0",
-  "description": "Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator.",
+  "version": "0.7.0",
+  "description": "Nine strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator and eight dual-mode engineering leaves.",
   "author": {
     "name": "zhanglu"
   },
@@ -19,8 +19,8 @@
   "hooks": {},
   "interface": {
     "displayName": "Zhanggui（掌柜）",
-    "shortDescription": "Eight strict leaves plus one host-extended orchestrator",
-    "longDescription": "Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator. /zhanggui owns WorkflowState and Embedded SkillRequest/SkillResult routing; eight zhanggui-* leaves stay discoverable Agent Skills with Direct and Zhanggui Embedded contracts. Activation order is native activation, catalog location, then controlled collection fallback.",
+    "shortDescription": "One selective-hybrid root and eight dual-mode leaves",
+    "longDescription": "Nine strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator with automatic or manual loading, plus eight zhanggui-* leaves with Direct and Zhanggui Embedded contracts. The root owns WorkflowState and activates leaves by SkillRequest; narrow requests stay with their corresponding leaf.",
     "developerName": "zhanglu",
     "category": "Developer Tools",
     "capabilities": [
@@ -29,8 +29,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "完整工作流先输入 /zhanggui，再直接描述目标；窄任务也可直接描述，由宿主匹配对应 leaf skill。",
-      "Type /zhanggui for the full workflow, or describe a narrow task and let the host match a leaf skill."
+      "复杂、跨模块或端到端工作可直接描述，由宿主自动匹配 Zhanggui；也可使用宿主原生命令手动进入。",
+      "Describe a complex end-to-end goal to automatically match Zhanggui, or describe a narrow task to match its engineering leaf."
     ],
     "brandColor": "#10B981",
     "screenshots": []

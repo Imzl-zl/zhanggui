@@ -119,37 +119,40 @@ test('all relative skill navigation paths resolve', async () => {
   }
 });
 
-function assertPluginManifestV06(manifest) {
+function assertPluginManifestV07(manifest) {
   assert.equal(manifest.skills, './skills/');
-  assert.equal(manifest.version, '0.6.0');
+  assert.equal(manifest.version, '0.7.0');
   assert.equal(
     manifest.description,
-    'Eight strict Agent Skills plus one explicit-only host-extended Zhanggui orchestrator.',
+    'Nine strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator and eight dual-mode engineering leaves.',
   );
-  assert.match(manifest.interface.shortDescription, /eight strict leaves/i);
-  assert.match(manifest.interface.shortDescription, /host-extended orchestrator/i);
-  assert.match(manifest.interface.longDescription, /Eight strict Agent Skills/i);
-  assert.match(manifest.interface.longDescription, /explicit-only host-extended Zhanggui orchestrator/i);
+  assert.match(manifest.interface.shortDescription, /selective-hybrid root/i);
+  assert.match(manifest.interface.shortDescription, /eight dual-mode leaves/i);
+  assert.match(manifest.interface.longDescription, /Nine strict Agent Skills/i);
+  assert.match(manifest.interface.longDescription, /automatic or manual/i);
   assert.match(manifest.interface.longDescription, /eight zhanggui-\* leaves/i);
+  assert.ok(manifest.interface.defaultPrompt.some(line => /automatically match Zhanggui/i.test(line)));
+  assert.ok(manifest.interface.defaultPrompt.some(line => /narrow task/i.test(line)));
 }
 
-test('plugin manifest pins v0.6 packaging contract', async () => {
+test('plugin manifest pins v0.7 hybrid packaging contract', async () => {
   const manifest = JSON.parse(
     await readFile(path.join(projectRoot, '.codex-plugin', 'plugin.json'), 'utf8'),
   );
 
-  // Mutation probe: 0.5 / old packaging wording must fail the strict check.
+  // Mutation probe: 0.6 / old packaging wording must fail the strict check.
   const mutated = structuredClone(manifest);
-  mutated.version = '0.5.0';
+  mutated.version = '0.6.0';
   mutated.description = 'Zhanggui workflow plugin';
   mutated.interface.shortDescription = 'Workflow helper';
   mutated.interface.longDescription = 'Legacy packaging description without leaf contract.';
+  mutated.interface.defaultPrompt = ['Type /zhanggui for the full workflow.'];
   assert.throws(
-    () => assertPluginManifestV06(mutated),
+    () => assertPluginManifestV07(mutated),
     /Expected values to be strictly equal|AssertionError/,
   );
 
-  assertPluginManifestV06(manifest);
+  assertPluginManifestV07(manifest);
 });
 
 test('root orchestrator supports strict hybrid invocation', async () => {
