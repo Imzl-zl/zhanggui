@@ -131,6 +131,9 @@ test('root orchestrator remains explicit-only', async () => {
   const { metadata } = parseFrontmatter(rootSkill);
   assert.equal(metadata.name, 'zhanggui');
   assert.equal(metadata['disable-model-invocation'], 'true');
+  assert.match(metadata.description ?? '', /^Use only when the user explicitly invokes \/zhanggui\b/);
+  assert.match(metadata.compatibility ?? '', /explicit-only invocation/);
+
 
   const policy = await readFile(
     path.join(skillsRoot, 'zhanggui', 'agents', 'openai.yaml'),

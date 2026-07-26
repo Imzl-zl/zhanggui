@@ -1,6 +1,7 @@
 ---
 name: zhanggui
-description: Use when starting any development effort - an idea, bug, plan, review, or ambiguous work - to route it through design, planning, execution, and verification inside one session frame.
+description: Use only when the user explicitly invokes /zhanggui to run the complete stateful development workflow from design through verified delivery
+compatibility: Requires a host profile that supports explicit-only invocation and the installed Zhanggui skill collection
 disable-model-invocation: true
 ---
 
@@ -20,23 +21,71 @@ disable-model-invocation: true
 
 ## 宿主调用契约
 
-### 文件定位
+完整运行单元是 plugin 的整个 `skills/` collection：`zhanggui/SKILL.md`、`zhanggui/stages/`、`zhanggui/RECOVERY.md` 以及 Stage 导航表引用的 sibling leaf skill 缺一不可。内部 `stages/...` 与 `RECOVERY.md` 相对**本 SKILL.md 所在目录**（下称 `<skill-dir>`）解析；与项目根和当前工作目录无关，访问前先拼出绝对路径。Leaf skill 不通过任意目录搜索加载，只走下方 Skill Activation Contract。
 
-完整运行单元是 plugin 的整个 `skills/` collection：`zhanggui/SKILL.md`、`zhanggui/stages/`、`zhanggui/RECOVERY.md` 以及 Stage 导航表引用的 sibling leaf skill 缺一不可。`stages/...`、`RECOVERY.md` 相对**本 SKILL.md 所在目录**（下称 `<skill-dir>`）解析；`../zhanggui-.../SKILL.md` 也从 `<skill-dir>` 解析。与项目根和当前工作目录无关，访问前先拼出绝对路径。
+“返回编排器”表示继续执行已加载的本文件，绝不再次 invoke `/zhanggui`，也不要求用户输入下一条 slash command。Internal stages 与 Embedded leaves 返回请求或局部 delta；实际 phase、return point、readiness 与结果合并只由本编排器决定。
 
-首次需要读取 supporting procedure 时按以下顺序确定 `<skill-dir>`：候选目录必须真实存在 `stages/` 才算命中（宿主注入的内容镜像可能不带文件包），否则继续下一序；命中后本会话内复用，不重复探测：
+## Skill Activation Contract
 
-1. 宿主加载本 skill 时提供的位置信息（base directory、skill 文件路径或等价字段）。
-2. 搜索特征路径 `**/stages/grilling/STAGE.md`：范围为项目根与用户主目录下的 skills 安装位置（`.agents/skills/`、`.claude/skills/`、`.codex/skills/`、`.gemini/skills/`、`.trae/skills/` 等宿主自有 skills/插件目录）。命中后回退两级得到候选目录，其中须存在 frontmatter 为 `name: zhanggui` 的 `SKILL.md`，该候选目录即 `<skill-dir>`。多处命中时优先项目根下的安装，其次用户主目录；同一优先级仍有多处时按一次一问请用户指定。
-3. 均未命中时报告"找不到 zhanggui 的 supporting procedure 文件，无法按检查单执行"，并按一次一问节奏请用户给出完整 skills collection 的安装路径。仅当用户明确表示不提供时，才在**显式声明降级**后以本文件已加载的编排规则加通用实践继续；禁止静默降级，禁止把降级输出当作按检查单执行的结果。
+Only this root frame consumes Embedded `SkillRequest` values and merges `SkillResult` values. Internal stages and Embedded leaves return requests; they do not load sibling skills themselves.
 
-### Supporting procedure 加载
+```yaml
+SkillRequest:
+  request_id: SR-<stable-id>
+  name: <exact catalog skill name>
+  mode: zhanggui-embedded
+  input: <leaf-specific mapping>
+  return_to: { phase: <phase>, node: <node-or-null> }
 
-- Stage 导航表中的路径是唯一加载位置：有状态步骤读取 `stages/<stage>/STAGE.md`；dual-mode leaf 读取 `../zhanggui-.../SKILL.md` 并强制使用其中 `Zhanggui Embedded` 契约。不要靠名称猜路径。
-- 编排器读取 leaf 文件是当前 frame 内的 procedure load，不是新的 user command，也不依赖宿主提供 nested skill call/return stack。
-- supporting procedure 返回局部 delta 后由当前 frame 合并。task-root 与冷启动恢复细则在需要时读取同目录 `RECOVERY.md`，不常驻。
-- “返回编排器”表示继续执行已加载的本文件，绝不再次 invoke `/zhanggui`，也不要求用户输入下一条 slash command。
-- supporting procedure 不直接路由 sibling；它只能返回自己的状态和下一动作建议，实际 phase、return point 和 readiness 由本编排器决定。
+SkillResult:
+  request_id: SR-<same-id>
+  name: <same catalog skill name>
+  mode: zhanggui-embedded
+  status: completed | blocked | awaiting-user | skill-required
+  evidence: <actual evidence-or-null>
+  delta: <leaf-specific mapping-or-null>
+  question_request: <QuestionRequest-or-null>
+  next_skill_request: <SkillRequest-or-null>
+```
+
+Activation order is fixed:
+
+1. **native activation** — use a host `Skill` / `activate_skill` capability only when it loads content into this same frame; pass only fields supported by the real tool schema and retain the SkillRequest input in this frame.
+2. **catalog location** — when the catalog exposes the requested SKILL.md location, read that exact location.
+3. **collection fallback** — resolve the requested name through the registry below, relative to this root skill directory.
+4. If all methods fail, return `blocked: missing-skill`; never search arbitrary project or home directories and never pretend the procedure ran.
+
+Before executing loaded content, verify its frontmatter name equals `SkillRequest.name`. After execution, reject a result whose request identity differs, whose mode is not `zhanggui-embedded`, or whose delta writes WorkflowState, tracker, return point, readiness, owner, consensus, or global phase directly.
+
+`awaiting-user` requires `question_request`; the root updates `awaiting` and its checkpoint before real native delivery or an explicit text fallback. `skill-required` requires `next_skill_request`; the root processes the child synchronously and resumes the parent request without occupying the global detour return point.
+
+Add one root-owned field to the full WorkflowState schema:
+
+```yaml
+skill_requests:
+  - request_id: SR-<stable-id>
+    name: <exact skill name>
+    parent_request_id: null | SR-<parent-id>
+    return_to: { phase: <phase>, node: <node-or-null> }
+    status: active | awaiting-user
+```
+
+Omit an empty `skill_requests` field from Minimal state. Synchronous requests are removed immediately after their validated delta is merged. Before any Embedded `awaiting-user` yield, persist the active request chain in the same compressed/full checkpoint as `awaiting`; resume by request_id and clear entries only after the parent result merges successfully. Only the root may write this field.
+
+Stable failures are: `missing-skill`, `skill-identity-mismatch`, `unsupported-mode`, `invalid-embedded-input`, `invalid-skill-result`, and `state-ownership-violation`.
+
+### Fallback Registry
+
+| Skill name | Collection fallback |
+|---|---|
+| `zhanggui-systematic-debugging` | `../zhanggui-systematic-debugging/SKILL.md` |
+| `zhanggui-test-driven-development` | `../zhanggui-test-driven-development/SKILL.md` |
+| `zhanggui-verification-before-completion` | `../zhanggui-verification-before-completion/SKILL.md` |
+| `zhanggui-requesting-code-review` | `../zhanggui-requesting-code-review/SKILL.md` |
+| `zhanggui-receiving-code-review` | `../zhanggui-receiving-code-review/SKILL.md` |
+| `zhanggui-using-git-worktrees` | `../zhanggui-using-git-worktrees/SKILL.md` |
+| `zhanggui-dispatching-parallel-agents` | `../zhanggui-dispatching-parallel-agents/SKILL.md` |
+| `zhanggui-finishing-a-development-branch` | `../zhanggui-finishing-a-development-branch/SKILL.md` |
 
 ## WorkflowState - 唯一设计状态
 
@@ -78,6 +127,12 @@ readiness: continue-design | stop | transient-execution | durable-plan | epic-pl
 next: 一个明确动作
 task_root: .tasks
 checkpoint: session | <task_root>/<task>/DESIGN.md | <task_root>/<task>/PROGRESS.md#design-drift | <task_root>/<task>/TODO.csv | <task_root>/<epic>/SUBTASKS.csv
+skill_requests:
+  - request_id: SR-<stable-id>
+    name: <exact skill name>
+    parent_request_id: null | SR-<parent-id>
+    return_to: { phase: <phase>, node: <node-or-null> }
+    status: active | awaiting-user
 ```
 
 规则：
@@ -125,9 +180,9 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 |---|---|---|
 | 继续/恢复、提供 checkpoint，或存在活动 tracker | 按冷启动优先序 hydrate 设计/drift/execution 真值 | checkpoint 对应 phase |
 | 问答、研究、解释且不改文件 | 直接处理；完成后 `stop`，不建 tracker | route |
-| 请求代码审查且不改文件 | 读取 `../zhanggui-requesting-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式；报告后 `stop`，不建 tracker | route |
-| 收到外部代码审查反馈 | 读取 `../zhanggui-receiving-code-review/SKILL.md` 的 `Zhanggui Embedded` 模式；核实后逐项处理，设计冲突返回根 frame | execute |
-| Bug、测试失败、异常行为 | 保存 return point；读取 `../zhanggui-systematic-debugging/SKILL.md` 的 `Zhanggui Embedded` 模式 | debug |
+| 请求代码审查且不改文件 | `SkillRequest(name=zhanggui-requesting-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；报告后 `stop`，不建 tracker | route |
+| 收到外部代码审查反馈 | `SkillRequest(name=zhanggui-receiving-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；核实后逐项处理，设计冲突返回根 frame | execute |
+| Bug、测试失败、异常行为 | 保存 return point；`SkillRequest(name=zhanggui-systematic-debugging, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` | debug |
 | 已有可执行计划或明确任务清单 | 复用现有真值，不新建第二套 | execute |
 | 部分计划、笔记或不完整 TODO | 先做可执行性检查 | route |
 | 目标明确、局部、无重大设计 | 建 Transient 会话 plan | execute |
@@ -328,16 +383,16 @@ Owner/grill-me 领域内只能跳过：
 | 编排器接受 PrototypeRequest，`prototype.parent_id` 已写入 | `stages/prototype/STAGE.md` |
 | `phase = plan` ∧ `readiness ∈ {durable-plan, epic-plan}` | `stages/writing-plans/STAGE.md` |
 | `phase = execute`（Transient 直入；Durable/Epic 需 plan-ready） | `stages/executing-plans/STAGE.md` |
-| `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `../zhanggui-test-driven-development/SKILL.md`（Zhanggui Embedded） |
-| `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `../zhanggui-systematic-debugging/SKILL.md`（Zhanggui Embedded） |
-| `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `../zhanggui-verification-before-completion/SKILL.md`（Zhanggui Embedded） |
-| 完成门/任务级/ad-hoc 请求审查（同步子步骤，不占 return_point 单槽） | `../zhanggui-requesting-code-review/SKILL.md`（Zhanggui Embedded） |
-| 收到外部代码审查反馈（同步子步骤，不占 return_point 单槽） | `../zhanggui-receiving-code-review/SKILL.md`（Zhanggui Embedded） |
-| verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `../zhanggui-finishing-a-development-branch/SKILL.md`（Zhanggui Embedded） |
-| `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `../zhanggui-using-git-worktrees/SKILL.md`（Zhanggui Embedded） |
-| 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `../zhanggui-dispatching-parallel-agents/SKILL.md`（Zhanggui Embedded） |
+| `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `SkillRequest(name=zhanggui-test-driven-development, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `SkillRequest(name=zhanggui-systematic-debugging, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `SkillRequest(name=zhanggui-verification-before-completion, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| 完成门/任务级/ad-hoc 请求审查（同步子步骤，不占 return_point 单槽） | `SkillRequest(name=zhanggui-requesting-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| 收到外部代码审查反馈（同步子步骤，不占 return_point 单槽） | `SkillRequest(name=zhanggui-receiving-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `SkillRequest(name=zhanggui-finishing-a-development-branch, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `SkillRequest(name=zhanggui-using-git-worktrees, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `SkillRequest(name=zhanggui-dispatching-parallel-agents, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 
-Transient 直接进入 execution stage；Durable/Epic 先进入 planning stage。永久生产功能和 bugfix 在写实现前读取 `../zhanggui-test-driven-development/SKILL.md` 的 `Zhanggui Embedded` 模式；throwaway prototype 不加载。
+Transient 直接进入 execution stage；Durable/Epic 先进入 planning stage。永久生产功能和 bugfix 在写实现前发出 `SkillRequest(name=zhanggui-test-driven-development, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；throwaway prototype 不加载。
 
 ### Design drift 唯一路径
 
@@ -352,6 +407,6 @@ execution 返回 `design-drift` 时，确认 `return_point` 为空后写入 `{ p
 - 每次等待、stage delta 和恢复都更新同一 WorkflowState。
 - 用户暂停时先写必要的 DESIGN/PROGRESS checkpoint，再退出。
 - 只有工具和仓库都无法提供、且会实质改变结果的信息才升级给用户。
-- 完成声称前必须读取 `../zhanggui-verification-before-completion/SKILL.md` 的 `Zhanggui Embedded` 模式并运行能证明目标的最新检查。
+- 完成声称前必须发出 `SkillRequest(name=zhanggui-verification-before-completion, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` 并运行能证明目标的最新检查。
 - 用户明确放弃当前目标或方向大变时执行 scope reset：剪枝全部 `open_nodes` 和 `fog`，作废受影响的 decisions（不受影响的保留），按共识失效规则重置 `consensus`，再从新目标重新路由；已落盘的 DESIGN.md 按用户意愿删除或保留，不遗留无主 checkpoint。
 - 用户明确暂停、终止或切换其他工作时，先保存当前 checkpoint，再停止本编排 frame。
