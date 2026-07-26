@@ -289,6 +289,10 @@ test('v0.7 host acceptance proves hybrid root and narrow leaf behavior', () => {
   const host = summary.host_acceptance;
   assert.equal(host.host, 'omp');
   assert.equal(host.session_persistence, false);
+  assert.equal(
+    host.runtime_source_head,
+    '13bedd125ffe084eca535b07a4b8ecaf152b9c6c',
+  );
   assert.deepEqual(
     host.cases.map(item => item.id),
     [
@@ -302,8 +306,13 @@ test('v0.7 host acceptance proves hybrid root and narrow leaf behavior', () => {
   );
   assert.ok(host.cases.every(item => item.pass === true));
   assert.equal(host.cases.find(item => item.id === 'native-root-explicit').root_first, true);
-  assert.equal(host.cases.find(item => item.id === 'native-root-implicit').first_skill, 'zhanggui');
-  assert.equal(host.cases.find(item => item.id === 'native-root-implicit').announcement_observed, true);
+  const implicit = host.cases.find(item => item.id === 'native-root-implicit');
+  assert.equal(implicit.first_skill, 'zhanggui');
+  assert.equal(implicit.announcement_observed, true);
+  assert.equal(implicit.announcement_marker, '已自动进入 Zhanggui 完整工作流：');
+  assert.equal(implicit.runtime_source_head, '13bedd125ffe084eca535b07a4b8ecaf152b9c6c');
+  assert.equal(implicit.evidence_file, 'task-5-evidence/refresh-native-root-implicit.jsonl');
+  assert.match(String(implicit.notice_timing || implicit.activation_events?.find(e => e.event === 'assistant_notice')?.timing || ''), /before first non-skill tool/i);
   assert.equal(host.cases.find(item => item.id === 'native-debug').first_skill, 'zhanggui-systematic-debugging');
   assert.equal(host.cases.find(item => item.id === 'native-root-conflict').first_skill, 'zhanggui');
   assert.equal(host.cases.find(item => item.id === 'native-review').first_skill, 'zhanggui-requesting-code-review');
