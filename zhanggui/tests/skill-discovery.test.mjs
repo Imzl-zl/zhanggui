@@ -182,7 +182,13 @@ test('worktree leaf delegates embedded decisions and never commits setup automat
   assert.match(body, /QuestionRequest/);
   assert.match(body, /\/zhanggui[\s\S]*`awaiting`/);
   assert.match(body, /StageStatus:[^\n]*awaiting-user/);
-  assert.equal(body.match(/^SetupChange:/gm)?.length, 2);
+
+  const completion = extractSection(body, '## Completion Contracts');
+  const directCompletion = extractSection(completion, '### Direct', '### Zhanggui Embedded');
+  const embeddedCompletion = extractSection(completion, '### Zhanggui Embedded');
+  assert.match(directCompletion, /^SetupChange:/m);
+  assert.match(embeddedCompletion, /delta:[\s\S]*?^\s+SetupChange:/m);
+  assert.doesNotMatch(embeddedCompletion, /^SetupChange:/m);
 });
 
 test('executing stage loads embedded leaf procedures without nested invocation', async () => {
