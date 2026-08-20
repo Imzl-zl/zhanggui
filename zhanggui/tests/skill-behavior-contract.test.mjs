@@ -61,3 +61,14 @@ test('design-assist treats architecture as an explicit decision domain', async (
   assert.match(assist, /遵循既定架构/);
   assert.match(assist, /架构结构决策/);
 });
+
+test('steelman argumentation gates fog discovery and obvious-optimum', async () => {
+  const root = await read('zhanggui/SKILL.md');
+  const assist = await read('zhanggui/stages/design-assist/STAGE.md');
+  assert.match(root, /钢人论证前置/);
+  assert.match(root, /自我压力测试/);
+  assert.match(root, /只问用户一个最关键的问题/);
+  assert.match(root, /与 grilling 的“用户主导访谈”是两回事/);
+  assert.match(assist, /明显优解”自检（钢人论证）/);
+  assert.match(assist, /先替每个被放弃的替代方案做最强辩护/);
+});
