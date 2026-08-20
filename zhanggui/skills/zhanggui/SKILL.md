@@ -286,7 +286,7 @@ Stage 可以构造 `QuestionRequest`，但实际等待前由当前编排 frame �
 
 只声明部分领域时，未声明领域默认 `owner: model`；无领域限定的 Owner 信号（"逐项问我"、"grill me"、"所有/全部设计都由我定"）视为全领域声明，把全部领域设为 `user`。若用户措辞对某个已 ready node 的 owner 真有冲突，只围绕该 node 问一次，不做全局模式访谈。
 
-提示已经明确时不再问模式问题。只有交互方式确实不清且会改变结果时，构造并按“原生提问分发契约”发出一次：
+进入 `design` 的默认动作是先确认决策分权：用户措辞已明确给出 Owner 或 Assisted 信号（“逐项问我”/“grill me”/“这部分我来定”，或“你看着办”/“你先设计”）时不再问；否则构造并按“原生提问分发契约”发出一次决策模式问题。不得用“默认 assisted”静默跳过这道题——用户必须实际看到并做出这个选择。
 
 ```yaml
 QuestionRequest:
@@ -343,7 +343,7 @@ Owner/grill-me 领域内只能跳过：
 
 这些规则只定 UI mode，不改变 node owner；例如 `Text-Only + owner:user` 仍由 grilling 用文字逐项询问。
 
-应用上述优先级后 UI mode 仍无法确定，且不同 mode 会实质改变结果或成本时才问一次。视觉-only 请求在结论吸收且全局节点关闭后可以 `stop`，不强迫实现。
+真实涉及视觉、布局或交互的工作，进入 `design` 时默认把 UI mode 一并确认为开局问题：用户措辞已明确给出上表任一信号时不再问；否则与 decision-mode 合并为开局的一次交互（同一轮同时问 decision-mode 与 ui-mode 两个维度，仍遵守“每轮最多一问”的总闸）。不得用“默认 Text-Only/Direct”静默跳过原型选项。视觉-only 请求在结论吸收且全局节点关闭后可以 `stop`，不强迫实现。
 
 ## 全局 Mixed 调度
 

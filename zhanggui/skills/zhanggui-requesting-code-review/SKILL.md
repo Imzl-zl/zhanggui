@@ -56,7 +56,14 @@ A single-file low-risk change, documentation-only edit, or throwaway prototype m
    - **Fidelity:** implementation matches the supplied requirements; deviations are identified.
    - **Quality:** correctness, error handling, edge cases, security, real-behavior tests, migrations, compatibility, and production readiness.
 5. Keep review read-only. Never mutate the working tree, index, HEAD, or branch.
-6. Categorize every issue by actual severity and cite `file:line`, impact, and a concrete fix.
+6. Classify every finding as **architecture** or **detail** before assigning severity:
+   - **Architecture** — duplicated logic, a second source of truth, missing or
+     needless abstraction, wrong module boundary, or a design that forces many
+     future edits. Severity is at least Important; the fix is a redesign routed
+     back to design, never a local patch.
+   - **Detail** — localized bug, edge case, naming, error handling, or test gap;
+     fix in place; severity follows actual impact.
+   Then cite `file:line`, impact, and a concrete fix for every finding.
 
 ## Findings Semantics
 

@@ -36,6 +36,17 @@ Subagent (general-purpose):
 
     ## What to Check
 
+    **First, classify every finding before assigning severity:**
+
+    - **Architecture defect** — duplicated business logic, a second source of
+      truth (same rule/constant/state defined in more than one place), missing
+      abstraction, needless abstraction, wrong module boundary, or a design that
+      will force many edits for one future change. Architecture defects are NOT
+      patchable in place: the fix is a redesign that routes back to design, never
+      a local patch. Mark them Important or Critical and say so explicitly.
+    - **Detail defect** — a localized bug, missing edge case, naming, style,
+      error-handling gap, or test gap that can be fixed in place.
+
     **Plan alignment:**
     - Does the implementation match the plan / requirements?
     - Are deviations justified improvements, or problematic departures?
@@ -48,11 +59,17 @@ Subagent (general-purpose):
     - DRY without premature abstraction?
     - Edge cases handled?
 
-    **Architecture:**
-    - Sound design decisions?
-    - Reasonable scalability and performance?
-    - Security concerns?
-    - Integrates cleanly with surrounding code?
+    **Architecture (explicit checks):**
+    - **Single source of truth** — is any business rule, constant, config key, or
+      state defined in more than one place? (grep for duplicated literals)
+    - **Duplication** — is the same logic copy-pasted across modules?
+    - **Abstraction** — missing where it would remove duplication, or present
+      where it adds indirection without removing duplication?
+    - **Design patterns** — is a standard pattern applicable and used correctly,
+      or is a bespoke structure reinventing one?
+    - **Reuse** — is existing shared code reused, or re-implemented?
+    - Sound design decisions? Reasonable scalability and performance?
+    - Security concerns? Integrates cleanly with surrounding code?
 
     **Testing:**
     - Tests verify real behavior, not mocks?
