@@ -183,9 +183,9 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 
 ### 冷启动恢复
 
-每次新的 `/zhanggui` invocation 在重新分类意图前做恢复探测：用户给出 checkpoint，或按信号（项目根 `.zhanggui/config.yaml`、带 `.zhanggui-root` marker 的默认 `.tasks/` 或后备 `.zhanggui/tasks/`）定位到的 task root 内**存在非终态真值文件**（`DESIGN.md`、active `Design Drift`、非终态 CSV tracker）——满足才读取 `RECOVERY.md` 并按其流程 hydrate。config 或 marker 存在但没有任何非终态真值时不读 `RECOVERY.md`，直接进入普通意图分类。
+每次新的 `/zhanggui` invocation 在重新分类意图前做恢复探测：用户给出 checkpoint，或按信号（项目根 `.zhanggui/config.yaml`、带 `.zhanggui-root` marker 的默认 `.tasks/` 或后备 `.zhanggui/tasks/`）定位到的 task root 内**存在非终态真值文件**（`DESIGN.md`、active `Design Drift`、`FinalizationStatus != complete` 的 `PROGRESS.md`、非终态 CSV tracker）——满足才读取 `RECOVERY.md` 并按其流程 hydrate。config 或 marker 存在但没有任何非终态真值时不读 `RECOVERY.md`，直接进入普通意图分类。
 
-用户请求已含明确新目标且不匹配任何恢复候选时，不为恢复提问：直接按新意图路由，只在首轮回复附一句可恢复任务提示。同一 task 的真值优先序固定为：`DESIGN.md` → PROGRESS 中 active `Design Drift` → 非终态 CSV tracker。
+用户请求已含明确新目标且不匹配任何恢复候选时，不为恢复提问：直接按新意图路由，只在首轮回复附一句可恢复任务提示。同一 task 的真值优先序固定为：`DESIGN.md` → PROGRESS 中 active `Design Drift` → 非终态 `PROGRESS.md`（`FinalizationStatus` + `Current` 记录的执行进度）→ 非终态 CSV tracker。
 
 没有可恢复候选才进入普通意图分类。
 
@@ -205,6 +205,18 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 | 目标明确、局部、无重大设计 | 建 Transient 会话 plan | execute |
 | 新想法、新功能、行为变化 | 建 WorkflowState，进入决策分流 | design |
 | 大而模糊、无法在一个会话看清路径 | 进入发现循环 | discovery |
+
+### 意图不清时的苏格拉底式诊断
+
+请求足够含糊、连 intent 都无法可靠判定时（`intent: fog` 或意图信号互相冲突），不猜路由、不直接进 discovery 扫描。先做一次苏格拉底式问诊，把"用户嘴上问的"和"真正想解决的"分开：
+
+1. 每次只问一个问题，根据回答决定下一问，不一次性抛整套问卷。
+2. 优先区分用户表述里的是：可验证的事实 / 对事实的解释 / 价值判断 / 真正想实现的目标。
+3. 检查关键词是否含糊、默认了哪些前提、证据来自哪里、有没有相反解释，以及结论成立/不成立分别意味着什么。
+4. 每次提问前用一句话说明上一条回答更新了什么判断。
+5. 只问可能改变结论的问题；信息足够立即停止，不凑满固定问数。
+
+问诊收敛后回填 `intent` 与 `goal`（必要时新建 fog 条目），再走第 0 级路由。问诊遵循"每轮最多一问"总闸，只在本轮等待当前一个问题。
 
 已有计划同时满足以下条件才直接执行：
 
@@ -357,15 +369,27 @@ Owner/grill-me 领域内只能跳过：
 
 `fog` 用于路径还看不清、无法直接形成完整决策树的工作：
 
-**钢人论证前置**：请求足够模糊、存在不可消除的重大权衡，或用户明确要“先论证再动手”时，先做一次钢人论证再开始映射——①用最有力的方式重述用户真正想解决的问题；②把“支持”与“反对”各自推到最强论证；③指出双方真正的分歧与最能改变结论的关键变量；④按“原生提问分发契约”只问用户一个最关键的问题。用户回答前不进入 breadth-first 扫描、不给出方案。钢人论证是 agent 的自我压力测试（用户不参与逐条决策），与 grilling 的“用户主导访谈”是两回事，不占用 owner 分权。
+**钢人论证前置**:请求足够模糊、存在不可消除的重大权衡,或用户明确要"先论证再动手"时,先做一次钢人论证再开始映射--1用最有力的方式重述用户真正想解决的问题;2把"支持"与"反对"各自推到最强论证;3指出双方真正的分歧与最能改变结论的关键变量;4按"原生提问分发契约"只问用户一个最关键的问题。用户回答前不进入 breadth-first 扫描、不给出方案。钢人论证是 agent 的自我压力测试（用户不参与逐条决策），与 grilling 的"用户主导访谈"是两回事，不占用 owner 分权。
 
-1. 先按当前 owner 规则确定 destination：最终要得到 spec、关键决定还是实际改动；用户连 destination 都说不清时，先用开放问题逐轮收敛出 destination，再开始映射。
+**专家会诊补充**：问题横跨多个互补专业域（如产品×架构×安全），单一钢人论证视角不足时，先为问题选 3 个真正互补的视角并说明各自必要性，让每个视角分别回答"如何重定义问题 / 最推荐路径 / 其他视角最容易忽略的风险 / 什么新证据会改变判断"，再让它们互相质疑，暴露共同认可的事实、真正的分歧、分歧背后的不同假设。不选高度相似的身份，不模仿或编造真实人物观点；信息不足时先只问用户一个最关键的问题。专家会诊与钢人论证同样不占用 owner 分权，用户不参与逐条决策。
+
+1. 先按当前 owner 规则确定 destination：最终要得到 spec、关键决定还是实际改动；用户连 destination 都说不清时，用"意图不清时的苏格拉底式诊断"逐轮收敛出 destination，再开始映射。
 2. breadth-first 扫描产品、架构、数据、安全、UI、资源和验证面；能准确表述的写成稳定 id 的 `open_nodes`，暂时说不清的写入 `fog`。
 3. `fog` 非空即满足机械落盘条件；在第一次等待用户前创建 `DESIGN.md`。
 4. 按全局 frontier 解决节点：事实研究走 model，价值决策走 user，纸上无法判断的单个节点走 prototype。
 5. 每个结果都更新 decisions、pruned/rejected branches、open_nodes 和 fog；新问题只有在可准确表述时才升级为 node。
 6. 同时满足以下条件才退出 discovery：destination/成功标准明确；scope/non-goals/约束明确；`fog` 为空；所有设计节点关闭；验证目标已知。
 7. 若 breadth-first 扫描证明任务实际很小，直接转普通 design/Transient，不创建长期地图；已创建的 DESIGN.md 按用户意愿删除或保留，不遗留无主 checkpoint。
+
+### 陌生领域横纵研究
+
+destination 是"搞懂一个陌生产品、技术、行业或人物"时，用横纵两轴做结构化研究，替代零散搜索：
+
+- 纵向（它怎么走到今天）：诞生背景与关键推动者；重要转折、成功与失败；哪些早期选择变成了今天的能力、路径依赖或包袱。
+- 横向（今天跟竞品差在哪）：选最值得比较的对象并说明理由；用统一维度比较强项、短板与独特性；用户、客户或市场为什么选它、又为什么放弃它。
+- 合轴（未来判断）：历史形成的能力、路径依赖与约束会怎样影响未来；最可能的 3 条路径；每条路径的前提与预警信号。
+
+证据规则：优先一手来源（官方资料、原始数据、论文、财报、访谈）；重要结论就近标注来源与日期；事实、推断、观点分开写；冲突信息并列呈现，查不到证据明确写"暂未核实"。研究结果只产出可写进 `open_nodes`/`fog` 的材料。
 
 发现循环只产生决定，不提前生产实现。
 
@@ -385,9 +409,11 @@ Owner/grill-me 领域内只能跳过：
 
 1. `open_nodes` 非空、`fog` 非空，或本轮存在 user-owned decisions 且 `consensus != confirmed` -> `continue-design`。
 2. 目标只要求研究/评审/设计，且交付已满足 -> `stop`。
-3. 单会话低风险实现 -> `transient-execution`。
-4. 需要恢复、高风险或依赖较多 -> `durable-plan`。
-5. 多 deliverable 或依赖链 -> `epic-plan`。
+3. 轻任务 -> `transient-execution`。
+4. 重任务 -> `durable-plan`。
+5. 重任务且多 deliverable 或依赖链 -> `epic-plan`。
+
+轻/重是任务固有属性，开局就能判定，与"会不会跨会话"无关：轻 = 单文件小改动、明确低风险、几步能完、无需留痕；重 = 重构、完整功能开发、跨多文件、多步骤、涉及迁移/兼容/安全、需要留痕，或任何"可能做不完"的活。命中任一重信号即判重；拿不准就判重。重任务从第 0 步就落 `PROGRESS.md` 并持续更新，所以"要不要换会话"根本不进入判定——它由落盘本身兑底，而不是由预判兑底。
 
 任何内部 stage 都不能绕过此门。Assisted 产生了未回答用户卡点时同样保持 `continue-design`。
 
@@ -424,7 +450,7 @@ execution 返回 `design-drift` 时，确认 `return_point` 为空后写入 `{ p
 ## 完成与退出
 
 - 每次等待、stage delta 和恢复都更新同一 WorkflowState。
-- 用户暂停时先写必要的 DESIGN/PROGRESS checkpoint，再退出。
+- 用户暂停时先写必要的 DESIGN/PROGRESS checkpoint，再退出；执行中的 Transient 先原地升级 Durable（落 `SPEC.md` + `TODO.csv` + `PROGRESS.md`）再退出，不得裸退出丢进度。
 - 只有工具和仓库都无法提供、且会实质改变结果的信息才升级给用户。
 - 完成声称前必须发出 `SkillRequest(name=zhanggui-verification-before-completion, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` 并运行能证明目标的最新检查。
 - 用户明确放弃当前目标或方向大变时执行 scope reset：剪枝全部 `open_nodes` 和 `fog`，作废受影响的 decisions（不受影响的保留），按共识失效规则重置 `consensus`，再从新目标重新路由；已落盘的 DESIGN.md 按用户意愿删除或保留，不遗留无主 checkpoint。

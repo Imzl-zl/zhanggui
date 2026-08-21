@@ -48,6 +48,8 @@ The root activates the leaf, validates SkillResult, then resumes this same numbe
 
 ## 开工前检查
 
+0. 项目根若存在 init-project 协作文件，先读 `memory.md`（当前状态、进行中、坑点）与 `tools.md`（命令、路径、模式、坑点）找北，用项目已验证的信息开工，不重复调查；`memory/archive/` 只按需读当月或最近一个归档，不批量加载。
+
 1. 目标、boundary、依赖和 validation 是否足以开始。
 2. 文件、符号和接口是否仍与仓库一致。
 3. `sync_targets` 是否覆盖公开接口、调用方、类型、schema、迁移、配置、测试和文档。
@@ -63,7 +65,7 @@ TODO → IN_PROGRESS → DONE
                   ↘ FAILED → IN_PROGRESS
 ```
 
-- 任务开始时同步磁盘 CSV 与会话 plan。
+- 任务开始时同步磁盘 CSV 与会话 plan，并更新 `PROGRESS.md` 的 `Current` 为当前任务——IN_PROGRESS 也落盘，不只 DONE。
 - `DONE` 必须有当前 `validation` 的新鲜证据。
 - 失败时保留 `IN_PROGRESS` 或标记 `FAILED`，在 notes 记录错误、已验证假设和下一策略。
 - 串行 Durable 同一时刻最多一个 `IN_PROGRESS`；使用并行派发时允许多个写范围不冲突的行同时 `IN_PROGRESS`，但每行仍需独立 diff 与 validation 核实。
@@ -72,7 +74,7 @@ TODO → IN_PROGRESS → DONE
 ## 每个任务的执行循环
 
 1. 重读磁盘真值（Durable 读 `TODO.csv`；Epic 读父 `SUBTASKS.csv` 与当前 child `TODO.csv`），再选择第一个依赖已满足的 `TODO` 或可重试 `FAILED`；不凭记忆中的行状态开工。
-2. 标记 `IN_PROGRESS`，同步磁盘真值和会话 plan。
+2. 标记 `IN_PROGRESS`，同步磁盘真值和会话 plan，并更新 `PROGRESS.md` 恢复区 `Current` 为当前任务。
 3. 永久生产功能、bugfix、refactor 或行为变化在写实现代码前返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-test-driven-development`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，由根按 Red-Green-Refactor 激活后恢复本步骤；throwaway prototype 不请求。
 4. 按 boundary 实现，不做与目标无关的清理。
 5. 对每个 `sync_target` 使用符号 references、schema/route/config 搜索重新发现真实影响面；更新所有必要调用方。
@@ -97,7 +99,7 @@ TODO → IN_PROGRESS → DONE
 
 ### Transient → Durable
 
-当出现跨会话风险、任务范围增长、重复失败或需要持久化决策时：
+当出现跨会话风险、任务范围增长、重复失败、需要持久化决策，或**用户明确要求换会话、暂停续做、上下文紧张**时立即升级，不继续执行剩余步骤：
 
 1. 由当前 handoff 生成 `SPEC.md`。
 2. 将剩余会话 plan 转成统一 `TODO.csv`。
@@ -139,7 +141,7 @@ Next: 一个明确动作
 3. 返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-verification-before-completion`，`mode: zhanggui-embedded`，`input` 含完整证据，`return_to: { phase: execute, node: <task-id> }`，由根核对需求与证据后恢复本步骤。
 4. `not-verified` 记录 gaps 并回原 task/debug，Durable/Epic 保持 `pending-validation`；`verified` 恢复 execution 后，Durable/Epic 改为 `pending-cleanup`，Transient 继续完成会话交付。
 5. 未被用户要求时不自行 commit、push 或创建 PR；工作在独立分支/worktree 上或用户要求收尾时，返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-finishing-a-development-branch`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，由根呈现收尾选项并执行用户选择。
-6. 项目已有 memory/archive 约定时，将关键决策、根因和坑点写入该位置；没有约定但本次产生了可复用的领域决策或坑点时，问一次是否创建轻量沉淀文件（如 `docs/DECISIONS.md`），用户拒绝则本 effort 内不再问。`SPEC.md` / `EPIC.md` 是否保留遵循项目文档约定；清理临时 raw 和无价值恢复信息。
+6. 沉淀到项目协作记忆（init-project 体系）：项目根存在 `memory.md` 时，把本次仍有效且跨任务成立的"关键决策 / 可复用坑点 / 新完成能力"滚动写进 `memory.md`（遵守 ≤120 行、删失效项、只留仍有效决策的规则），有重要根因分析或踩坑时追加到 `memory/archive/YYYY-MM.md`（只追加、不覆盖历史）；任务内部的一次性决策留在 SPEC/PROGRESS，不升进项目记忆。项目根没有这套协作文件、但本次产生了可复用领域决策或坑点时，才问一次是否创建轻量沉淀文件（如 `docs/DECISIONS.md`），用户拒绝则本 effort 内不再问。`SPEC.md` / `EPIC.md` 是否保留遵循项目文档约定；清理临时 raw 和无价值恢复信息。
 7. Transient 确认会话 plan 全部 completed 后结束。Durable/Epic 还要确认 CSV 没有未完成/失败行且 cleanup 已结束，设置 `FinalizationStatus: complete`；只有此后才可删除临时 `TODO.csv` / `SUBTASKS.csv`。`complete` 的 PROGRESS 可按项目归档约定保留或删除。
 
 ## 输出 delta

@@ -11,7 +11,7 @@
 ## 冷启动恢复流程
 
 1. 先从用户给出的 checkpoint、项目根 `.zhanggui/config.yaml`、带 `.zhanggui-root` marker 的默认 `.tasks/` 和确定性后备 `.zhanggui/tasks/` 得到候选根；无 marker 的非空根只作为 foreign/legacy 导入候选，未经明确采用/迁移不得读取为活动真值。
-2. 同一 task 按真值优先序恢复：存在 `DESIGN.md` 时无论候选 SPEC/EPIC 是否也存在，都 hydrate DESIGN 并重建候选；没有 DESIGN 但 PROGRESS 有 active `Design Drift` 时读取 SPEC/EPIC + drift state；两者都没有但 TODO/SUBTASKS 含 `IN_PROGRESS`、`FAILED`、未完成项，或 `FinalizationStatus` 为 `active` / `pending-validation` / `pending-cleanup` 时，读取 SPEC/EPIC + CSV + PROGRESS 并恢复 execution。`complete` 且已归档/删除的 tracker 不属于候选。`PROGRESS.md` 含 `Parent:` 字段的目录不是独立候选，一律经其父 epic 的 `SUBTASKS.csv` 恢复，child 位置由 `task_dir` 决定。
+2. 同一 task 按真值优先序恢复：存在 `DESIGN.md` 时无论候选 SPEC/EPIC 是否也存在，都 hydrate DESIGN 并重建候选；没有 DESIGN 但 PROGRESS 有 active `Design Drift` 时读取 SPEC/EPIC + drift state；两者都没有但存在 `FinalizationStatus != complete` 的 `PROGRESS.md`（或 TODO/SUBTASKS 含 `IN_PROGRESS`、`FAILED`、未完成项）时，读取 SPEC/EPIC + PROGRESS（+ 可选 CSV）并恢复 execution。`PROGRESS.md` 是执行恢复的唯一入口，CSV 只是可选行状态补充。`complete` 且已归档/删除的 tracker 不属于候选。`PROGRESS.md` 含 `Parent:` 字段的目录不是独立候选，一律经其父 epic 的 `SUBTASKS.csv` 恢复，child 位置由 `task_dir` 决定。
 3. 按目标和更新时间能得到唯一明确 task 时直接恢复；多个 task 都合理时列出简短候选并只问一次，不得猜。用户请求已含明确新目标且不匹配任何候选时，不提问也不恢复：返回普通意图分类，只在首轮回复附一句可恢复任务提示。优先序只解决同一 task 的真值，不能替用户在多个 task 间选择。
-4. 校验 version、task_root 和必要字段；Design/Drift 根据 decisions、depends_on、fog、prototype、consensus、current/awaiting/return point 重算 frontier，Execution 根据 CSV 真值重算 dependency-ready task 和父子状态。
+4. 校验 version、task_root 和必要字段；Design/Drift 根据 decisions、depends_on、fog、prototype、consensus、current/awaiting/return point 重算 frontier，Execution 先按 `PROGRESS.md` 的 `Current` 与 `FinalizationStatus` 定位进度，再按 CSV（如有）真值重算 dependency-ready task 和父子状态。
 5. 从 pending prototype、待回答 node、待确认 consensus、design drift 或未完成 execution task 继续；不得重新建图、重问已定决定或为恢复另建 tracker。
