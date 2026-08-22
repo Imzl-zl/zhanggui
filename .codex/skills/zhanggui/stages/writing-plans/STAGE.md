@@ -9,15 +9,15 @@
 
 ## 先选形态
 
-| 形态 | 条件 | 磁盘工件 | 状态真值 |
+| 形态 | 判定（轻/重） | 磁盘工件 | 恢复入口 |
 |---|---|---|---|
-| **Transient** | 单会话、低风险、通常 1–5 个线性步骤，不需要恢复 | 无 | 会话内置 plan |
-| **Durable** | 需要跨会话恢复、风险高、依赖较多或通常 ≥6 步 | `.tasks/<task>/SPEC.md` + `TODO.csv` + `PROGRESS.md` | `TODO.csv` |
-| **Epic** | 多个独立 deliverable、明确依赖链或可并行子任务 | `.tasks/<epic>/EPIC.md` + `SUBTASKS.csv` + `PROGRESS.md` + `tasks/` | `SUBTASKS.csv` |
+| **Transient**（轻） | 单文件小改、明确低风险、几步能完、无需留痕 | 无 | 无（会话内完成） |
+| **Durable**（重） | 重构/完整开发/跨多文件/多步骤/高风险/要留痕 | `.tasks/<task>/SPEC.md` + `PROGRESS.md` + `TODO.csv` | `PROGRESS.md` |
+| **Epic**（重的多 deliverable 形态） | 多个独立 deliverable、依赖链或可并行子任务 | `.tasks/<epic>/EPIC.md` + `SUBTASKS.csv` + `PROGRESS.md` + `tasks/` | `PROGRESS.md` |
 
-步骤数量只是信号。三步数据迁移可以是 Durable；八步一次性文案调整也可以是 Transient。
+轻/重是任务固有属性，开局判定，不看"会不会跨会话"。命中任一重信号即判重；拿不准就判重。重任务从第 0 步就建 `PROGRESS.md` 并持续更新，它是唯一恢复入口；`TODO.csv`/`SUBTASKS.csv` 只是多任务时的行状态机，不是恢复必需。
 
-不要为了“记录完整”给短任务创建 CSV。不要同时创建 `.tasks`、`.codex-tasks` 和项目根 TODO。
+不要为了"记录完整"给轻任务建文件。不要同时创建 `.tasks`、`.codex-tasks` 和项目根 TODO。
 `zhanggui` 通常会把 Transient 直接交给执行阶段；只有需要记录 shape 选择本身时，计划阶段才记录一个不落盘的 Transient 结论。
 
 `Batch` 不再是第四种 shape：本工作流不依赖 `spawn_agents_on_csv`。同质批量工作按恢复/风险选择 Durable 或 Epic，再把可独立、写范围不冲突的行作为受控并行执行策略；不要仅因数量大就强制 Epic。
