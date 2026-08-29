@@ -120,7 +120,7 @@ next_skill_request:
    - 持续向上追直到源头
    - 在源头修，不在症状修
 
-   详见 `root-cause-tracing.md`
+   详见 `references/root-cause-tracing.md`
 
 ### Phase 2：模式分析
 
@@ -272,9 +272,9 @@ next_skill_request:
 
 ## 辅助技术（同目录）
 
-- `root-cause-tracing.md`：调用栈反向追踪
-- `defense-in-depth.md`：多层验证
-- `condition-based-waiting.md`：条件轮询替代任意 timeout
+- `references/root-cause-tracing.md`：调用栈反向追踪
+- `references/defense-in-depth.md`：多层验证
+- `references/condition-based-waiting.md`：条件轮询替代任意 timeout
 
 ## Completion Contracts
 

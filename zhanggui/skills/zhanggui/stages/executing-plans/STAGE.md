@@ -54,7 +54,7 @@ The root activates the leaf, validates SkillResult, then resumes this same numbe
 2. 文件、符号和接口是否仍与仓库一致。
 3. `sync_targets` 是否覆盖公开接口、调用方、类型、schema、迁移、配置、测试和文档。
 4. WorkflowState 的 `open_nodes` 与 `fog` 是否为空；若有 user-owned decisions，`consensus` 是否已 confirmed。
-5. 高风险改动、并行子任务或用户要求隔离时，返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-using-git-worktrees`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，由根建立隔离工作区并验证基线后恢复本步骤。
+5. 隔离触发命中时（`readiness ∈ {durable-plan, epic-plan}`、并行子任务写范围重叠、脏工作区，或用户要求隔离），返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-using-git-worktrees`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，由根建立隔离工作区并验证基线后恢复本步骤。轻任务（`readiness = transient-execution`）且未命中其余触发项时原地执行，不请求隔离。
 
 事实过时但不改变设计时，就地更新 tracker 并记录原因。发现设计缺口时返回 `StageStatus: design-drift` 和原 task return point，由当前编排 frame 恢复 design；不让用户手动重新路由。
 

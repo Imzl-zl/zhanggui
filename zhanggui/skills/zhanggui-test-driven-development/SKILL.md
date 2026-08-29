@@ -336,7 +336,7 @@ PASS
 
 ## Testing Anti-Patterns
 
-添加 mock 或测试工具时，先读 [testing-anti-patterns.md](testing-anti-patterns.md) 避免常见陷阱：
+添加 mock 或测试工具时，先读 [references/testing-anti-patterns.md](references/testing-anti-patterns.md) 避免常见陷阱：
 
 - 测 mock 行为而不是真实行为
 - 给生产类加 test-only 方法

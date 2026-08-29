@@ -416,6 +416,30 @@ test('Embedded finishing requests verification by exact name when evidence is st
   );
 });
 
+test('worktree isolation triggers on readiness instead of a subjective risk self-assessment', async () => {
+  const root = await readFile(rootPath, 'utf8');
+  const stage = await readFile(
+    path.join(skillsRoot, 'zhanggui', 'stages', 'executing-plans', 'STAGE.md'),
+    'utf8',
+  );
+  const splitLines = (text) => text.split(/\r?\n/);
+  const forbiddenSelfAssessment = /\u9ad8\u98ce\u9669/;
+
+  const routingRow = splitLines(root)
+    .find(line => line.includes('zhanggui-using-git-worktrees') && line.includes('phase = execute'));
+  assert.ok(routingRow, 'routing table must map execute-entry isolation to the worktree leaf');
+  assert.match(routingRow, /durable-plan/);
+  assert.match(routingRow, /epic-plan/);
+  assert.doesNotMatch(routingRow, forbiddenSelfAssessment);
+
+  const stageRow = splitLines(stage)
+    .find(line => line.includes('zhanggui-using-git-worktrees'));
+  assert.ok(stageRow, 'executing-plans must request the worktree leaf before implementation');
+  assert.match(stageRow, /durable-plan/);
+  assert.match(stageRow, /epic-plan/);
+  assert.doesNotMatch(stageRow, forbiddenSelfAssessment);
+});
+
 test('worktree names finishing as later cleanup capability without sibling path', async () => {
   const content = await readFile(path.join(skillsRoot, 'zhanggui-using-git-worktrees', 'SKILL.md'), 'utf8');
   assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);

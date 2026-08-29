@@ -1,0 +1,36 @@
+{
+  "name": "zhanggui",
+  "version": "0.7.0",
+  "description": "Nine strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator and eight dual-mode engineering leaves.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "zhanglu",
+    "url": "https://github.com/Imzl-zl"
+  },
+  "homepage": "https://github.com/Imzl-zl/zhanggui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Imzl-zl/zhanggui.git"
+  },
+  "keywords": [
+    "pi-package",
+    "skills",
+    "planning",
+    "debugging",
+    "tdd",
+    "workflow"
+  ],
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  },
+  "scripts": {
+    "test": "node --test",
+    "validate": "node scripts/validate-agent-skills.mjs",
+    "deploy": "bash scripts/deploy-skills.sh",
+    "check": "npm run test && npm run validate"
+  }
+}

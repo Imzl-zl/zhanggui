@@ -48,7 +48,7 @@ A single-file low-risk change, documentation-only edit, or throwaway prototype m
 
 1. Resolve the exact git range or working-tree diff and state it.
 2. Resolve the review contract. If absent in Direct mode, mark the fidelity axis unchecked.
-3. If subagents are available, dispatch one independent reviewer using [code-reviewer.md](code-reviewer.md):
+3. If subagents are available, dispatch one independent reviewer using [references/code-reviewer.md](references/code-reviewer.md):
    - `DESCRIPTION` = concise implementation summary.
    - `PLAN_OR_REQUIREMENTS` = the actual contract, or `not provided - quality review only`.
    - `BASE_SHA` / `HEAD_SHA` = the resolved range.

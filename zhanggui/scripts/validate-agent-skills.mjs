@@ -19,10 +19,20 @@ const skills = [
   'zhanggui-finishing-a-development-branch',
 ];
 
+// The validator is a Python tool that reads UTF-8 skill files. On Windows,
+// Python defaults to the GBK code page under a Chinese locale and dies on the
+// first non-ASCII byte, so force UTF-8 for the child process.
+const childEnv = {
+  ...process.env,
+  PYTHONUTF8: '1',
+  PYTHONIOENCODING: 'utf-8',
+};
+
 function validate(skillPath) {
   const result = spawnSync(uvx, ['--from', source, 'skills-ref', 'validate', skillPath], {
     cwd: projectRoot,
     encoding: 'utf8',
+    env: childEnv,
   });
   if (result.error) {
     throw new Error(`Failed to spawn ${uvx} for ${skillPath}: ${result.error.message}`);
@@ -34,4 +44,4 @@ function validate(skillPath) {
 
 for (const name of skills) validate(path.join(skillsRoot, name));
 
-console.log('Validated 9 strict Agent Skills.');
+console.log(`Validated ${skills.length} strict Agent Skills.`);

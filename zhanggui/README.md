@@ -44,13 +44,17 @@ Nine strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator an
 
 ```text
 zhanggui/
-├── .codex-plugin/plugin.json     # skills root -> ./skills/
+├── .claude-plugin/plugin.json    # Claude Code manifest; skills -> ./skills/
+├── .codex-plugin/plugin.json     # Codex manifest; skills -> ./skills/
+├── package.json                  # npm scripts + pi package skills entry
 ├── README.md
-├── docs/skill-fusion-design.md
+├── docs/                         # design rationale, not loaded at runtime
 ├── evals/                        # trigger datasets + routing summary
-├── scripts/validate-agent-skills.mjs
+├── scripts/
+│   ├── validate-agent-skills.mjs # strict Agent Skills validation
+│   └── deploy-skills.sh          # mirror skills/ into a host skills dir
 ├── tests/                        # discovery / routing / trigger contracts
-└── skills/
+└── skills/                       # the only source of truth
     ├── zhanggui/                 # selective-hybrid strict orchestrator
     │   ├── SKILL.md
     │   ├── RECOVERY.md
@@ -59,24 +63,66 @@ zhanggui/
     │       ├── design-assist/STAGE.md
     │       ├── grilling/STAGE.md
     │       ├── prototype/{STAGE,UI,LOGIC}.md
-    │       ├── writing-plans/{STAGE,plan-document-reviewer-prompt}.md
+    │       ├── writing-plans/STAGE.md
+    │       │   └── references/plan-document-reviewer-prompt.md
     │       └── executing-plans/STAGE.md
-    ├── zhanggui-systematic-debugging/SKILL.md
-    ├── zhanggui-test-driven-development/SKILL.md
+    ├── zhanggui-systematic-debugging/
+    │   ├── SKILL.md
+    │   ├── references/           # root-cause tracing, defense in depth, waiting
+    │   └── scripts/find-polluter.sh
+    ├── zhanggui-test-driven-development/
+    │   ├── SKILL.md
+    │   └── references/testing-anti-patterns.md
+    ├── zhanggui-requesting-code-review/
+    │   ├── SKILL.md
+    │   └── references/code-reviewer.md
     ├── zhanggui-verification-before-completion/SKILL.md
-    ├── zhanggui-requesting-code-review/{SKILL,code-reviewer}.md
     ├── zhanggui-receiving-code-review/SKILL.md
     ├── zhanggui-using-git-worktrees/SKILL.md
     ├── zhanggui-dispatching-parallel-agents/SKILL.md
     └── zhanggui-finishing-a-development-branch/SKILL.md
 ```
 
+`skills/` 是唯一真值源。宿主 skills 目录（`~/.claude/skills/` 等）一律视为生成产物，只能由安装或 `scripts/deploy-skills.sh` 写入，不在那里改规则。Bundled resource 按 Agent Skills 惯例分层：`references/` 放按需加载的文档，`scripts/` 放可执行脚本。
+
 ### 安装单元：完整 collection
 
-完整可移植单元是 `skills/` 下的 `zhanggui/` 与全部 `zhanggui-*` 目录，无需构建：
+完整可移植单元是 `skills/` 下的 `zhanggui/` 与全部 `zhanggui-*` 目录，无需构建。按宿主能力优先选择正式安装方式：
 
-1. **插件形态**：宿主加载 `.codex-plugin/plugin.json`（skills root 指向 `./skills/`）。
-2. **裸 collection 形态**：把 `skills/zhanggui/` 和全部 `skills/zhanggui-*` 目录一起复制到宿主 skills 根（如 `~/.claude/skills/` 或 `~/.agents/skills/`），保持 collection 布局。
+**1. Claude Code 插件（首选）**
+
+仓库根有 `.claude-plugin/marketplace.json`，`zhanggui/` 内有 `.claude-plugin/plugin.json`，可直接作为 marketplace 安装：
+
+```text
+/plugin marketplace add Imzl-zl/zhanggui      # 或本地路径
+/plugin install zhanggui@zhanggui-marketplace
+```
+
+插件安装由宿主管理版本与更新，不产生手工副本。
+
+**2. Codex 插件**
+
+宿主加载 `zhanggui/.codex-plugin/plugin.json`（skills root 指向 `./skills/`），`skills/zhanggui/agents/openai.yaml` 声明 `allow_implicit_invocation: true`。
+
+**3. 裸 collection（宿主不支持插件时）**
+
+```bash
+cd zhanggui
+./scripts/deploy-skills.sh --target claude     # ~/.claude/skills
+./scripts/deploy-skills.sh --target codex      # ~/.codex/skills
+./scripts/deploy-skills.sh --target agents     # ~/.agents/skills
+./scripts/deploy-skills.sh --target DIR --dry-run
+```
+
+脚本从 `skills/` 单向镜像九个技能目录并删除目标里已不存在的文件，因此过期副本不会变成第二真值源；它不触碰目标目录内其他来源的技能。
+
+也可以直接手工复制——插件不是必需的，这九个目录就是完整安装单元：
+
+```bash
+cp -R zhanggui/skills/zhanggui zhanggui/skills/zhanggui-* ~/.agents/skills/
+```
+
+手工复制和脚本的唯一区别是脚本会清掉目标里源已删除的残留文件。改名或删除文件后用手工复制会留下过期副本，所以重复部署优先用脚本。
 
 只复制 `skills/zhanggui/` 会缺少 Embedded leaf 依赖，不是完整安装。Agent Skills 仍是渐进加载：启动只注入九个技能的 frontmatter；实际匹配后才加载对应 `SKILL.md`。根编排器通过 Skill Activation Contract 激活 leaf，而不是把 sibling 路径当作业务接口。不要同时启用插件与裸 collection，也不要同时启用另一套默认强编排入口。
 
@@ -136,14 +182,14 @@ v0.7 继续使用 `zhanggui/v0.4` WorkflowState 与 task-root schema。默认根
 ### Automated verification
 
 ```bash
-node --check tests/skill-discovery.test.mjs
-node --check tests/skill-routing-contract.test.mjs
-node --check tests/skill-trigger-data.test.mjs
-node --test
-node scripts/validate-agent-skills.mjs
+node --test                              # 或 npm test
+node scripts/validate-agent-skills.mjs   # 或 npm run validate
+npm run check                            # 两者串跑
 ```
 
-Expected: zero test failures/todos；validator 最终行报告 `Validated 9 strict Agent Skills.`
+Expected: 50 tests / 50 pass / 0 fail；validator 最终行报告 `Validated 9 strict Agent Skills.`
+
+validator 会给 Python 子进程注入 `PYTHONUTF8=1`，避免中文 Windows 语系下 GBK 解码 UTF-8 skill 文件时崩溃。
 
 ### Trigger eval
 

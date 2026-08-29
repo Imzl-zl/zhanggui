@@ -107,7 +107,7 @@ Owner 中，只有事实和已定结论可跳过。剩余真实 decision node �
 - 只有依赖关闭的 node 可以进入 ready frontier。
 - design-assist、grilling 和 prototype 只返回当前 node delta。
 - 局部领域完成不产生全局 plan/execute readiness。
-- 任一 user-owned branch 活跃时，全工作流每轮最多问用户一个问题；决策问题与元问题（模式、UI mode、worktree、恢复候选、沉淀文件）共用该节奏，可延迟的元问题延后到必须决定时再问。
+- 任一 user-owned branch 活跃时，全工作流每轮最多问用户一个问题；决策问题与元问题（模式、UI mode、worktree、恢复候选、沉淀文件）共用该节奏，可延迟的元问题延后到必须决定时再问。命中隔离触发条件进入 execute 时，worktree 同意是该轮最先必需的阻塞问题。
 
 因此业务 Owner + UI Assisted、业务 Assisted + UI Owner 等组合不会丢失另一个领域，也不会同时塞给用户一批问题。
 
@@ -253,7 +253,7 @@ Minimal 投影只含 `goal / intent / phase / readiness / next`，用于问答�
 | verification-before-completion leaf | claim + acceptance + evidence + return_point | verified/not-verified + return target |
 | requesting/receiving-code-review leaves | scope/feedback + contract + return fields | strengths/findings/verdict 或反馈处理 delta |
 | finishing-a-development-branch leaf | verified 结论 + branch/workspace 状态 | 用户选项执行结果 + cleanup 状态 |
-| using-git-worktrees leaf | 隔离触发条件 | workspace/baseline + isolated/in-place |
+| using-git-worktrees leaf | 隔离触发条件（readiness 为 durable-plan/epic-plan、并行写范围、脏工作区或用户要求） | workspace/baseline + isolated/in-place |
 | dispatching-parallel-agents leaf | 独立域划分 + 每 agent scope | 派发计划/结果核实/冲突/集成验证 |
 
 内部 stage 只返回局部 delta 或 `SkillRequest`；leaf 的 `Zhanggui Embedded` 模式返回 `SkillResult`，不创建新的全局 ledger；leaf 的 Direct 模式按自身 Completion Contract 终止。

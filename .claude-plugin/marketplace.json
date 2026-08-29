@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "zhanggui-marketplace",
+  "description": "Marketplace for the Zhanggui skill collection and the init-project collaboration bootstrap.",
+  "owner": {
+    "name": "zhanglu",
+    "url": "https://github.com/Imzl-zl"
+  },
+  "plugins": [
+    {
+      "name": "zhanggui",
+      "source": "./zhanggui",
+      "description": "Nine strict Agent Skills: one selective-hybrid stateful orchestrator and eight dual-mode engineering leaves.",
+      "version": "0.7.0",
+      "author": {
+        "name": "zhanglu"
+      },
+      "homepage": "https://github.com/Imzl-zl/zhanggui",
+      "license": "MIT",
+      "category": "Developer Tools",
+      "keywords": [
+        "skills",
+        "planning",
+        "debugging",
+        "tdd",
+        "workflow"
+      ]
+    }
+  ]
+}

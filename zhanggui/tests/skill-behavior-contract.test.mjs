@@ -40,7 +40,7 @@ test('prototype stage produces runnable HTML evidence with a smoke check', async
 });
 
 test('code reviewer classifies architecture vs detail and checks SSOT/duplication/abstraction', async () => {
-  const reviewer = await read('zhanggui-requesting-code-review/code-reviewer.md');
+  const reviewer = await read('zhanggui-requesting-code-review/references/code-reviewer.md');
   assert.match(reviewer, /Architecture defect/);
   assert.match(reviewer, /Detail defect/);
   assert.match(reviewer, /Single source of truth/);

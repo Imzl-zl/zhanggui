@@ -244,7 +244,7 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 决策问题和元问题（决策模式、UI mode、worktree 同意、恢复候选、沉淀文件等）共用同一节奏：**每轮等待最多向用户提出一个问题**。约束方式：
 
 1. 能从既有信号、仓库事实或本文件默认值判定的元问题不问。
-2. 可延迟的元问题（worktree、沉淀文件）延迟到必须决定时再问，不在开局堆积。
+2. 可延迟的元问题（沉淀文件等）延迟到必须决定时再问，不在开局堆积。worktree 同意在开局同样不问，但一旦命中隔离触发条件进入 execute，它就是该轮最先必需的阻塞问题，不再顺延到其他领域之后。
 3. 同一时刻多个问题都必需时，按阻塞程度只问最先必需的一个，其余顺延到后续等待轮。
 
 ### 原生提问分发契约
@@ -369,7 +369,7 @@ Owner/grill-me 领域内只能跳过：
 
 `fog` 用于路径还看不清、无法直接形成完整决策树的工作：
 
-**钢人论证前置**：请求足够模糊、存在不可消除的重大权衡，或用户明确要"先论证再动手"时，先做一次钢人论证再开始映射——①用最有力的方式重述用户真正想解决的问题；②把"支持"与"反对"各自推到最强论证；③指出双方真正的分歧与最能改变结论的关键变量；④按"原生提问分发契约"只问用户一个最关键的问题。用户回答前不进入 breadth-first 扫描、不给出方案。钢人论证是 agent 的自我压力测试（用户不参与逐条决策），与 grilling 的"用户主导访谈"是两回事，不占用 owner 分权。
+**钢人论证前置**：请求足够模糊、存在不可消除的重大权衡，或用户明确要“先论证再动手”时，先做一次钢人论证再开始映射——①用最有力的方式重述用户真正想解决的问题；②把“支持”与“反对”各自推到最强论证；③指出双方真正的分歧与最能改变结论的关键变量；④按“原生提问分发契约”只问用户一个最关键的问题。用户回答前不进入 breadth-first 扫描、不给出方案。钢人论证是 agent 的自我压力测试（用户不参与逐条决策），与 grilling 的“用户主导访谈”是两回事，不占用 owner 分权。
 
 **专家会诊补充**：问题横跨多个互补专业域（如产品×架构×安全），单一钢人论证视角不足时，先为问题选 3 个真正互补的视角并说明各自必要性，让每个视角分别回答"如何重定义问题 / 最推荐路径 / 其他视角最容易忽略的风险 / 什么新证据会改变判断"，再让它们互相质疑，暴露共同认可的事实、真正的分歧、分歧背后的不同假设。不选高度相似的身份，不模仿或编造真实人物观点；信息不足时先只问用户一个最关键的问题。专家会诊与钢人论证同样不占用 owner 分权，用户不参与逐条决策。
 
@@ -434,7 +434,7 @@ destination 是"搞懂一个陌生产品、技术、行业或人物"时，用横
 | 完成门/任务级/ad-hoc 请求审查（同步子步骤，不占 return_point 单槽） | `SkillRequest(name=zhanggui-requesting-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | 收到外部代码审查反馈（同步子步骤，不占 return_point 单槽） | `SkillRequest(name=zhanggui-receiving-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `SkillRequest(name=zhanggui-finishing-a-development-branch, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
-| `phase = execute` 开始前 ∧ 隔离触发（高风险/并行写范围/脏工作区/用户要求） | `SkillRequest(name=zhanggui-using-git-worktrees, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| `phase = execute` 开始前 ∧ 隔离触发（`readiness ∈ {durable-plan, epic-plan}` ∨ 并行写范围 ∨ 脏工作区 ∨ 用户要求） | `SkillRequest(name=zhanggui-using-git-worktrees, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `SkillRequest(name=zhanggui-dispatching-parallel-agents, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 
 Transient 直接进入 execution stage；Durable/Epic 先进入 planning stage。永久生产功能和 bugfix 在写实现前发出 `SkillRequest(name=zhanggui-test-driven-development, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；throwaway prototype 不加载。
