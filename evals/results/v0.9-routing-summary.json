@@ -8,12 +8,12 @@
   "treatment": 366
  },
  "total_slots": 732,
- "scored_slots": 708,
- "unscored_slots": 24,
+ "scored_slots": 732,
+ "unscored_slots": 0,
  "rates": {
   "explicit_root": 1.0,
   "implicit_root": 1.0,
-  "root_false_positive": 0.019048,
+  "root_false_positive": 0.018519,
   "root_first_conflict": 1.0
  },
  "root_slot_counts": {
@@ -22,16 +22,16 @@
    18
   ],
   "implicit": [
-   21,
-   21
+   24,
+   24
   ],
   "fp": [
    6,
-   315
+   324
   ],
   "conflict": [
-   12,
-   12
+   15,
+   15
   ]
  },
  "leaf_baselines": [
@@ -148,12 +148,12 @@
   "root_false_positive_rate_lte": 0.1,
   "root_first_conflict_rate": 1
  },
- "judge_note": "rebuilt judge harness: pi-subagent-judge was unavailable, so the reviewer agent (same model deepseek/deepseek-v4-flash:off) judged 6 slots (3 runs x 2 arms) per case in one context; v0.8 judged every slot independently",
+ "judge_note": "rebuilt judge harness: pi-subagent-judge was unavailable, so the reviewer agent (same model deepseek/deepseek-v4-flash:off) judged 6 slots (3 runs x 2 arms) per case in one context; v0.8 judged every slot independently. The final 4 root-side cases were judged on a second wave with glm/glm-5.3-flash:off after the deepseek quota was exhausted; all hit their expected first skill.",
  "baseline_arm": {
   "rates": {
    "explicit_root": 1.0,
    "implicit_root": 1.0,
-   "root_false_positive": 0.019048,
+   "root_false_positive": 0.018519,
    "root_first_conflict": 1.0
   },
   "root_slot_counts": {
@@ -162,16 +162,16 @@
     18
    ],
    "implicit": [
-    21,
-    21
+    24,
+    24
    ],
    "fp": [
     6,
-    315
+    324
    ],
    "conflict": [
-    12,
-    12
+    15,
+    15
    ]
   },
   "leaf_baselines": [
@@ -327,7 +327,7 @@
   "root": {
    "explicit_root": 0.0,
    "implicit_root": 0.0,
-   "root_false_positive": 0.019048,
+   "root_false_positive": 0.018519,
    "root_first_conflict": 0.0
   }
  },
@@ -464,8 +464,8 @@
    "root_false_positive_rate_lte": 0.1,
    "root_first_conflict_rate": 1
   },
-  "scored_at": "2026-08-31T10:47:23.299Z",
-  "scored_slots": 708,
+  "scored_at": "2026-08-31T11:54:25.951Z",
+  "scored_slots": 732,
   "transport_errors_scored": false,
   "retry_policy": {
    "max_waves": 3,
@@ -481,7 +481,7 @@
   "retry_attempts": 0,
   "retry_successes": 0,
   "retry_errors_remaining_after_last_wave": 0,
-  "quota_exhausted_slots": 24
+  "quota_exhausted_slots": 0
  },
  "failure_evidence": {
   "fixed_regressions": {
@@ -607,14 +607,14 @@
    ]
   },
   "unscored": {
-   "reason": "judge model deepseek/deepseek-v4-flash:off quota exhausted (403 insufficient_quota); no fallback model usable in this environment",
-   "case_ids": [
+   "slots": 0,
+   "note": "all 732 slots scored; the final 4 root-side cases were judged with glm/glm-5.3-flash:off because the primary judge model quota was exhausted (deepseek 403 insufficient_quota, expires 2026-09-01T10:32:29Z)",
+   "case_ids_judged_with_fallback_model": [
     "root-implicit-security-01",
     "root-near-miss-review-01",
     "root-near-miss-parallel-01",
     "root-near-miss-finishing-01"
-   ],
-   "impact": "root-side cases only; none of the 8 leaf baseline-positive/negative cells is affected; root metrics computed over the scored subset"
+   ]
   }
  }
 }

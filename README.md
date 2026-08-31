@@ -236,7 +236,7 @@ node --test tests/skill-trigger-data.test.mjs
 
 Observed v0.9 summary facts（对**当前** description 目录测得——三处修订后的 catalog，catalog 含 9 个 zhanggui 技能 + 6 个无关第三方干扰项，A/B 双 arm 同批判官模型，见 [`evals/results/v0.9-routing-summary.json`](evals/results/v0.9-routing-summary.json)）：
 
-- 708/732 slots 有效（4 个 root-side case 因判官模型配额耗尽未评分；不影响 8 个 leaf 单元格）
+- 732/732 slots 有效（主批判官 deepseek-v4-flash:off；最后 4 个 root-side case 因该模型配额耗尽改用 glm-5.3-flash 补评，全部命中预期）
 - 处理组 root rates: explicit/implicit/root-first-conflict = 1.0, root_false_positive = 0.019（全部满足阈值）
 - 处理组 leaf: 正例除 dispatching 0.833（`dispatching-pos-03`，两 arm 一致，判官批次差异）外全部 1.0，含 tdd、worktrees、finishing——v0.8 的五个退化点全部消失
 - 处理组 leaf 负例误触发全部 0（v0.8: worktrees 0.111 / dispatching 0.222 / finishing 0.167）

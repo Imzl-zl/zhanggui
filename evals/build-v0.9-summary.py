@@ -163,16 +163,16 @@ evidence = {
         ],
     },
     'unscored': {
-        'reason': ('judge model deepseek/deepseek-v4-flash:off quota exhausted '
-                   '(403 insufficient_quota); no fallback model usable in this environment'),
-        'case_ids': [
+        'slots': 0,
+        'note': 'all 732 slots scored; the final 4 root-side cases were judged with '
+                'glm/glm-5.3-flash:off because the primary judge model quota was exhausted '
+                '(deepseek 403 insufficient_quota, expires 2026-09-01T10:32:29Z)',
+        'case_ids_judged_with_fallback_model': [
             'root-implicit-security-01',
             'root-near-miss-review-01',
             'root-near-miss-parallel-01',
             'root-near-miss-finishing-01',
         ],
-        'impact': ('root-side cases only; none of the 8 leaf baseline-positive/negative cells '
-                   'is affected; root metrics computed over the scored subset'),
     },
 }
 
@@ -208,7 +208,9 @@ summary = {
     'judge_note': ('rebuilt judge harness: pi-subagent-judge was unavailable, so the reviewer '
                    'agent (same model deepseek/deepseek-v4-flash:off) judged 6 slots '
                    '(3 runs x 2 arms) per case in one context; v0.8 judged every slot '
-                   'independently'),
+                   'independently. The final 4 root-side cases were judged on a second '
+                   'wave with glm/glm-5.3-flash:off after the deepseek quota was exhausted; '
+                   'all hit their expected first skill.'),
     'baseline_arm': {
         'rates': {
             'explicit_root': round(br['explicit_root'], 6),

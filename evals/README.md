@@ -6,7 +6,7 @@
 |---|---|
 | `skill-triggering.json` | 122 条触发用例数据集（digest 被 `tests/skill-trigger-data.test.mjs` 钉住） |
 | `catalog-current.json` | **当前** description 目录的快照 + digest 门 + 测量状态（`measured` / `pending-reevaluation`）。改 description 就改这里，历史 summary 不动 |
-| `results/v0.9-routing-summary.json` | 对**当前**目录（三处 description 修订后）的重测：122 cases × 3 runs × 2 arms，判官模型同 v0.8（deepseek-v4-flash:off），4 个 root-side case 因判官模型配额耗尽未评分 |
+| `results/v0.9-routing-summary.json` | 对**当前**目录（三处 description 修订后）的重测：122 cases × 3 runs × 2 arms，732/732 slots 全部有效。主批判官同 v0.8（deepseek-v4-flash:off），最后 4 个 root-side case 因该模型配额耗尽改用 glm-5.3-flash 补评 |
 | `results/v0.8-routing-summary.json` | 历史测量。对**归一化后、未做本轮三处修订**的目录测得：122 cases × 3 runs × 2 arms，A/B 双 arm 同批判官，catalog 掺入 6 个无关第三方干扰项 |
 | `results/v0.7-routing-summary.json` | 历史测量。对**旧** description 目录测得（无干扰项），不描述当前目录 |
 | `results/v0.6-routing-summary.json` | 更早的历史测量 |
@@ -18,7 +18,7 @@
 - 处理组：root 四项速率全部满足阈值（explicit/implicit/root-first-conflict = 1.0，root_false_positive = 0.019 ≤ 0.1）；leaf 正例 tdd/worktrees/finishing 等全部回到 1.0（dispatching 0.833，见下），负例误触发全部为 0。
 - **v0.8 的五个退化点全部消失**：`tdd-pos-02`（3/3 → 3/3 命中）、`worktrees-pos-02/05`、`worktrees-neg-02/05`、`dispatching-neg-02/05`、`finishing-neg-01`（3/3 误触发 → 0）均有 run 级证据在 `failure_evidence.fixed_regressions`。
 - 两个新差异在 `failure_evidence.judge_batch_differences`：`dispatching-pos-03` 正例 0.833、两处新 root FP（`verification-neg-01`、`dispatching-neg-03`）。它们**两 arm 行为一致**，不是 description 差异，归因于判官基建批次（v0.8 每槽独立判断，v0.9 为 reviewer agent 每 subagent 判 6 槽）+ 本次采样噪声。
-- 4 个 case 未评分（`root-implicit-security-01`、`root-near-miss-review/parallel/finishing-01`）：判官模型 deepseek-v4-flash 配额耗尽，fallback 不可用。全为 root-side case，不影响任何 leaf 单元格。
+- 最后 4 个 root-side case（`root-implicit-security-01`、`root-near-miss-review/parallel/finishing-01`）判官模型 deepseek-v4-flash 配额耗尽，用 glm-5.3-flash 补评完成，全部命中预期首次技能；记录于 `failure_evidence.unscored`。
 
 v0.8（上一版被测目录）的记录保持只读。判官提示词身份（`evaluator_identity_sha256`）与 v0.8 相同；judge harness 改了（见 `judge_note`），跨版本比较时需带批次噪声前提。
 

@@ -1,0 +1,122 @@
+[
+ {
+  "reason": "Three bounded, mutually unrelated problems investigated concurrently with results-only aggregation match the dispatch trigger; request explicitly disclaims redesign and end-to-end root ownership.",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "slot_id": "root-near-miss-parallel-01-treatment-r1"
+ },
+ {
+  "reason": "Dispatch trigger matches independent domains without shared state; no defer to root since the user invokes no cross-module/end-to-end workflow and the baseline root excludes parallel-agent requests.",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "slot_id": "root-near-miss-parallel-01-baseline-r1"
+ },
+ {
+  "reason": "Three bounded, mutually unrelated problems investigated concurrently with results-only aggregation match the dispatch trigger; request explicitly disclaims redesign and end-to-end root ownership.",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "slot_id": "root-near-miss-parallel-01-treatment-r2"
+ },
+ {
+  "reason": "Dispatch trigger matches independent domains without shared state; no defer to root since the user invokes no cross-module/end-to-end workflow and the baseline root excludes parallel-agent requests.",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "slot_id": "root-near-miss-parallel-01-baseline-r2"
+ },
+ {
+  "reason": "Three bounded, mutually unrelated problems investigated concurrently with results-only aggregation match the dispatch trigger; request explicitly disclaims redesign and end-to-end root ownership.",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "slot_id": "root-near-miss-parallel-01-treatment-r3"
+ },
+ {
+  "reason": "Dispatch trigger matches independent domains without shared state; no defer to root since the user invokes no cross-module/end-to-end workflow and the baseline root excludes parallel-agent requests.",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "slot_id": "root-near-miss-parallel-01-baseline-r3"
+ },
+ {
+  "reason": "Diff review request explicitly scoped to review only; requesting-code-review matches before verification/delivery",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "slot_id": "root-near-miss-review-01-treatment-r1"
+ },
+ {
+  "reason": "Root's exclusion list pushes review requests to zhanggui-requesting-code-review",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "slot_id": "root-near-miss-review-01-baseline-r1"
+ },
+ {
+  "reason": "Diff needs a new independent review; request explicitly excludes end-to-end ownership",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "slot_id": "root-near-miss-review-01-treatment-r2"
+ },
+ {
+  "reason": "Isolated diff review request; root does not handle review per its exclusion list",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "slot_id": "root-near-miss-review-01-baseline-r2"
+ },
+ {
+  "reason": "Diff review request scoped to review only; requesting-code-review is the matching leaf",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "slot_id": "root-near-miss-review-01-treatment-r3"
+ },
+ {
+  "reason": "New independent review of a diff with no end-to-end ownership",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "slot_id": "root-near-miss-review-01-baseline-r3"
+ },
+ {
+  "reason": "User states verification is complete and requests only the merge/PR/keep/discard landing choice - exact trigger for the finishing leaf; no end-to-end or multi-deliverable work is requested.",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "slot_id": "root-near-miss-finishing-01-treatment-r1"
+ },
+ {
+  "reason": "User states verification is complete and requests only the merge/PR/keep/discard choice; baseline root explicitly excludes branch-finishing requests handled by zhanggui-* skills, so the finishing leaf matches.",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "slot_id": "root-near-miss-finishing-01-baseline-r1"
+ },
+ {
+  "reason": "Request is scoped to only the landing decision (merge/PR/keep/discard) after verification is done, matching the finishing leaf's trigger, not the root's end-to-end conditions.",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "slot_id": "root-near-miss-finishing-01-treatment-r2"
+ },
+ {
+  "reason": "Baseline finishing skill fires when the user states verification is complete and wants the explicit merge/PR/keep/discard choice; the root's exclusion for branch-finishing requests keeps routing on the leaf.",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "slot_id": "root-near-miss-finishing-01-baseline-r2"
+ },
+ {
+  "reason": "Verification already passed and only the merge/PR/keep/discard finishing decision is requested, which is precisely the finishing leaf; the root requires carrying work to verified delivery, which is already done.",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "slot_id": "root-near-miss-finishing-01-treatment-r3"
+ },
+ {
+  "reason": "User asserts verification complete and asks only for the merge/PR/keep/discard choice - direct baseline finishing trigger; root defers because no explicit or end-to-end workflow is being requested, only isolated finishing.",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "slot_id": "root-near-miss-finishing-01-baseline-r3"
+ },
+ {
+  "reason": "Request spans multiple modules and demands end-to-end design→implementation→independent review→verified delivery, the root's trigger; worktree/review/verification mentions are substeps, not isolated leaf requests.",
+  "selected_skill": "zhanggui",
+  "slot_id": "root-implicit-security-01-treatment-r1"
+ },
+ {
+  "reason": "Cross-module, multi-deliverable, explicitly end-to-end request matches the root trigger; every leaf defers to the root for end-to-end workflows, so worktree/review/verification remain substeps.",
+  "selected_skill": "zhanggui",
+  "slot_id": "root-implicit-security-01-baseline-r1"
+ },
+ {
+  "reason": "Request spans multiple modules and demands end-to-end design→implementation→independent review→verified delivery, the root's trigger; worktree/review/verification mentions are substeps, not isolated leaf requests.",
+  "selected_skill": "zhanggui",
+  "slot_id": "root-implicit-security-01-treatment-r2"
+ },
+ {
+  "reason": "Cross-module, multi-deliverable, explicitly end-to-end request matches the root trigger; every leaf defers to the root for end-to-end workflows, so worktree/review/verification remain substeps.",
+  "selected_skill": "zhanggui",
+  "slot_id": "root-implicit-security-01-baseline-r2"
+ },
+ {
+  "reason": "Request spans multiple modules and demands end-to-end design→implementation→independent review→verified delivery, the root's trigger; worktree/review/verification mentions are substeps, not isolated leaf requests.",
+  "selected_skill": "zhanggui",
+  "slot_id": "root-implicit-security-01-treatment-r3"
+ },
+ {
+  "reason": "Cross-module, multi-deliverable, explicitly end-to-end request matches the root trigger; every leaf defers to the root for end-to-end workflows, so worktree/review/verification remain substeps.",
+  "selected_skill": "zhanggui",
+  "slot_id": "root-implicit-security-01-baseline-r3"
+ }
+]
