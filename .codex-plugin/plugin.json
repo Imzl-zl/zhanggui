@@ -1,0 +1,38 @@
+{
+  "name": "zhanggui",
+  "version": "0.8.0",
+  "description": "Ten strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone init-project bootstrap.",
+  "author": {
+    "name": "zhanglu"
+  },
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "debugging",
+    "tdd",
+    "verification",
+    "code-review",
+    "worktree",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "hooks": {},
+  "interface": {
+    "displayName": "Zhanggui（掌柜）",
+    "shortDescription": "One selective-hybrid root, eight dual-mode leaves, one standalone bootstrap",
+    "longDescription": "Ten strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator with automatic or manual loading, eight zhanggui-* leaves with Direct and Zhanggui Embedded contracts, and the standalone init-project bootstrap. The root owns WorkflowState and activates leaves by SkillRequest; narrow requests stay with their corresponding leaf.",
+    "developerName": "zhanglu",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "复杂、跨模块或端到端工作可直接描述，由宿主自动匹配 Zhanggui；也可使用宿主原生命令手动进入。",
+      "Describe a complex end-to-end goal to automatically match Zhanggui, or describe a narrow task to match its engineering leaf."
+    ],
+    "brandColor": "#10B981",
+    "screenshots": []
+  }
+}

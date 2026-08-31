@@ -1,4 +1,12 @@
-# 仅供本地参考的第三方仓库（含独立 .git，不纳入本仓库）
-/skills/
-/superpowers/
+# 宿主部署快照：由 scripts/deploy-skills.sh 或插件安装生成，不是真值源
+/.claude/
+/.codex/
+/.pi/
+
+# 本机工具缓存与工作区
+/.serena/cache/
 /.worktrees/
+node_modules/
+
+# 上游参考克隆（含独立 .git，只读比对）。注意：不能放进 skills/，那里是真值源
+/.reference/

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "zhanggui",
+  "displayName": "Zhanggui（掌柜）",
+  "version": "0.8.0",
+  "description": "Ten strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone init-project bootstrap.",
+  "author": {
+    "name": "zhanglu",
+    "url": "https://github.com/Imzl-zl"
+  },
+  "homepage": "https://github.com/Imzl-zl/zhanggui",
+  "repository": "https://github.com/Imzl-zl/zhanggui",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "planning",
+    "debugging",
+    "tdd",
+    "verification",
+    "code-review",
+    "worktree",
+    "workflow",
+    "init-project"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/"
+}
