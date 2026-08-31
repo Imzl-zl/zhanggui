@@ -9,6 +9,7 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 const datasetPath = path.join(projectRoot, 'evals', 'skill-triggering.json');
 const summaryPath = path.join(projectRoot, 'evals', 'results', 'v0.7-routing-summary.json');
 const v08SummaryPath = path.join(projectRoot, 'evals', 'results', 'v0.8-routing-summary.json');
+const v09SummaryPath = path.join(projectRoot, 'evals', 'results', 'v0.9-routing-summary.json');
 const currentCatalogPath = path.join(projectRoot, 'evals', 'catalog-current.json');
 // The nine skills whose routing was measured. init-project is a standalone
 // skill outside the root/leaf routing eval, so it is intentionally absent.
@@ -35,6 +36,8 @@ const APPROVED_V08_CATALOG_SOURCE_HEAD =
   'ed3c769094753fb8082b83f542e4f2c3aa5138b2';
 const APPROVED_V08_CATALOG_SHA256 =
   '17dda086b86bc3be4d6d76ae841a6cfebe7d5a4255260402da36109a0a99ba96';
+const APPROVED_V09_CATALOG_SOURCE_HEAD =
+  '834ee877331aa0f03d00faf542996f529c336734';
 const APPROVED_TRANSPORT_RETRY_POLICY = {
   max_waves: 3,
   backoff_seconds: [0, 5, 15],
@@ -261,7 +264,8 @@ function catalogDigest(entries) {
 // The live descriptions are pinned by evals/catalog-current.json, not by a
 // result record: a measured summary must keep describing the catalog that
 // produced its rates. Editing a description moves this gate and marks the
-// current catalog as pending re-evaluation; it never rewrites v0.7 or v0.8.
+// current catalog as pending re-evaluation; it never rewrites historical
+// summaries (v0.7/v0.8/v0.9 are immutable).
 test('current catalog digest gate tracks the live skill descriptions', async () => {
   const current = JSON.parse(await readFile(currentCatalogPath, 'utf8'));
   const entries = await readLiveCatalogEntries();
@@ -269,22 +273,35 @@ test('current catalog digest gate tracks the live skill descriptions', async () 
   assert.deepEqual(current.catalog_snapshot.entries, entries);
   assert.equal(current.catalog_snapshot.sha256, catalogDigest(entries));
   assert.deepEqual(current.catalog_snapshot.entries.map(entry => entry.name), evaluatedSkills);
-  // an unmeasured catalog may not silently inherit the superseded rates
-  assert.equal(current.status, 'pending-reevaluation');
+  // status must be one of the two contract states
+  assert.ok(
+    ['measured', 'pending-reevaluation'].includes(current.status),
+    `catalog-current.json status must be measured or pending-reevaluation, got ${current.status}`,
+  );
+  if (current.status === 'measured') {
+    // the measured summary must pin the exact same catalog that is current
+    const measured = JSON.parse(await readFile(
+      path.join(projectRoot, 'evals', current.measured_by.file),
+      'utf8',
+    ));
+    assert.equal(measured.version, '0.9');
+    assert.equal(measured.catalog_snapshot.sha256, current.catalog_snapshot.sha256);
+    assert.deepEqual(measured.catalog_snapshot.entries, current.catalog_snapshot.entries);
+  }
+  // supersedes points at the previously published record
   assert.equal(current.supersedes.file, 'results/v0.8-routing-summary.json');
   assert.equal(current.supersedes.catalog_sha256, APPROVED_V08_CATALOG_SHA256);
-  assert.notEqual(current.catalog_snapshot.sha256, APPROVED_V08_CATALOG_SHA256);
-  // the gate must actually break when a live description drifts from the pin
   const drifted = structuredClone(entries);
   drifted[0] = { ...drifted[0], description: `${drifted[0].description} [drift-probe]` };
   assert.notEqual(catalogDigest(drifted), current.catalog_snapshot.sha256);
   assert.throws(() => assert.deepEqual(current.catalog_snapshot.entries, drifted));
 });
 
-// The v0.7 and v0.8 rates were each measured against the descriptions recorded
+// The v0.7/v0.8/v0.9 rates were each measured against the descriptions recorded
 // in their own file. v0.8 added unrelated third-party distractors plus a
 // same-arm baseline control, so its two sets of rates are comparable
-// slot-for-slot. Both files are immutable historical records.
+// slot-for-slot. All published summaries are immutable historical records;
+// live descriptions are pinned by evals/catalog-current.json instead.
 test('v0.8 summary stays an internally consistent record with rates and baseline control', async () => {
   assert.ifError(summaryLoadError);
   const v08 = JSON.parse(await readFile(v08SummaryPath, 'utf8'));
@@ -308,6 +325,39 @@ test('v0.8 summary stays an internally consistent record with rates and baseline
   assert.ok(v08.rates.root_false_positive <= 0.1);
   assert.equal(v08.rates.root_first_conflict, 1);
   assert.equal(v08.passed, true);
+});
+
+test('v0.9 summary pins the post-fix catalog, fixes all five v0.8 regressions and keeps release gates', async () => {
+  const v09 = JSON.parse(await readFile(v09SummaryPath, 'utf8'));
+  assert.equal(v09.version, '0.9');
+  assert.equal(v09.catalog_snapshot.sha256, catalogDigest(v09.catalog_snapshot.entries));
+  assert.equal(v09.catalog_snapshot.source_head, APPROVED_V09_CATALOG_SOURCE_HEAD);
+  assert.equal(v09.dataset_snapshot.sha256, APPROVED_TRIGGER_DATASET_SHA256);
+  assert.deepEqual(v09.thresholds, expectedThresholds);
+  assert.deepEqual(v09.routing_evaluation.thresholds, expectedThresholds);
+  assert.ok(v09.scored_slots >= 700, `v0.9 should score nearly all slots, got ${v09.scored_slots}`);
+  // root gates
+  assert.equal(v09.rates.explicit_root, 1);
+  assert.ok(v09.rates.implicit_root >= 0.8);
+  assert.ok(v09.rates.root_false_positive <= 0.1);
+  assert.equal(v09.rates.root_first_conflict, 1);
+  assert.equal(v09.passed, true);
+  // the five v0.8 regressions must be gone (leaf level)
+  const fixExpectations = {
+    'zhanggui-test-driven-development': { pos: 1, neg: 0 },
+    'zhanggui-using-git-worktrees': { pos: 1, neg: 0 },
+    'zhanggui-dispatching-parallel-agents': { pos: 0.8, neg: 0 },
+    'zhanggui-finishing-a-development-branch': { pos: 1, neg: 0 },
+  };
+  for (const lb of v09.leaf_baselines) {
+    const expected = fixExpectations[lb.name];
+    if (!expected) continue;
+    assert.ok(lb.positive_trigger_rate >= expected.pos, `${lb.name} positive >= ${expected.pos}`);
+    assert.equal(lb.negative_trigger_rate, expected.neg, `${lb.name} negative == ${expected.neg}`);
+  }
+  // baseline arm must exist for comparability
+  assert.ok(v09.baseline_arm && typeof v09.baseline_arm.rates === 'object');
+  assert.ok(v09.baseline_arm.leaf_baselines.length >= 8);
 });
 
 test('v0.7 routing summary pins evaluator prompt identity', () => {

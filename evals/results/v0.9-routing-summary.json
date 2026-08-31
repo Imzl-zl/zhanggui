@@ -1,0 +1,620 @@
+{
+ "version": "0.9",
+ "runs_per_case": 3,
+ "total_cases": 122,
+ "total_runs": 366,
+ "arms": {
+  "baseline": 366,
+  "treatment": 366
+ },
+ "total_slots": 732,
+ "scored_slots": 708,
+ "unscored_slots": 24,
+ "rates": {
+  "explicit_root": 1.0,
+  "implicit_root": 1.0,
+  "root_false_positive": 0.019048,
+  "root_first_conflict": 1.0
+ },
+ "root_slot_counts": {
+  "explicit": [
+   18,
+   18
+  ],
+  "implicit": [
+   21,
+   21
+  ],
+  "fp": [
+   6,
+   315
+  ],
+  "conflict": [
+   12,
+   12
+  ]
+ },
+ "leaf_baselines": [
+  {
+   "name": "zhanggui-systematic-debugging",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-test-driven-development",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-verification-before-completion",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-requesting-code-review",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-receiving-code-review",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-using-git-worktrees",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-dispatching-parallel-agents",
+   "positive_trigger_rate": 0.833333,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    15,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  },
+  {
+   "name": "zhanggui-finishing-a-development-branch",
+   "positive_trigger_rate": 1.0,
+   "negative_trigger_rate": 0.0,
+   "positive_slots": [
+    18,
+    18
+   ],
+   "negative_slots": [
+    0,
+    18
+   ]
+  }
+ ],
+ "failures": [],
+ "passed": true,
+ "thresholds": {
+  "explicit_root_rate": 1,
+  "implicit_root_rate_gte": 0.8,
+  "root_false_positive_rate_lte": 0.1,
+  "root_first_conflict_rate": 1
+ },
+ "judge_note": "rebuilt judge harness: pi-subagent-judge was unavailable, so the reviewer agent (same model deepseek/deepseek-v4-flash:off) judged 6 slots (3 runs x 2 arms) per case in one context; v0.8 judged every slot independently",
+ "baseline_arm": {
+  "rates": {
+   "explicit_root": 1.0,
+   "implicit_root": 1.0,
+   "root_false_positive": 0.019048,
+   "root_first_conflict": 1.0
+  },
+  "root_slot_counts": {
+   "explicit": [
+    18,
+    18
+   ],
+   "implicit": [
+    21,
+    21
+   ],
+   "fp": [
+    6,
+    315
+   ],
+   "conflict": [
+    12,
+    12
+   ]
+  },
+  "leaf_baselines": [
+   {
+    "name": "zhanggui-systematic-debugging",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-test-driven-development",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-verification-before-completion",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-requesting-code-review",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-receiving-code-review",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-using-git-worktrees",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-dispatching-parallel-agents",
+    "positive_trigger_rate": 0.833333,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     15,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   },
+   {
+    "name": "zhanggui-finishing-a-development-branch",
+    "positive_trigger_rate": 1.0,
+    "negative_trigger_rate": 0.0,
+    "positive_slots": [
+     18,
+     18
+    ],
+    "negative_slots": [
+     0,
+     18
+    ]
+   }
+  ]
+ },
+ "delta_vs_v08": {
+  "leaf": [
+   {
+    "skill": "zhanggui-systematic-debugging",
+    "positive_trigger_rate_delta_vs_v08": 0.0,
+    "negative_trigger_rate_delta_vs_v08": 0.0
+   },
+   {
+    "skill": "zhanggui-test-driven-development",
+    "positive_trigger_rate_delta_vs_v08": 0.166667,
+    "negative_trigger_rate_delta_vs_v08": 0.0
+   },
+   {
+    "skill": "zhanggui-verification-before-completion",
+    "positive_trigger_rate_delta_vs_v08": 0.0,
+    "negative_trigger_rate_delta_vs_v08": 0.0
+   },
+   {
+    "skill": "zhanggui-requesting-code-review",
+    "positive_trigger_rate_delta_vs_v08": 0.055556,
+    "negative_trigger_rate_delta_vs_v08": 0.0
+   },
+   {
+    "skill": "zhanggui-receiving-code-review",
+    "positive_trigger_rate_delta_vs_v08": 0.0,
+    "negative_trigger_rate_delta_vs_v08": 0.0
+   },
+   {
+    "skill": "zhanggui-using-git-worktrees",
+    "positive_trigger_rate_delta_vs_v08": 0.111111,
+    "negative_trigger_rate_delta_vs_v08": -0.111111
+   },
+   {
+    "skill": "zhanggui-dispatching-parallel-agents",
+    "positive_trigger_rate_delta_vs_v08": -0.166667,
+    "negative_trigger_rate_delta_vs_v08": -0.222222
+   },
+   {
+    "skill": "zhanggui-finishing-a-development-branch",
+    "positive_trigger_rate_delta_vs_v08": 0.0,
+    "negative_trigger_rate_delta_vs_v08": -0.166667
+   }
+  ],
+  "root": {
+   "explicit_root": 0.0,
+   "implicit_root": 0.0,
+   "root_false_positive": 0.019048,
+   "root_first_conflict": 0.0
+  }
+ },
+ "distractors": [
+  {
+   "name": "pdf-invoice-extractor",
+   "description": "Use when invoices arrive as PDF files and the amounts, dates, or line items need to be extracted into structured data."
+  },
+  {
+   "name": "excel-sales-analysis",
+   "description": "Use when monthly sales figures live in Excel workbooks and need pivot-style aggregation, trend summaries, or chart-ready output."
+  },
+  {
+   "name": "commit-message-writer",
+   "description": "Use when a completed change set needs a conventional commit message with type, scope, and a short imperative summary."
+  },
+  {
+   "name": "regex-pattern-builder",
+   "description": "Use when a text extraction or validation rule needs a regular expression drafted, explained, or tested against sample strings."
+  },
+  {
+   "name": "docker-compose-debugger",
+   "description": "Use when a local docker compose stack fails to start, ports conflict, or services restart in a loop."
+  },
+  {
+   "name": "legacy-sql-query-optimizer",
+   "description": "Use when a slow legacy SQL query needs its execution plan reviewed and indexed or rewritten for better performance."
+  }
+ ],
+ "dataset_snapshot": {
+  "sha256": "42b30e2b65a289a035b4f585f36ac053d110eaae2847e749329b347ba3eb6af5",
+  "case_count": 122
+ },
+ "catalog_snapshot": {
+  "source_head": "834ee877331aa0f03d00faf542996f529c336734",
+  "sha256": "4433554b19e77385042321fa1be7dc06c6da1b2b1c06c639abce6f670254eab7",
+  "entries": [
+   {
+    "name": "zhanggui",
+    "description": "Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-systematic-debugging",
+    "description": "Use when a test failure, production bug, build failure, integration failure, performance problem, or otherwise unexpected behavior needs its root cause found, including when earlier fix attempts did not hold or the problem is still not understood.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-test-driven-development",
+    "description": "Use when a new feature, bug fix, refactor, or behavior change is about to be implemented and the failing test or regression test must be written first, before any implementation code exists.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-verification-before-completion",
+    "description": "Use when work is about to be called complete, fixed, passing, or ready, or before a commit, push, pull request, or handoff to the next task, and no fresh evidence for that claim has been produced yet.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-requesting-code-review",
+    "description": "Use when a diff, patch, or code change needs a new independent review, including a severity-scoped report of Critical and Important findings, before verification, merge, delivery, or dependent work starts.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-receiving-code-review",
+    "description": "Use when review feedback, reviewer comments, or a findings report has arrived and each item needs technical verification before it is accepted, rejected, or implemented.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-using-git-worktrees",
+    "description": "Use when feature work needs an isolated checkout, a write scope separated from the main working tree, or a dedicated workspace for executing an implementation plan.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-dispatching-parallel-agents",
+    "description": "Use when subagent capacity is available and two or more independent problem domains can run at the same time on non-overlapping files without shared state, such as separate root-cause investigations in different components or dependency-ready tasks with distinct write scopes.",
+    "implicit": true
+   },
+   {
+    "name": "zhanggui-finishing-a-development-branch",
+    "description": "Use when branch or worktree work has already passed verification and needs an explicit decision about how to land it, such as merging, opening a pull request, keeping the branch, or discarding it, including right after the user says the tests passed.",
+    "implicit": true
+   }
+  ]
+ },
+ "routing_evaluation": {
+  "model": "deepseek/deepseek-v4-flash:off",
+  "tool": "pi-workflow-reviewer-agent",
+  "system_prompt": "You are evaluating first-skill routing for an Agent Skills catalog. Based only on each catalog entry's name and description, the invocation source, and the user request, select the single skill that should load first. Return null when no skill applies. Do not execute any skill, solve the user's task, or select a later lifecycle substep. An explicit source means the user intentionally invoked the root named by the request; an implicit source contains no host command guarantee.",
+  "user_prompt_template": "Catalog: ${JSON.stringify(catalog)}\nInvocation source: ${item.source}\nUser request: ${item.prompt}",
+  "result_schema": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "selected_skill": {
+     "anyOf": [
+      {
+       "type": "string",
+       "enum": [
+        "zhanggui",
+        "zhanggui-systematic-debugging",
+        "zhanggui-test-driven-development",
+        "zhanggui-verification-before-completion",
+        "zhanggui-requesting-code-review",
+        "zhanggui-receiving-code-review",
+        "zhanggui-using-git-worktrees",
+        "zhanggui-dispatching-parallel-agents",
+        "zhanggui-finishing-a-development-branch",
+        "pdf-invoice-extractor",
+        "excel-sales-analysis",
+        "commit-message-writer",
+        "regex-pattern-builder",
+        "docker-compose-debugger",
+        "legacy-sql-query-optimizer"
+       ]
+      },
+      {
+       "type": "null"
+      }
+     ]
+    },
+    "reason": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "selected_skill",
+    "reason"
+   ]
+  },
+  "evaluator_identity_sha256": "6617b9e34a7dab53de1510fceb8fca87cd3a2db97487c81d9fe609ec41d3930e",
+  "thresholds": {
+   "explicit_root_rate": 1,
+   "implicit_root_rate_gte": 0.8,
+   "root_false_positive_rate_lte": 0.1,
+   "root_first_conflict_rate": 1
+  },
+  "scored_at": "2026-08-31T10:47:23.299Z",
+  "scored_slots": 708,
+  "transport_errors_scored": false,
+  "retry_policy": {
+   "max_waves": 3,
+   "backoff_seconds": [
+    0,
+    5,
+    15
+   ],
+   "retry_scope": "transport-errors-only",
+   "valid_wrong_selections_retryable": false
+  },
+  "retry_waves": 3,
+  "retry_attempts": 0,
+  "retry_successes": 0,
+  "retry_errors_remaining_after_last_wave": 0,
+  "quota_exhausted_slots": 24
+ },
+ "failure_evidence": {
+  "fixed_regressions": {
+   "tdd_positive": [
+    {
+     "case_id": "test-driven-development-baseline-positive-02",
+     "v08_evidence": "3/3 routed to zhanggui-systematic-debugging",
+     "v09_treatment": [
+      "zhanggui-test-driven-development",
+      "zhanggui-test-driven-development",
+      "zhanggui-test-driven-development"
+     ]
+    }
+   ],
+   "worktrees_positive": [
+    {
+     "case_id": "using-git-worktrees-baseline-positive-02",
+     "v09_treatment": [
+      "zhanggui-using-git-worktrees",
+      "zhanggui-using-git-worktrees",
+      "zhanggui-using-git-worktrees"
+     ]
+    },
+    {
+     "case_id": "using-git-worktrees-baseline-positive-05",
+     "v09_treatment": [
+      "zhanggui-using-git-worktrees",
+      "zhanggui-using-git-worktrees",
+      "zhanggui-using-git-worktrees"
+     ]
+    }
+   ],
+   "worktrees_negative": [
+    {
+     "case_id": "using-git-worktrees-baseline-negative-02",
+     "v09_treatment": [
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "case_id": "using-git-worktrees-baseline-negative-05",
+     "v09_treatment": [
+      null,
+      null,
+      null
+     ]
+    }
+   ],
+   "dispatching_negative": [
+    {
+     "case_id": "dispatching-parallel-agents-baseline-negative-02",
+     "v09_treatment": [
+      null,
+      null,
+      null
+     ]
+    },
+    {
+     "case_id": "dispatching-parallel-agents-baseline-negative-05",
+     "v09_treatment": [
+      null,
+      null,
+      null
+     ]
+    }
+   ],
+   "finishing_negative": [
+    {
+     "case_id": "finishing-a-development-branch-baseline-negative-01",
+     "v09_treatment": [
+      "zhanggui-verification-before-completion",
+      "zhanggui-verification-before-completion",
+      "zhanggui-verification-before-completion"
+     ]
+    }
+   ]
+  },
+  "judge_batch_differences": {
+   "note": "identical in both arms, so not attributable to the description edits; caused by the rebuilt judge harness (reviewer agent, 6 slots per subagent context) and this batch sampling",
+   "dispatching_positive_03": {
+    "case_id": "dispatching-parallel-agents-baseline-positive-03",
+    "treatment": [
+     null,
+     null,
+     null
+    ],
+    "baseline": [
+     null,
+     null,
+     null
+    ],
+    "v08_treatment_rate": 1
+   },
+   "root_fp_new": [
+    {
+     "case_id": "verification-before-completion-baseline-negative-01",
+     "treatment": [
+      "zhanggui",
+      "zhanggui",
+      "zhanggui"
+     ],
+     "baseline": [
+      "zhanggui",
+      "zhanggui",
+      "zhanggui"
+     ]
+    },
+    {
+     "case_id": "dispatching-parallel-agents-baseline-negative-03",
+     "treatment": [
+      "zhanggui",
+      "zhanggui",
+      "zhanggui"
+     ],
+     "baseline": [
+      "zhanggui",
+      "zhanggui",
+      "zhanggui"
+     ]
+    }
+   ]
+  },
+  "unscored": {
+   "reason": "judge model deepseek/deepseek-v4-flash:off quota exhausted (403 insufficient_quota); no fallback model usable in this environment",
+   "case_ids": [
+    "root-implicit-security-01",
+    "root-near-miss-review-01",
+    "root-near-miss-parallel-01",
+    "root-near-miss-finishing-01"
+   ],
+   "impact": "root-side cases only; none of the 8 leaf baseline-positive/negative cells is affected; root metrics computed over the scored subset"
+  }
+ }
+}

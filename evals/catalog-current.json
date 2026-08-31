@@ -1,6 +1,6 @@
 {
-  "catalog_version": "current",
-  "status": "pending-reevaluation",
+  "catalog_version": "v0.9-measured",
+  "status": "measured",
   "reason": "Three descriptions were changed after v0.8: tdd regained a test-first trigger, finishing front-loads the already-verified precondition, dispatching front-loads the subagent-capacity precondition. These target the three deterministic v0.8 regressions (3/3 misroutes). The v0.8 rates were measured against the superseded catalog and do not describe this one.",
   "supersedes": {
     "file": "results/v0.8-routing-summary.json",
@@ -37,7 +37,7 @@
   ],
   "unmeasurable_by_this_harness": "The judge sees only name and description (routing_evaluation.system_prompt). SKILL.md body routing predicates cannot move any rate in this eval; they govern runtime behavior after a skill loads and need a separate acceptance run.",
   "catalog_snapshot": {
-    "source_head": "ed3c769094753fb8082b83f542e4f2c3aa5138b2",
+    "source_head": "834ee877331aa0f03d00faf542996f529c336734",
     "sha256": "4433554b19e77385042321fa1be7dc06c6da1b2b1c06c639abce6f670254eab7",
     "entries": [
       {
@@ -86,5 +86,9 @@
         "implicit": true
       }
     ]
+  },
+  "measured_by": {
+    "file": "results/v0.9-routing-summary.json",
+    "catalog_sha256": "4433554b19e77385042321fa1be7dc06c6da1b2b1c06c639abce6f670254eab7"
   }
 }

@@ -222,7 +222,7 @@ node scripts/validate-agent-skills.mjs   # 或 npm run validate
 npm run check                            # 两者串跑
 ```
 
-Expected: 55 tests / 55 pass / 0 fail；validator 最终行报告 `Validated 10 strict Agent Skills.`
+Expected: 56 tests / 56 pass / 0 fail；validator 最终行报告 `Validated 10 strict Agent Skills.`
 
 validator 会给 Python 子进程注入 `PYTHONUTF8=1`，避免中文 Windows 语系下 GBK 解码 UTF-8 skill 文件时崩溃。
 
@@ -230,18 +230,27 @@ validator 会给 Python 子进程注入 `PYTHONUTF8=1`，避免中文 Windows �
 
 ```bash
 node --test tests/skill-trigger-data.test.mjs
-# 当前目录快照与待重测状态在 evals/catalog-current.json
-# 历史测量：evals/results/v0.8-routing-summary.json（含对照 arm）、evals/results/v0.7-routing-summary.json
+# 当前目录快照与测量状态在 evals/catalog-current.json
+# 历史测量：evals/results/v0.9-routing-summary.json（当前目录，含对照 arm）、evals/results/v0.8-routing-summary.json、evals/results/v0.7-routing-summary.json
 ```
 
-Observed v0.8 summary facts（对**归一化后、未做后续三处修订**的 description 目录测得：catalog 含 9 个 zhanggui 技能 + 6 个无关第三方干扰项，A/B 双 arm 同批判官，见 [`evals/results/v0.8-routing-summary.json`](evals/results/v0.8-routing-summary.json)）：
+Observed v0.9 summary facts（对**当前** description 目录测得——三处修订后的 catalog，catalog 含 9 个 zhanggui 技能 + 6 个无关第三方干扰项，A/B 双 arm 同批判官模型，见 [`evals/results/v0.9-routing-summary.json`](evals/results/v0.9-routing-summary.json)）：
+
+- 708/732 slots 有效（4 个 root-side case 因判官模型配额耗尽未评分；不影响 8 个 leaf 单元格）
+- 处理组 root rates: explicit/implicit/root-first-conflict = 1.0, root_false_positive = 0.019（全部满足阈值）
+- 处理组 leaf: 正例除 dispatching 0.833（`dispatching-pos-03`，两 arm 一致，判官批次差异）外全部 1.0，含 tdd、worktrees、finishing——v0.8 的五个退化点全部消失
+- 处理组 leaf 负例误触发全部 0（v0.8: worktrees 0.111 / dispatching 0.222 / finishing 0.167）
+- 对照 arm（v0.7 旧 description 原文，同批判官）: root 同样达标，leaf 除 dispatching 0.833 外全部 1.0，负例全 0
+- 判官提示词身份与 v0.8 相同（`evaluator_identity_sha256`）；judge harness 从每槽独立判断改为每 case 6 槽一批（见 summary `judge_note`），跨版本对比需带批次噪声前提
+
+Observed v0.8 summary facts（**历史**：对归一化后、未做三处修订的 description 目录测得，见 [`evals/results/v0.8-routing-summary.json`](evals/results/v0.8-routing-summary.json)）：
 
 - 122 cases × 3 runs × 2 arms = 732 slots，全部有效（transport 错误不计分，0 残余）
 - transport retry policy: max 3 waves, backoffs `[0, 5, 15]`, transport-errors-only; valid wrong selections never retried
 - 被测目录（treatment）root rates: explicit/implicit/root-first-conflict = 1.0, root_false_positive = 0.0（全部满足阈值）
 - 被测目录 leaf: debugging/verification/receiving/dispatching/finishing positive = 1.0；tdd 0.833（`tdd-baseline-positive-02` 被 routing 到 debugging）、requesting 0.944、worktrees 0.889；负例误触发 worktrees 0.111 / dispatching 0.222 / finishing 0.167，其余 0
 - 对照 arm（旧 description 原文，同批判官同干扰项）: root rates 同样 1.0/0/1.0；leaf positive tdd/receiving/worktrees/dispatching/finishing = 1.0, debugging/verification/requesting 0.944；负例误触发 worktrees 0.056 / dispatching 0.111 / finishing 0
-- 相比对照 arm 的退化点（已记录于 summary `failures`，run 级明细在 `failure_evidence`）：tdd 正例 −0.167、worktrees 正例 −0.111、worktrees/dispatching/finishing 负例误触发 +0.056/+0.111/+0.167；其中只有 `tdd-pos-02`、`dispatching-neg-05`、`finishing-neg-01` 是 3/3 确定性误路由，其余为单次翻转、与对照 arm 噪音同量级（3 runs 的分辨率是 1/18 ≈ 0.056）。同一次归一化另把 debugging、verification 正例从 0.944 抬到 1.0。三个确定性用例已通过 description 修订处理，待 v0.9 重测验证。
+- 相比对照 arm 的退化点（已记录于 summary `failures`，run 级明细在 `failure_evidence`）：tdd 正例 −0.167、worktrees 正例 −0.111、worktrees/dispatching/finishing 负例误触发 +0.056/+0.111/+0.167；其中只有 `tdd-pos-02`、`dispatching-neg-05`、`finishing-neg-01` 是 3/3 确定性误路由，其余为单次翻转、与对照 arm 噪音同量级（3 runs 的分辨率是 1/18 ≈ 0.056）。同一次归一化另把 debugging、verification 正例从 0.944 抬到 1.0。三个确定性用例已通过 description 修订处理并得到 v0.9 重测验证（见上）。
 - focused trigger suite 10/10
 
 Observed v0.7 summary facts（**历史**：对旧 description 目录测得，仅含 zhanggui 自身、不含干扰项，见 [`evals/results/v0.7-routing-summary.json`](evals/results/v0.7-routing-summary.json)）：

@@ -1,0 +1,3542 @@
+[
+ {
+  "slot_id": "root-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end product-idea workflow; root skill owns it."
+ },
+ {
+  "slot_id": "root-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end product-idea workflow; root skill owns it."
+ },
+ {
+  "slot_id": "root-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end product-idea workflow; root skill owns it."
+ },
+ {
+  "slot_id": "root-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end product-idea workflow; root skill owns it."
+ },
+ {
+  "slot_id": "root-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end product-idea workflow; root skill owns it."
+ },
+ {
+  "slot_id": "root-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end product-idea workflow; root skill owns it."
+ },
+ {
+  "slot_id": "root-near-miss-tdd-01-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated single function via TDD only, no end-to-end delivery, so leaf TDD skill wins over root."
+ },
+ {
+  "slot_id": "root-near-miss-tdd-01-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Root explicitly excludes isolated TDD; user wants only TDD, no design or full delivery."
+ },
+ {
+  "slot_id": "root-near-miss-tdd-01-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Single well-defined function, no end-to-end scope, so leaf TDD skill is the first-skill match."
+ },
+ {
+  "slot_id": "root-near-miss-tdd-01-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Root defers isolated TDD to zhanggui-test-driven-development; user limits scope to TDD only."
+ },
+ {
+  "slot_id": "root-near-miss-tdd-01-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Not ambiguous/end-to-end; isolated TDD of a single discount function, so leaf wins."
+ },
+ {
+  "slot_id": "root-near-miss-tdd-01-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Explicitly excludes TDD from root; isolated single-function TDD selects the leaf skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Request to find root cause of a test failure is an isolated debugging task; zhanggui root is not ambiguous/end-to-end."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test-failure root-cause investigation matches systematic-debugging; root skill's do-not-use clause keeps it out."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failure root cause investigation is an isolated, single-domain debugging request."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test-failure root-cause investigation matches systematic-debugging; worktree/root not applicable."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Investigating a test failure's root cause is a debugging task, not worktree or end-to-end work."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failure root-cause investigation matches systematic-debugging; root skill excluded for isolated debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-05-treatment-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Three unrelated problems to different agents = independent domains dispatched concurrently; parallel-dispatch skill matches."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-05-baseline-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Request matches parallel-agent dispatch; not root-cause debugging, and no explicit/end-to-end workflow to defer to root."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-05-treatment-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Same request semantics: independent problems to different agents fits the parallel dispatch trigger."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-05-baseline-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Disabled three unrelated problems to different agents matches concurrent independent-domain dispatch."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-05-treatment-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Request is pure dispatch of independent problems; parallel-agent skill is the exact match."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-05-baseline-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Matches parallel-dispatch conditions (independent domains, no shared state); no other skill applies."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "用户要把互不重叠的前端/后端/文档任务一次性派发，命中 parallel-agents 的并发触发条件（多独立领域、无共享状态）。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "独立三领域任务同时并发即 parallel-agents 主谓词，非显式调用也非端到端工作流，不归根技能。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "前端、后端、文档为不重叠独立领域，一次派发符合 parallel-agents 描述。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "与 r1 同源请求，满足无共享状态并发条件，选中 parallel-agents。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "同一请求重复采样，命中的仍是 parallel-agents 独特路由条件。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "独立任务一次派发匹配 baseline 中 parallel-agents 的一对多并发谓词。"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Protecting the current branch before high-risk work needs an isolated/protected checkout, matching the worktree skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Branch protection is a protected-checkout/separate-write-scope request owned by the worktree skill, not the implicit root."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Protecting the current branch before high-risk work needs an isolated/protected checkout, matching the worktree skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Branch protection is a protected-checkout/separate-write-scope request owned by the worktree skill, not the implicit root."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Protecting the current branch before high-risk work needs an isolated/protected checkout, matching the worktree skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Branch protection is a protected-checkout/separate-write-scope request owned by the worktree skill, not the implicit root."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer refactor suggestions arrived and need verification before acceptance; matches receiving-code-review, implicit source so no root deferral."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer feedback must be technically verified before accept/reject; implicit isolated feedback handling, no deferral to zhanggui root."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer refactor suggestions arrived and need verification before acceptance; matches receiving-code-review, implicit source so no root deferral."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer feedback must be technically verified before accept/reject; implicit isolated feedback handling, no deferral to zhanggui root."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer refactor suggestions arrived and need verification before acceptance; matches receiving-code-review, implicit source so no root deferral."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer feedback must be technically verified before accept/reject; implicit isolated feedback handling, no deferral to zhanggui root."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "User asks for an isolated worktree before feature start; dirty checkout fit the worktree skill exactly."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree creation matches the worktree leaf; root explicitly defers worktree requests."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request is direct worktree setup, isolated concern handled by the worktree leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree leaf owns isolated checkout; root excludes worktree requests."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Implicit isolated worktree request; worktree skill is the single best match."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree request routed to worktree leaf, per root deferral language."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Independent review of the current implementation maps to requesting a code review; no debugging, TDD, or verification claim involved."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Root excludes review requests; isolated independent review selects requesting-code-review."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Independent review of the current implementation selects requesting-code-review; no other predicate matches."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Isolated independent review; root defers review requests to the requesting-code-review leaf."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Independent review request selects requesting-code-review; not debugging, TDD, verification, or finishing."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Root excludes review requests handled by leaves; independent review selects requesting-code-review."
+ },
+ {
+  "slot_id": "root-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation with ambiguous end-to-end project matching root's design-through-delivery scope."
+ },
+ {
+  "slot_id": "root-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and ambiguous end-to-end request match root; also use-when-explicitly-invoked."
+ },
+ {
+  "slot_id": "root-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation with ambiguous end-to-end project matching root's design-through-delivery scope."
+ },
+ {
+  "slot_id": "root-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and ambiguous end-to-end request match root; also use-when-explicitly-invoked."
+ },
+ {
+  "slot_id": "root-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation with ambiguous end-to-end project matching root's design-through-delivery scope."
+ },
+ {
+  "slot_id": "root-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and ambiguous end-to-end request match root; also use-when-explicitly-invoked."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch already verified and user asks the explicit merge-vs-PR landing decision, which is that skill's trigger."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needing a merge/push-PR/keep/discard choice matches the finishing leaf; root excludes branch-finishing."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch, explicit landing-choice request (merge vs PR) matches the finishing leaf description."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verification already complete; finishing leaf owns the merge-vs-PR decision, root defers/excludes it."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Request is a single post-verification landing decision, not an ambiguous/end-to-end root workflow."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states branch verified and asks for the landing choice; finishing leaf triggers, debugging/root do not."
+ },
+ {
+  "slot_id": "root-implicit-parallel-delivery-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module frontend+backend work with discovery/design/integration/delivery in one workflow fits the zhanggui root."
+ },
+ {
+  "slot_id": "root-implicit-parallel-delivery-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Multi-deliverable end-to-end workflow from discovery through verified delivery selects the zhanggui root."
+ },
+ {
+  "slot_id": "root-implicit-parallel-delivery-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Spans multiple modules with integration and verified delivery in one recoverable workflow — zhanggui root."
+ },
+ {
+  "slot_id": "root-implicit-parallel-delivery-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module multi-deliverable end-to-end request maps to the zhanggui root, not a parallel leaf."
+ },
+ {
+  "slot_id": "root-implicit-parallel-delivery-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "User wants one workflow for design, integration, and verified delivery, so root zhanggui owns it."
+ },
+ {
+  "slot_id": "root-implicit-parallel-delivery-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Ambiguous cross-module end-to-end delivery, including design and verification, selects the zhanggui root."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Starting a new API behavior from a failing test is the TDD red phase; the TDD entry matches exactly."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated new-feature implementation starting from a failing test fits Red-Green-Refactor; no explicit/ambiguous/end-to-end signal to defer to root."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Implementing a new API behavior starting from a failing test maps to TDD write-test-first trigger."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "New feature from failing test is isolated TDD work, not explicit/end-to-end, so the leaf wins over root."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Failing test as start of new implementation is exactly the TDD first-write-test trigger, not debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated new behavior implementation requiring a failing test first selects the TDD leaf, no deferral applies."
+ },
+ {
+  "slot_id": "root-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Clear isolated TDD request; TDD leaf matches, root excludes TDD."
+ },
+ {
+  "slot_id": "root-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "TDD leaf applies; not ambiguous/cross-module so no root deferral."
+ },
+ {
+  "slot_id": "root-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Explicit TDD implementation; isolated scope, TDD leaf wins."
+ },
+ {
+  "slot_id": "root-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "TDD request, no end-to-end/ambiguous signal; TDD leaf selected."
+ },
+ {
+  "slot_id": "root-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated TDD implementation; TDD leaf matches, no other skill."
+ },
+ {
+  "slot_id": "root-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Straightforward TDD; no ambiguous/cross-module cue, TDD leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查当前 diff 是对代码变更的独立评审请求，命中 zhanggui-requesting-code-review；与 worktree 无关。"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查当前 diff 对应 diff/代码变更的新增独立评审，root 描述明确排除 review 请求，选 requesting-code-review。"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查当前 diff 是对代码变更的独立评审请求，命中 zhanggui-requesting-code-review；与 worktree 无关。"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查当前 diff 对应 diff/代码变更的新增独立评审，root 描述明确排除 review 请求，选 requesting-code-review。"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查当前 diff 是对代码变更的独立评审请求，命中 zhanggui-requesting-code-review；与 worktree 无关。"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查当前 diff 对应 diff/代码变更的新增独立评审，root 描述明确排除 review 请求，选 requesting-code-review。"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Intermittent test failure needing root-cause investigation matches systematic-debugging description; not an end-to-end workflow."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Intermittent test failure is an isolated debugging request; leaf skill applies over the root, which explicitly excludes isolated debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Intermittent test failure needing root-cause investigation matches systematic-debugging description; not an end-to-end workflow."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Intermittent test failure is an isolated debugging request; leaf skill applies over the root, which explicitly excludes isolated debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Intermittent test failure needing root-cause investigation matches systematic-debugging description; not an end-to-end workflow."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Intermittent test failure is an isolated debugging request; leaf skill applies over the root, which explicitly excludes isolated debugging."
+ },
+ {
+  "slot_id": "root-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needs explicit landing decision (merge/PR/keep/discard)"
+ },
+ {
+  "slot_id": "root-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch handling maps to the finishing branch leaf"
+ },
+ {
+  "slot_id": "root-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch already verified; needs explicit land decision"
+ },
+ {
+  "slot_id": "root-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks how to handle verified branch; finishing leaf owns it"
+ },
+ {
+  "slot_id": "root-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needs merge/PR/keep/discard decision"
+ },
+ {
+  "slot_id": "root-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch handling is the finishing branch leaf's job"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-03-treatment-r1",
+  "selected_skill": null,
+  "reason": "两个独立组件各自找根因，评估并行 agent。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-03-baseline-r1",
+  "selected_skill": null,
+  "reason": "两个独立根因调查可并发，匹配 description。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-03-treatment-r2",
+  "selected_skill": null,
+  "reason": "两个独立组件分别找根因，可用并行。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-03-baseline-r2",
+  "selected_skill": null,
+  "reason": "独立组件并发根因调查，匹配 description。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-03-treatment-r3",
+  "selected_skill": null,
+  "reason": "两个独立组件各自根因，可并行。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-03-baseline-r3",
+  "selected_skill": null,
+  "reason": "独立组件并发根因调查。"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "External review feedback arrived; verifying that feedback item."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Review feedback needs verification before acceptance."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "External review opinion arrived; verify it."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Review feedback needs technical verification."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer comment arrived; verify whether valid."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing review feedback needs verification."
+ },
+ {
+  "slot_id": "root-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of /zhanggui plus cross-module feature request."
+ },
+ {
+  "slot_id": "root-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and ambiguous cross-module end-to-end work."
+ },
+ {
+  "slot_id": "root-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation plus cross-module feature work."
+ },
+ {
+  "slot_id": "root-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and cross-module feature work."
+ },
+ {
+  "slot_id": "root-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation plus cross-module feature."
+ },
+ {
+  "slot_id": "root-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and cross-module feature."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needs PR decision."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states verification done, asks to open PR."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needs PR decision."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states verification done, asks to open PR."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needs PR decision."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states verification done, asks to open PR."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-05-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test-failure root-cause request matches systematic-debugging even in treatment catalog"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-05-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated debugging request; root's exclusion clause confirms leaf skill"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-05-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test-failure root-cause request matches systematic-debugging even in treatment catalog"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-05-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated debugging request; root's exclusion clause confirms leaf skill"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-05-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test-failure root-cause request matches systematic-debugging even in treatment catalog"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-05-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated debugging request; root's exclusion clause confirms leaf skill"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Bug fix needing a failing regression test written first"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated bug fix, not deferred to root"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Bug fix needing a failing regression test written first"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated bug fix, not deferred to root"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Bug fix needing a failing regression test written first"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated bug fix, not deferred to root"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-06-treatment-r1",
+  "selected_skill": null,
+  "reason": "仅格式配置且无生产行为，任何技能触发条件（尤其 tdd）均不满足，返回 null"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-06-baseline-r1",
+  "selected_skill": null,
+  "reason": "仅格式配置且无生产行为，任何技能触发条件（尤其 tdd）均不满足，返回 null"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-06-treatment-r2",
+  "selected_skill": null,
+  "reason": "仅格式配置且无生产行为，任何技能触发条件（尤其 tdd）均不满足，返回 null"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-06-baseline-r2",
+  "selected_skill": null,
+  "reason": "仅格式配置且无生产行为，任何技能触发条件（尤其 tdd）均不满足，返回 null"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-06-treatment-r3",
+  "selected_skill": null,
+  "reason": "仅格式配置且无生产行为，任何技能触发条件（尤其 tdd）均不满足，返回 null"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-06-baseline-r3",
+  "selected_skill": null,
+  "reason": "仅格式配置且无生产行为，任何技能触发条件（尤其 tdd）均不满足，返回 null"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "验证已完成，请求仅剩推送并创建 PR 的落地决策，命中分支收尾技能"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "用户声明验证完成并要推送创建 PR，finishing 叶技能且不 defer 给根技能"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "验证完成+推送并创建 PR，属于已验证分支的落地方式选择"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "验证已完成的隔离收尾请求，选 finishing 而非 verification 或根技能"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "已验证分支需决定 merge/PR，用户明确要求推送并创建 PR"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "声明验证完成并要推送创建 PR，finishing 直接对应，verification 被排除"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback requires technical verification before accepting or implementing."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback arrival maps to review-feedback verification leaf, not root."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback requires technical verification before accepting or implementing."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback arrival maps to review-feedback verification leaf, not root."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback requires technical verification before accepting or implementing."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback arrival maps to review-feedback verification leaf, not root."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failure needing root-cause investigation matches the debugging skill; verification skill only covers claims of completion with no fresh evidence."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failure needs root-cause investigation; not a completion/verification claim."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failure needing root-cause investigation selects the debugging skill, not the verification one."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Request is root-cause investigation of a test failure, matching the debugging leaf."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failure with goal of finding root cause matches systematic-debugging; no completion claim is made."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Root-cause investigation of a test failure routes to the debugging skill, not verification-before-completion."
+ },
+ {
+  "slot_id": "root-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for a discovery-to-verified-delivery inventory system request."
+ },
+ {
+  "slot_id": "root-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation and end-to-end ambiguous multi-deliverable request."
+ },
+ {
+  "slot_id": "root-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for end-to-end requirements-to-delivery design request."
+ },
+ {
+  "slot_id": "root-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation plus cross-module end-to-end workflow ownership."
+ },
+ {
+  "slot_id": "root-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation for an end-to-end design-and-deliver inventory system."
+ },
+ {
+  "slot_id": "root-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation; request spans discovery through verified delivery."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "请求明确为三个独立问题域、非重叠写范围并行调查，命中静态能力可用且域独立的并行分派技能。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "独立问题域、无共享状态非重叠写、并行调查，直接命中 dispatching-parallel-agents 谓词。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "三个互不相关问题域、写范围不重叠、并行调查，命中并行分派谓词。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "独立域、非重叠写、并行调查，直接命中 dispatching-parallel-agents。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "问题域独立、写范围不重叠、需并行调查，命中并行分派技能条件。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "独立问题域、非重叠写、并行调查请求，非 end-to-end 根工作流，选择并行分派叶技能。"
+ },
+ {
+  "slot_id": "root-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer feedback (删除锁 suggestion) has arrived and each item needs verification before acceptance."
+ },
+ {
+  "slot_id": "root-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing review feedback needs technical verification before acceptance; leaf skill, not root/verification/request-review."
+ },
+ {
+  "slot_id": "root-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer comment asked to delete a lock; must verify the feedback before acting, matching receiving-code-review."
+ },
+ {
+  "slot_id": "root-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Review feedback arrived and needs verification before acceptance; no explicit/end-to-end workflow to defer to root."
+ },
+ {
+  "slot_id": "root-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审者反馈已到达，需先做技术核实再决定接受/拒绝，命中 receiving-code-review。"
+ },
+ {
+  "slot_id": "root-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing reviewer suggestion requires verification first; leaf skill owns this, not root."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Request asks to check test pass and prove completion—fresh evidence needed, so verification-before-completion owns the first load."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated claim of passing/complete needs fresh evidence; user has not stated tests passed, so finishing leaf doesn't own it."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Checking that tests pass and proving completion is exactly producing fresh evidence for a completion claim."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Neither TDD nor finishing-branch nor root applies; verification-before-completion matches the isolated verification request."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Request seeks evidence that work passes before it can be called done—verification-before-completion triggers."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "User asks to run/check tests and prove completion, so the verification leaf, not the finishing leaf or root, loads first."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review request means requesting, not receiving, feedback"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求新的独立审查 maps to requesting-code-review; received differs"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review of completed work selects requesting-code-review"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Asking for a fresh review, not verifying arrived feedback; receiving excluded"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Request to launch new review targets requesting-code-review"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review request; receiving feedback does not apply"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-02-treatment-r1",
+  "selected_skill": null,
+  "reason": "Both tasks modify same core file, so parallel-agents precondition (non-overlapping, distinct write scopes) is unmet; no other positive trigger."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-02-baseline-r1",
+  "selected_skill": null,
+  "reason": "Overlapping writes on one core file explicitly excluded by parallel-agents; no other skill positively triggered."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-02-treatment-r2",
+  "selected_skill": null,
+  "reason": "Shared core file means tasks overlap; parallel-agents requires independent non-overlapping scopes, no other trigger."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-02-baseline-r2",
+  "selected_skill": null,
+  "reason": "Same file modified by both tasks = overlapping writes, excluded by parallel-agents; no other positive trigger."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-02-treatment-r3",
+  "selected_skill": null,
+  "reason": "Overlapping writes to one core file fail parallel-agents' distinct-write-scope precondition; nothing else applies."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-02-baseline-r3",
+  "selected_skill": null,
+  "reason": "Shared core file violates non-overlapping-writes precondition; parallel-agents excluded and no other skill triggered."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failures need root cause found; failures sharing one root cause are not independent domains, so parallel dispatch does not apply."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated debugging request; baseline root excludes it and a shared root cause rules out parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failures need root cause found; failures sharing one root cause are not independent domains, so parallel dispatch does not apply."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated debugging request; baseline root excludes it and a shared root cause rules out parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test failures need root cause found; failures sharing one root cause are not independent domains, so parallel dispatch does not apply."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated debugging request; baseline root excludes it and a shared root cause rules out parallel dispatch."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "用户明确要求用红绿重构实现新订单折扣功能，命中“先写失败测试再实现”的 TDD 首发触发条件"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "红绿重构信号明确，属隔离特性开发，未达 root 的 explicit/cross-module/end-to-end 条件，root 也不得用于 TDD"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "用户明确要求用红绿重构实现新订单折扣功能，命中“先写失败测试再实现”的 TDD 首发触发条件"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "红绿重构信号明确，属隔离特性开发，未达 root 的 explicit/cross-module/end-to-end 条件，root 也不得用于 TDD"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "用户明确要求用红绿重构实现新订单折扣功能，命中“先写失败测试再实现”的 TDD 首发触发条件"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "红绿重构信号明确，属隔离特性开发，未达 root 的 explicit/cross-module/end-to-end 条件，root 也不得用于 TDD"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Integration failure after dependency upgrade needs systematic root-cause investigation; matches integration failure trigger."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated integration anomaly needing root-cause investigation; not ambiguous or end-to-end."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Integration failure after dependency upgrade needs root-cause finding."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated integration anomaly needing root-cause investigation; not ambiguous or end-to-end."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Integration failure after dependency upgrade needs root-cause finding."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated integration anomaly needing root-cause investigation; not ambiguous or end-to-end."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "新生产功能是含糊的端到端开发请求，无任何完成/通过声明，应由此技能从实现到验证交付接管，而非 verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "请求含糊属端到端开发，baseline 根技能描述明确接管；无完成声明不触发 verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "新生产功能是含糊的端到端开发请求，无任何完成/通过声明，应由此技能从实现到验证交付接管，而非 verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "请求含糊属端到端开发，baseline 根技能描述明确接管；无完成声明不触发 verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "新生产功能是含糊的端到端开发请求，无任何完成/通过声明，应由此技能从实现到验证交付接管，而非 verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "请求含糊属端到端开发，baseline 根技能描述明确接管；无完成声明不触发 verification"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-04-treatment-r1",
+  "selected_skill": null,
+  "reason": "User explicitly says 'not review'; request is to explain code, matching no skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-04-baseline-r1",
+  "selected_skill": null,
+  "reason": "User explicitly says 'not review'; request is to explain code, matching no skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-04-treatment-r2",
+  "selected_skill": null,
+  "reason": "User explicitly says 'not review'; request is to explain code, matching no skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-04-baseline-r2",
+  "selected_skill": null,
+  "reason": "User explicitly says 'not review'; request is to explain code, matching no skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-04-treatment-r3",
+  "selected_skill": null,
+  "reason": "User explicitly says 'not review'; request is to explain code, matching no skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-04-baseline-r3",
+  "selected_skill": null,
+  "reason": "User explicitly says 'not review'; request is to explain code, matching no skill."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "并行+没有共享状态 directly matches the parallel-agents description"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "并行+没有共享状态 directly matches the parallel-agents description"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "并行+没有共享状态 directly matches the parallel-agents description"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "并行+没有共享状态 directly matches the parallel-agents description"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "并行+没有共享状态 directly matches the parallel-agents description"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "并行+没有共享状态 directly matches the parallel-agents description"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-05-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Creating a worktree to protect a dirty working tree matches the worktrees skill; no code review requested."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-05-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated protected-checkout request routes to worktrees; baseline root explicitly excludes worktree requests."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-05-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree creation matches the worktrees skill; root and review skills do not apply to this isolated request."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-05-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Protected separate write scope is the worktrees trigger; not a review, verification, or end-to-end request."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-05-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Dirty-workspace protection via worktree is an isolated checkout task for the worktrees skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-05-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree setup for dirty workspace maps to the leaf skill; root deferred since no end-to-end workflow is specified."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求独立代码审查 is an isolated new independent review request; description matches and root's end-to-end triggers do not apply."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review request maps to zhanggui-requesting-code-review; root explicitly excludes isolated review requests."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求独立代码审查 is an isolated new independent review request; description matches and root's end-to-end triggers do not apply."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review request maps to zhanggui-requesting-code-review; root explicitly excludes isolated review requests."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求独立代码审查 is an isolated new independent review request; description matches and root's end-to-end triggers do not apply."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review request maps to zhanggui-requesting-code-review; root explicitly excludes isolated review requests."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Asking for Critical/Important findings on the current diff is a new independent severity-scoped code review request; no explicit/ambiguous/end-to-end markers to route to zhanggui root."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Request is an isolated review of a diff with severity-scoped reporting, matching requesting-code-review; implicit source, so defer-to-root condition does not fire."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Severity-scoped (Critical/Important) review of the current diff is exactly the requesting-code-review trigger; no lifecycle substep or end-to-end request."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Isolated review request, implicit source, no explicit/cross-module/end-to-end ownership, so the leaf applies without deferring to zhanggui root."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "User requests a new independent review reporting Critical and Important issues of the current diff; requesting-code-review is the first-skill match."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Matches requesting-code-review trigger precisely; implicit source and no ambiguous/end-to-end workflow markers, so no defer to zhanggui root."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Merging '直接合并' calls work ready without fresh verification evidence, so verification-before-completion applies; branch not verified so finishing does not."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-01-baseline-r1",
+  "selected_skill": null,
+  "reason": "Finishing excludes when verification is explicitly missing; verification skill excludes explicit skip; no skill applies."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Merge without evidence = calling ready unreviewed; verification skill fits and finishing requires already-passed verification."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-01-baseline-r2",
+  "selected_skill": null,
+  "reason": "Finishing excludes missing verification; verification excludes explicit skip; nothing matches."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Direct merge with no fresh evidence triggers verification-before-completion, not finishing (verification not passed)."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-01-baseline-r3",
+  "selected_skill": null,
+  "reason": "Both finishing and verification exclude when verification is missing/skipped; no applicable skill."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "isolated test-failure root-cause request; no review feedback arrived"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "isolated debugging excluded from root; systematic-debugging matches"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test-failure root-cause request matches systematic-debugging"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "isolated debugging; root defers to systematic-debugging"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test-failure root-cause request; no review feedback present"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "isolated debugging excluded from root; systematic-debugging matches"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Refactor with explicit TDD fits the TDD leaf's test-first scope; not ambiguous, cross-module, or end-to-end."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated refactor executed via TDD; root description explicitly excludes TDD requests and leaf owns them."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Refactor with explicit TDD fits the TDD leaf's test-first scope; not ambiguous, cross-module, or end-to-end."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated refactor executed via TDD; root description explicitly excludes TDD requests and leaf owns them."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Refactor with explicit TDD fits the TDD leaf's test-first scope; not ambiguous, cross-module, or end-to-end."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated refactor executed via TDD; root description explicitly excludes TDD requests and leaf owns them."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure with unknown root cause, investigation first"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needing root-cause investigation, isolated"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure with unknown root cause, investigation first"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needing root-cause investigation, isolated"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure with unknown root cause, investigation first"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needing root-cause investigation, isolated"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running tests to prove completion is a verification claim needing fresh evidence"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running tests to prove completion is a verification claim needing fresh evidence"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running tests to prove completion is a verification claim needing fresh evidence"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running tests to prove completion is a verification claim needing fresh evidence"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running tests to prove completion is a verification claim needing fresh evidence"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running tests to prove completion is a verification claim needing fresh evidence"
+ },
+ {
+  "slot_id": "root-implicit-cross-module-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module, multi-deliverable end-to-end request from discovery/design through verified delivery loads the root workflow."
+ },
+ {
+  "slot_id": "root-implicit-cross-module-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module, multi-deliverable end-to-end request from discovery/design through verified delivery loads the root workflow."
+ },
+ {
+  "slot_id": "root-implicit-cross-module-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module, multi-deliverable end-to-end request from discovery/design through verified delivery loads the root workflow."
+ },
+ {
+  "slot_id": "root-implicit-cross-module-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module, multi-deliverable end-to-end request from discovery/design through verified delivery loads the root workflow."
+ },
+ {
+  "slot_id": "root-implicit-cross-module-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module, multi-deliverable end-to-end request from discovery/design through verified delivery loads the root workflow."
+ },
+ {
+  "slot_id": "root-implicit-cross-module-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module, multi-deliverable end-to-end request from discovery/design through verified delivery loads the root workflow."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查 BASE 到 HEAD 的完整变更 直接请求代码审查，匹配 leaf 描述"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查 BASE 到 HEAD 的完整变更 是孤立审查请求，不是模糊/跨模块/端到端，不触发 defer-to-root"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查 BASE 到 HEAD 的完整变更 直接请求代码审查，匹配 leaf 描述"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查 BASE 到 HEAD 的完整变更 是孤立审查请求，不是模糊/跨模块/端到端，不触发 defer-to-root"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查 BASE 到 HEAD 的完整变更 直接请求代码审查，匹配 leaf 描述"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "审查 BASE 到 HEAD 的完整变更 是孤立审查请求，不是模糊/跨模块/端到端，不触发 defer-to-root"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-06-treatment-r1",
+  "selected_skill": null,
+  "reason": "user explicitly says branch is unverified and wants to skip verification by merging directly; no skill matches"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-06-baseline-r1",
+  "selected_skill": null,
+  "reason": "user explicitly says verification is missing and skips it; finishing and verification skills both have do-not-use clauses for this"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-06-treatment-r2",
+  "selected_skill": null,
+  "reason": "user explicitly says branch is unverified and wants to skip verification by merging directly; no skill matches"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-06-baseline-r2",
+  "selected_skill": null,
+  "reason": "user explicitly says verification is missing and skips it; finishing and verification skills both have do-not-use clauses for this"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-06-treatment-r3",
+  "selected_skill": null,
+  "reason": "user explicitly says branch is unverified and wants to skip verification by merging directly; no skill matches"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-06-baseline-r3",
+  "selected_skill": null,
+  "reason": "user explicitly says verification is missing and skips it; finishing and verification skills both have do-not-use clauses for this"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Build failure needs root-cause investigation, matching explicit systematic-debugging criteria."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated build failure needing root-cause investigation; root delegates to systematic-debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Build failure needs root-cause investigation, matching explicit systematic-debugging criteria."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated build failure needing investigation, not ambiguous/end-to-end; root defers here."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Build failure needs root-cause investigation, direct match to systematic-debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated build failure needing investigation; root delegates to systematic-debugging."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request is a focused pre-plan linked-worktree state check, matching the worktree skill's isolated workspace scope."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree-state request; workload root explicitly excludes worktree requests."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request is a focused pre-plan linked-worktree state check, matching the worktree skill's isolated workspace scope."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree-state request; workload root explicitly excludes worktree requests."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request is a focused pre-plan linked-worktree state check, matching the worktree skill's isolated workspace scope."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree-state request; workload root explicitly excludes worktree requests."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Request asks to choose merge/PR/keep/discard, which is the branch-finishing decision domain."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Request asks to choose merge/PR/keep/discard; finishing leaf owns this decision."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Choosing merge/PR/keep/discard maps to the branch-finishing leaf."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Request is the finishing decision (merge/PR/keep/discard), best fit is finishing leaf."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Request asks how to land verified work (merge/PR/keep/discard); finishing leaf applies."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "merge/PR/keep/discard choice is the branch-finishing decision, finishing leaf is selected."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-05-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree matches isolated-checkout/write-scope condition; root zhanggui excludes worktree requests"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-05-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request for isolated worktree matches leaf condition; root explicitly says do not use for worktree requests"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-05-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree creation is isolated feature-workspace setup, not root end-to-end ownership"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-05-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Root description excludes worktree; leaf owns isolated checkout and implementation-plan workspace"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-05-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree fits isolated checkout/write-scope trigger; no other leaf or root applies"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-05-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree request is explicitly routed to leaf, not root; root defers isolated worktree setup"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-02-treatment-r1",
+  "selected_skill": null,
+  "reason": "Plain branch creation with user explicitly negating isolated-dir trigger; no skill matches"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-02-baseline-r1",
+  "selected_skill": null,
+  "reason": "Plain branch creation with user explicitly negating isolated-dir trigger; no skill matches"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-02-treatment-r2",
+  "selected_skill": null,
+  "reason": "Plain branch creation with user explicitly negating isolated-dir trigger; no skill matches"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-02-baseline-r2",
+  "selected_skill": null,
+  "reason": "Plain branch creation with user explicitly negating isolated-dir trigger; no skill matches"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-02-treatment-r3",
+  "selected_skill": null,
+  "reason": "Plain branch creation with user explicitly negating isolated-dir trigger; no skill matches"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-02-baseline-r3",
+  "selected_skill": null,
+  "reason": "Plain branch creation with user explicitly negating isolated-dir trigger; no skill matches"
+ },
+ {
+  "slot_id": "root-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Diff审查请求，匹配请求代码审查技能，非根工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Diff审查请求，匹配请求代码审查技能，非根工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Diff审查请求，匹配请求代码审查技能，非根工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Diff审查请求，匹配请求代码审查技能，非根工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Diff审查请求，匹配请求代码审查技能，非根工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Diff审查请求，匹配请求代码审查技能，非根工作流"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "完成开发分支收尾及按选择清理 owned worktree 正是 finishing 技能覆盖的 landing/keep/discard 决策；root 与 worktrees 均不匹配。"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "收尾与 worktree 清理属已验证分支工作的落地选择；root 描述明确排除 branch-finishing 请求。"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "开发分支收尾及按选择清理 owned worktree 正是 finishing 技能覆盖的 landing/keep/discard 决策；root 与 worktrees 均不匹配。"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "收尾与 worktree 清理属已验证分支工作的落地选择；root 描述明确排除 branch-finishing 请求。"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "开发分支收尾及按选择清理 owned worktree 正是 finishing 技能覆盖的 landing/keep/discard 决策；root 与 worktrees 均不匹配。"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "收尾与 worktree 清理属已验证分支工作的落地选择；root 描述明确排除 branch-finishing 请求。"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dependencies satisfied and non-overlapping file writes describe ready parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dependencies satisfied and non-overlapping file writes describe ready parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dependencies satisfied and non-overlapping file writes describe ready parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dependencies satisfied and non-overlapping file writes describe ready parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dependencies satisfied and non-overlapping file writes describe ready parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dependencies satisfied and non-overlapping file writes describe ready parallel dispatch."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Dispatch of multiple read-only research agents with clear scopes matches parallel-agents."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Multiple independent read-only research agents match parallel-agents despite root deferral."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Multiple read-only research agents with clear scopes match parallel-agents."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Parallel dispatch of independent research agents matches parallel-agents."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Multiple read-only research agents match parallel-agents."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-dispatching-parallel-agents",
+  "reason": "Parallel read-only research dispatch matches parallel-agents."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means existing review feedback must be verified before acceptance; matches zhanggui-receiving-code-review, not worktree or root."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing reviewer feedback is to be handled; leaf matches, and root explicitly excludes review-feedback requests."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer feedback arrived and needs technical verification before accept/reject; that is zhanggui-receiving-code-review."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Request is isolated review-feedback handling; root domain rules defer such requests to the leaf skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "No hint of worktrees, ambiguity, or end-to-end ownership; processing reviewer feedback is the receiving-review leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Processing existing reviewer comments maps to zhanggui-receiving-code-review; not a new review request and not the root."
+ },
+ {
+  "slot_id": "root-near-miss-debug-01-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated flaky-test root-cause request matches systematic-debugging; no root positive conditions (multi-module/end-to-end/checkpoint) apply."
+ },
+ {
+  "slot_id": "root-near-miss-debug-01-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated bug/test-failure root-cause investigation maps to systematic-debugging, not the end-to-end root."
+ },
+ {
+  "slot_id": "root-near-miss-debug-01-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Single flaky test scoped away from broader project; root does not positively match, debugging leaf applies."
+ },
+ {
+  "slot_id": "root-near-miss-debug-01-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated root-cause investigation of a test failure selects systematic-debugging, not the root skill."
+ },
+ {
+  "slot_id": "root-near-miss-debug-01-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Request is explicitly isolated debugging, so the debugging leaf wins over the fully-specified root."
+ },
+ {
+  "slot_id": "root-near-miss-debug-01-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated flaky-test root-cause work belongs to systematic-debugging despite the root's exclusion clause text."
+ },
+ {
+  "slot_id": "root-implicit-resume-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "checkpointed resume + end-to-end delivery directly matches zhanggui description"
+ },
+ {
+  "slot_id": "root-implicit-resume-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "checkpointed resume + end-to-end delivery matches zhanggui description"
+ },
+ {
+  "slot_id": "root-implicit-resume-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "checkpointed resume + end-to-end delivery directly matches zhanggui description"
+ },
+ {
+  "slot_id": "root-implicit-resume-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "checkpointed resume + end-to-end delivery matches zhanggui description"
+ },
+ {
+  "slot_id": "root-implicit-resume-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "checkpointed resume + end-to-end delivery directly matches zhanggui description"
+ },
+ {
+  "slot_id": "root-implicit-resume-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "checkpointed resume + end-to-end delivery matches zhanggui description"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Implementing a new read behavior after DB migration with explicit 'prove RED' is a TDD-first task."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated new feature asking to demonstrate RED maps to TDD leaf, not the zhanggui root."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "New read behavior after migration with 'prove RED' is TDD-first implementation."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated feature change needing RED evidence is the TDD leaf."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Implementing new behavior with explicit RED-first request selects the TDD skill."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated read-behavior change asking to prove RED matches the TDD leaf."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "review comment 已到达且声称与既定架构冲突，需先取证核验后才接受或拒绝，命中的是彼条目而非新评审"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "既有 review feedback 需技术核验后再接受，非新评审请求，root 明确排除 review-feedback"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "review comment 和既定架构冲突，先找证据 = 核验反馈项后再接受，命中 receiving 定义"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "既有评审意见需先找证据验证，隐式来源，不 fallback 到 root，也不触发新评审"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "输入是已到达的 review comment，取证核验归属 receiving-code-review"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "existing review feedback 需技术验证后再接受/拒绝，排除其他候选"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Sequencing schema before API is a development workflow that the root carries end-to-end."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Ambiguous cross-step dev work owned end-to-end by the root; no parallel dispatch requested."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Schema-first dev planning belongs to the end-to-end workflow root."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module end-to-end dev ownership; no leaf matches."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Implementation-ordering request handled by the development workflow root."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "End-to-end dev request, implicit source, picks the workflow root."
+ },
+ {
+  "slot_id": "root-implicit-ambiguous-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Vague idea with discovery/design/implementation/verified-delivery matches the zhanggui root's end-to-end scope"
+ },
+ {
+  "slot_id": "root-implicit-ambiguous-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Ambiguous end-to-end request from discovery through verified delivery; root owns it, no leaf trigger applies"
+ },
+ {
+  "slot_id": "root-implicit-ambiguous-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Unclear idea carried through requirements, design, implementation, verified delivery — root's exact condition"
+ },
+ {
+  "slot_id": "root-implicit-ambiguous-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Vague cross-phase request: root's ambiguous/end-to-end clause matches, other skills not triggered"
+ },
+ {
+  "slot_id": "root-implicit-ambiguous-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Unresolved idea plus full workflow maps to the root description; no isolated leaf applies"
+ },
+ {
+  "slot_id": "root-implicit-ambiguous-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Discovery-through-delivery ownership belongs to the zhanggui root, not any leaf skill"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-04-treatment-r1",
+  "selected_skill": null,
+  "reason": "单一小任务不满足并行分发（两个以上独立域）触发条件，也未匹配任何技能"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-04-baseline-r1",
+  "selected_skill": null,
+  "reason": "无任务领域信息，无并行需求，未命中任何技能的正向前置条件"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-04-treatment-r2",
+  "selected_skill": null,
+  "reason": "单一小任务明确否定并行分发前提，且无调试/TDD/验证等触发词"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-04-baseline-r2",
+  "selected_skill": null,
+  "reason": "请求过简不足以判定为模糊跨模块开发请求，返回空最可辩护"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-04-treatment-r3",
+  "selected_skill": null,
+  "reason": "只有一个小任务，无需并发，其他技能均无任务领域匹配"
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-04-baseline-r3",
+  "selected_skill": null,
+  "reason": "无开发域证据，无并行触发，无生命周期子步骤，选择空"
+ },
+ {
+  "slot_id": "root-baseline-negative-05-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree 直接命中隔离 checkout/独立写作用域，root 只覆盖端到端歧义工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-05-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "root 描述明确排除 worktree 请求，隔离 worktree 唯一命中叶技能"
+ },
+ {
+  "slot_id": "root-baseline-negative-05-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree 是孤立操作，不满足 root 端到端触发条件，命中 worktree 技能"
+ },
+ {
+  "slot_id": "root-baseline-negative-05-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "root 的 do not use for worktree 排除语义确认由 zhanggui-using-git-worktrees 承担"
+ },
+ {
+  "slot_id": "root-baseline-negative-05-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "隔离 checkout 需求唯一命中 zhanggui-using-git-worktrees，无需 root 完整工作流"
+ },
+ {
+  "slot_id": "root-baseline-negative-05-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "worktree 请求由叶技能承担，root 排除语义与本判断一致"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到达（要求改实现），先核实建议即逐项技术核实，符合 receiving-code-review，非 TDD"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到达，需先核实后再接受/拒绝/实施，匹配 receiving-code-review；根技能明确排除 review-feedback"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到达（要求改实现），先核实建议即逐项技术核实，符合 receiving-code-review，非 TDD"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到达，需先核实后再接受/拒绝/实施，匹配 receiving-code-review；根技能明确排除 review-feedback"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到达（要求改实现），先核实建议即逐项技术核实，符合 receiving-code-review，非 TDD"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到达，需先核实后再接受/拒绝/实施，匹配 receiving-code-review；根技能明确排除 review-feedback"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback must be technically verified before acceptance"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing PR feedback needs verification before accept/reject decision"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback must be technically verified before acceptance"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing PR feedback needs verification before accept/reject decision"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "PR feedback must be technically verified before acceptance"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing PR feedback needs verification before accept/reject decision"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到，用户要求先技术核实再改，正是收到评审意见后逐条验证的场景"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审建议已到达且需技术核实后再实施，命中 receiving-code-review，非新评审请求亦非显式端到端工作流"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审反馈已到，需先技术核实再改，符合对反馈逐条技术验证后接受或实施的条件"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "现有评审建议需先在接受/拒绝/实施前技术验证，隐式来源不隶属根技能所有的工作流"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审者建议已到达，技术核实在前改在后，正是 feedback 验证场景"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "评审意见到达需技术验证，隐式来源不触发根技能 defer，选 receiving-code-review"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch verified, explicit merge/PR/keep/discard decision requested"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch verified, explicit merge/PR/keep/discard decision requested"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch verified, explicit merge/PR/keep/discard decision requested"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch verified, explicit merge/PR/keep/discard decision requested"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch verified, explicit merge/PR/keep/discard decision requested"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch verified, explicit merge/PR/keep/discard decision requested"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "测试先行 means failing tests must be written before implementing the new API error contract; TDD leaf matches best."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Isolated single-feature test-first request; TDD leaf applies and root's ambiguous/end-to-end clauses do not."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "测试先行 requires tests before implementation of the new error-handling contract; no ambiguous or end-to-end signal."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Clear isolated feature needing Red-Green-Refactor; defer-to-root clause not triggered by this request."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "New behavior change with test-first request maps directly to the TDD leaf."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "Test-first feature request is isolated and concrete; TDD leaf selected over the root."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "用户明确要求对安全改动进行代码审查（评审），这是 requesting-code-review 的精确触发条件"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "用户明确要求对安全改动进行代码审查，不是端到端工作流，应路由到专用的审查技能"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "用户请求的是审查（评审），不是模糊想法或跨模块交付，直接匹配 requesting-code-review"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "安全改动质量和规格双轴评审是明确的代码审查请求，不触发根技能"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "用户指明了评审而非端到端工作流，双轴评审直接对应审查技能的质量和规格维度"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求是独立的审查，不涉及端到端所有权，应路由到专用审查技能"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states branch verified and asks merge-vs-PR, matching the finishing leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified branch needs landing decision (merge vs PR); finishing leaf owns it."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "After-verification merge-vs-PR decision routes to the finishing leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Branch-finishing request with verification stated routes to finishing leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Merge-vs-PR for a verified branch matches finishing-a-development-branch."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verification complete; merging vs opening a PR is the finishing leaf's scope."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "User rejects a 'should pass' claim and demands running the check that proves it — fresh evidence for a passing claim, exactly the verification-before-completion trigger."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Same verification demand: run the check to prove the passing claim; root description explicitly defers isolated verification to this leaf."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "User wants the claim proven by running the check, not asserted — fresh evidence before 'passes' is stated."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Request demands fresh evidence for a passing claim; root defers isolated verification to this leaf."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Explicit instruction to run the proof check rather than say 'should pass' — verification-before-completion trigger."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Running the check to prove the claim is precisely isolated verification; root description directs such requests to this leaf."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Feedback arrived needs item-by-item technical verification."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing review feedback needs technical verification per item."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Feedback arrived needs item-by-item technical verification."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing review feedback needs technical verification per item."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Feedback arrived needs item-by-item technical verification."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing review feedback needs technical verification per item."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "请求明确要求先写失败测试锁定边界再改权限逻辑，正属 TDD 的失败测试先行场景"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "请求为孤立的行为修改且要求先写失败测试，不属于 zhanggui 根的歧义/跨模块/端到端触发条件"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "先写失败测试锁定边界再改权限判断逻辑，命中 TDD 技能描述"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "孤立修改+测试先行指令清晰，无歧义或多模块信号，不触发 zhanggui 根"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "请求要求先写失败测试再实施权限逻辑修改，明确属于 TDD 场景"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "implicit 调用下请求无歧义/跨模块/端到端特征，失败测试先行一致命中 TDD 叶技能"
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review-only request for a diff maps to requesting-code-review, not TDD."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review-only request for a diff maps to requesting-code-review, not TDD."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review-only request for a diff maps to requesting-code-review, not TDD."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review-only request for a diff maps to requesting-code-review, not TDD."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review-only request for a diff maps to requesting-code-review, not TDD."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review-only request for a diff maps to requesting-code-review, not TDD."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-06-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Bug root cause not yet located; systematic investigation requested."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-06-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated bug root-cause investigation; defer to zhanggui only when explicit/end-to-end."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-06-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Bug root cause not yet located; systematic investigation requested."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-06-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated bug root-cause investigation; defer to zhanggui only when explicit/end-to-end."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-06-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Bug root cause not yet located; systematic investigation requested."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-06-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated bug root-cause investigation; defer to zhanggui only when explicit/end-to-end."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "公开 API 修改后请求 reviewer 检查，是要独立的新代码审查，命中 requesting-code-review。"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求对 diff/code 做独立审查，命中 requesting-code-review；baseline 明确 review 由叶技能处理。"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "公开 API 修改后请求 reviewer 检查即新代码审查，命中 requesting-code-review。"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "独立 code review 请求由 requesting-code-review 叶技能承担，root 不适用。"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "对新代码变更请求独立审查，命中 requesting-code-review。"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求新审查属于 requesting-code-review，isolated review 不归 root。"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Work verified and user wants to keep the branch — explicit branch-landing decision."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verification complete; choosing to keep the branch is a finishing decision."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Work verified and user wants to keep the branch later."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verified work now wants the keep-branch landing choice."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verification passed; keep-branch decision needed."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Verification complete; keep-branch is explicit finish action."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "用户请求在进入下一任务前核对交付是否真的完成，正匹配'handoff to the next task'验证"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "隔离的完成验证需求，用户未声称测试通过或已完成验证，不属于根技能所有"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "用户请求在进入下一任务前核对交付是否真的完成，正匹配'handoff to the next task'验证"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "隔离的完成验证需求，用户未声称测试通过或已完成验证，不属于根技能所有"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "用户请求在进入下一任务前核对交付是否真的完成，正匹配'handoff to the next task'验证"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "隔离的完成验证需求，用户未声称测试通过或已完成验证，不属于根技能所有"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means 'process reviewer feedback', matching the receiving-code-review skill precisely"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means 'process reviewer feedback', matching the receiving-code-review skill precisely"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means 'process reviewer feedback', matching the receiving-code-review skill precisely"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means 'process reviewer feedback', matching the receiving-code-review skill precisely"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means 'process reviewer feedback', matching the receiving-code-review skill precisely"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "处理评审者反馈 means 'process reviewer feedback', matching the receiving-code-review skill precisely"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "The request asks to check whether current work is verified complete, which matches verification-before-completion's trigger (fresh evidence for a completion claim)."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Checking a completion/verified claim needs fresh evidence, handled by verification-before-completion, not by the review or root skills."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Verifying whether work is done/verified is a completion-claim check; verification-before-completion applies, no other leaf matches."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated verification claim needs fresh evidence; verification-before-completion is the correct first skill."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Request checks if work was verified complete; that is a completion-claim verification, so verification-before-completion loads first."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Confirming verification status of current work matches verification-before-completion; no review feedback or branch finishing is involved."
+ },
+ {
+  "slot_id": "root-implicit-multi-deliverable-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Multi-deliverable end-to-end workflow with design/review/verification stages maps to root skill."
+ },
+ {
+  "slot_id": "root-implicit-multi-deliverable-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module multi-deliverable end-to-end resumable request; review/verification are stages, not leaf triggers."
+ },
+ {
+  "slot_id": "root-implicit-multi-deliverable-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Multi-deliverable end-to-end workflow with design/review/verification stages maps to root skill."
+ },
+ {
+  "slot_id": "root-implicit-multi-deliverable-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module multi-deliverable end-to-end resumable request; review/verification are stages, not leaf triggers."
+ },
+ {
+  "slot_id": "root-implicit-multi-deliverable-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Multi-deliverable end-to-end workflow with design/review/verification stages maps to root skill."
+ },
+ {
+  "slot_id": "root-implicit-multi-deliverable-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-module multi-deliverable end-to-end resumable request; review/verification are stages, not leaf triggers."
+ },
+ {
+  "slot_id": "root-implicit-migration-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "End-to-end ownership of a cross-service migration matches zhanggui root; debugging is one step of it."
+ },
+ {
+  "slot_id": "root-implicit-migration-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-service migration handed over end-to-end matches zhanggui; debugging/TDD are sub-steps."
+ },
+ {
+  "slot_id": "root-implicit-migration-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "End-to-end ownership of a migration spanning services matches zhanggui root."
+ },
+ {
+  "slot_id": "root-implicit-migration-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit end-to-end migration ownership matches zhanggui; root-cause is a sub-step."
+ },
+ {
+  "slot_id": "root-implicit-migration-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Cross-service migration with full ownership matches zhanggui root, not isolated debugging."
+ },
+ {
+  "slot_id": "root-implicit-migration-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "End-to-end multi-service migration ownership matches zhanggui; failing test is one phase."
+ },
+ {
+  "slot_id": "root-implicit-end-to-end-01-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Request explicitly hands over end-to-end ownership of a redesign with unresolved design decisions, matching the zhanggui root trigger; TDD and verification are later lifecycle substeps."
+ },
+ {
+  "slot_id": "root-implicit-end-to-end-01-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicitly asks for end-to-end work from design through implementation and verified delivery; root zhanggui owns the full workflow, leaves are substeps."
+ },
+ {
+  "slot_id": "root-implicit-end-to-end-01-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit end-to-end ownership of a redesign with unresolved decisions; only the zhanggui root covers the full span."
+ },
+ {
+  "slot_id": "root-implicit-end-to-end-01-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Request asks for end-to-end work from open design decisions through implementation and verified delivery; zhanggui root triggers."
+ },
+ {
+  "slot_id": "root-implicit-end-to-end-01-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Hands over end-to-end ownership of a redesign; matches the root description's explicit end-to-end verbatim trigger."
+ },
+ {
+  "slot_id": "root-implicit-end-to-end-01-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicitly asks to carry a redesign from design through implementation and verified delivery; root zhanggui, not a substep leaf."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Two parallel write scopes needing isolated workspaces matches the worktrees write-scope/workspace trigger."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated workspace request matches worktrees; no explicit or end-to-end workflow to defer to the root."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request asks for separate write-scope workspaces, exactly the worktrees trigger; no end-to-end signal."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Separate-workspace need matches worktrees; implicit source, no root deferral condition applies."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Parallel write scopes requiring independent workspaces directly matches the worktrees description."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Workspace-isolation request matches worktrees and is not part of an explicit end-to-end workflow."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Production unexpected status needs root-cause investigation."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated production bug needs root-cause investigation; root excluded."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Production unexpected status needs root-cause investigation."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated production bug needs root-cause investigation; root excluded."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Production unexpected status needs root-cause investigation."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated production bug needs root-cause investigation; root excluded."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Pre-feature isolated worktree setup matches zhanggui-using-git-worktrees; finishing leaf requires prior verification."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree request, implicit source, not an explicit end-to-end workflow deferring to root."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree creation before feature work is isolated checkout work, not branch finishing."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Request is a standalone worktree setup; no verification-complete claim or landing decision present."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated checkout separation matches zhanggui-using-git-worktrees trigger."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Worktree is requested as a setup step before feature start, keeping the finishing leaf unselected."
+ },
+ {
+  "slot_id": "root-near-miss-verify-01-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "孤立单模块修复仅需完成前验证，用户明确不启动端到端工作流"
+ },
+ {
+  "slot_id": "root-near-miss-verify-01-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "仅要求完成前验证且明确排除端到端工作流，root 不适用"
+ },
+ {
+  "slot_id": "root-near-miss-verify-01-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "孤立单模块修复完成前验证，不启动端到端工作流"
+ },
+ {
+  "slot_id": "root-near-miss-verify-01-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "仅完成前验证，明确排除端到端工作流，root 不适用"
+ },
+ {
+  "slot_id": "root-near-miss-verify-01-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "孤立单模块修复完成前验证，用户排除端到端工作流"
+ },
+ {
+  "slot_id": "root-near-miss-verify-01-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "仅完成前验证，明确排除端到端工作流，root 不适用"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-03-treatment-r1",
+  "selected_skill": null,
+  "reason": "No skill description matches a general feature implementation request"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-03-baseline-r1",
+  "selected_skill": null,
+  "reason": "No skill description matches a general feature implementation request"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-03-treatment-r2",
+  "selected_skill": null,
+  "reason": "No skill description matches a general feature implementation request"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-03-baseline-r2",
+  "selected_skill": null,
+  "reason": "No skill description matches a general feature implementation request"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-03-treatment-r3",
+  "selected_skill": null,
+  "reason": "No skill description matches a general feature implementation request"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-03-baseline-r3",
+  "selected_skill": null,
+  "reason": "No skill description matches a general feature implementation request"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "User requests an independent review of completed work before merge; requesting-code-review matches."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "New independent review request; baseline root explicitly excludes isolated review requests."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Independent code review before merge is a new review request, not root TDD/verification scope."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "No explicit/end-to-end ownership signal; baseline root defers isolated review to requesting-code-review."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Request is a review of a code change before merge; root requires unresolved/end-to-end work."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Asking for a new independent review; root's do-not-use clause routes it to the review leaf."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求代码审查 matched by requesting-code-review; no tests-passed claim to trigger finishing leaf."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Isolated new-review request, not finishing; description's defer clause only applies to explicit/end-to-end contexts."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "请求代码审查 is a new independent review request, matching requesting-code-review exactly."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Request asks for code review, not branch landing; finishing requires stated verification-complete or merge choice."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Code review request, no verification-passed or branch-landing intent expressed."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Matches requesting-code-review; finishing-a-development-branch is a negative trap without a tests-passed signal."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "主目录有未提交改动、要求不在原地实现，正命中独立 checkout/隔离写作用例"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "implicit 来源下的隔离 worktree 请求，非显式端到端流程，应命中叶子而非 zhanggui 根"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "主目录脏、需隔离写作用例，与 worktrees 描述完全对应"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "隔离 worktree 需求且非显式端到端调用，根技能描述明确排除 worktree 请求"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "请求要求独立工作区以避开主工作树，命中 zhanggui-using-git-worktrees"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "implicit 请求指向单独写作用例，不属于根技能所有，选择 worktrees 叶子"
+ },
+ {
+  "slot_id": "root-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation plus checkpoint resume matches the root description."
+ },
+ {
+  "slot_id": "root-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation; root is also described as used when invoked explicitly."
+ },
+ {
+  "slot_id": "root-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation plus checkpoint resume matches the root description."
+ },
+ {
+  "slot_id": "root-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation; root is also described as used when invoked explicitly."
+ },
+ {
+  "slot_id": "root-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation plus checkpoint resume matches the root description."
+ },
+ {
+  "slot_id": "root-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit /zhanggui invocation; root is also described as used when invoked explicitly."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states tests passed and requests merging feature branch into main; matches finishing skill."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Tests passed stated and branch merge requested; finishing skill owns branch integration."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states tests passed and requests merging feature branch into main; matches finishing skill."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Tests passed stated and branch merge requested; finishing skill owns branch integration."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User states tests passed and requests merging feature branch into main; matches finishing skill."
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "Tests passed stated and branch merge requested; finishing skill owns branch integration."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-05-treatment-r1",
+  "selected_skill": null,
+  "reason": "A throwaway prototype needs no tests or verified delivery, so no catalog skill (root or TDD leaf) applies."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-05-baseline-r1",
+  "selected_skill": null,
+  "reason": "Request is a clear throwaway prototype; not ambiguous/cross-module/end-to-end and not an explicit invocation, so root prereqs unmet."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-05-treatment-r2",
+  "selected_skill": null,
+  "reason": "TDD requires writing a failing test first, which contradicts a throwaway; root requires verified delivery, also contradicted."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-05-baseline-r2",
+  "selected_skill": null,
+  "reason": "Baseline root fires only on ambiguity/cross-module/end-to-end/checkpointed or explicit invocation; throwaway prototype matches none."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-05-treatment-r3",
+  "selected_skill": null,
+  "reason": "No leaf covers scratch prototyping without verification; root's verified-delivery precondition excludes throwaway work."
+ },
+ {
+  "slot_id": "test-driven-development-baseline-negative-05-baseline-r3",
+  "selected_skill": null,
+  "reason": "No mechanical predicate in baseline catalog matches a one-off throwaway prototype; implicit source, name not invoked."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-05-treatment-r1",
+  "selected_skill": null,
+  "reason": "User explicitly says no subagent capacity and asks to pretend parallel work is finished; parallel dispatch skill requires available capacity, so none applies."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-05-baseline-r1",
+  "selected_skill": null,
+  "reason": "No subagent capacity and user asks to pretend parallel work done; parallel-agent skill explicitly excluded, no other skill fits."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-05-treatment-r2",
+  "selected_skill": null,
+  "reason": "No subagent capacity and user asks to pretend parallel work is finished; none applies."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-05-baseline-r2",
+  "selected_skill": null,
+  "reason": "No subagent capacity and user asks to pretend parallel work done; parallel-agent skill excluded, no other skill fits."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-05-treatment-r3",
+  "selected_skill": null,
+  "reason": "No subagent capacity and user asks to pretend parallel work is finished; none applies."
+ },
+ {
+  "slot_id": "dispatching-parallel-agents-baseline-negative-05-baseline-r3",
+  "selected_skill": null,
+  "reason": "No subagent capacity and user asks to pretend parallel work done; parallel-agent skill excluded, no other skill fits."
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "从失败测试开始修 bug，即先写失败测试再实现修复，属 TDD 流程"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "从失败测试开始修 bug，即先写失败测试再实现修复，属 TDD 流程"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "从失败测试开始修 bug，即先写失败测试再实现修复，属 TDD 流程"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "从失败测试开始修 bug，即先写失败测试再实现修复，属 TDD 流程"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "从失败测试开始修 bug，即先写失败测试再实现修复，属 TDD 流程"
+ },
+ {
+  "slot_id": "receiving-code-review-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-test-driven-development",
+  "reason": "从失败测试开始修 bug，即先写失败测试再实现修复，属 TDD 流程"
+ },
+ {
+  "slot_id": "root-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needs root cause investigation"
+ },
+ {
+  "slot_id": "root-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needs root cause investigation"
+ },
+ {
+  "slot_id": "root-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needs root cause investigation"
+ },
+ {
+  "slot_id": "root-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needs root cause investigation"
+ },
+ {
+  "slot_id": "root-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needs root cause investigation"
+ },
+ {
+  "slot_id": "root-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "test failure needs root cause investigation"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks about discarding a verified worktree, matching the skill's trigger for post-verification landing decisions"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks for discard impact on a verified worktree, matching the skill's explicit trigger for verified branch decisions"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks about discarding a verified worktree, matching the skill's trigger for post-verification landing decisions"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks for discard impact on a verified worktree, matching the skill's explicit trigger for verified branch decisions"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks about discarding a verified worktree, matching the skill's trigger for post-verification landing decisions"
+ },
+ {
+  "slot_id": "finishing-a-development-branch-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-finishing-a-development-branch",
+  "reason": "User asks for discard impact on a verified worktree, matching the skill's explicit trigger for verified branch decisions"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "User asks for review of completed epic child work before dependent work starts, matching 'before dependent work starts'."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Focused implicit review request; no root-invocation or end-to-end ownership to defer to zhanggui."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review of completed child before dependent tasks matches the requesting-code-review predicate."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Implicit, isolated review step; defer-to-root clause does not apply."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Review before dependent tasks is an independent review request, not an end-to-end handover."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-requesting-code-review",
+  "reason": "Implicit review request for finished work; root conditions (explicit/ambiguous/end-to-end) unmet."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-02-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Request asks to prove acceptance criteria met before commit; matches fresh-evidence-before-commit skill."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-02-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated verification-before-commit claim; does not defer to root, not finishing-branch."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-02-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Prove acceptance criteria before commit matches the verification-before-completion trigger."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-02-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated verification-before-commit request; not explicit/end-to-end, no root deferral."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-02-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Prove acceptance criteria before commit matches the verification-before-completion trigger."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-02-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated verification-before-commit request; not explicit/end-to-end, no root deferral."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-05-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "User asks to verify 'ready' with fresh evidence before opening a PR"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-05-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated ready-claim needs evidence before PR; leaf owns verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-05-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "User asks to verify 'ready' with fresh evidence before opening a PR"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-05-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated ready-claim needs evidence before PR; leaf owns verification"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-05-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "User asks to verify 'ready' with fresh evidence before opening a PR"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-05-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated ready-claim needs evidence before PR; leaf owns verification"
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-03-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "测试失败根因调查 is an isolated test-failure investigation, matching systematic-debugging, not the end-to-end root."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-03-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Implicit isolated debugging request; baseline root description explicitly excludes isolated debugging."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-03-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Test-failure root-cause task is a leaf debugging trigger; no end-to-end or explicit-root signal."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-03-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated test failure, no explicit root invocation; defer-to-root conditions absent."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-03-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Literal trigger for systematic-debugging; zhanggui root predicate (multi-module/end-to-end) not met."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-03-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Baseline description's do-not-use list covers isolated debugging; root-cause task stays on the leaf."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated performance degradation needing root-cause evidence/hypothesis"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated performance problem needing root-cause investigation"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated performance degradation needing root-cause evidence/hypothesis"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated performance problem needing root-cause investigation"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated performance degradation needing root-cause evidence/hypothesis"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated performance problem needing root-cause investigation"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-05-treatment-r1",
+  "selected_skill": null,
+  "reason": "仅列 worktree 状态且明确不开始工作，不满足隔离检出/工作区触发条件"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-05-baseline-r1",
+  "selected_skill": null,
+  "reason": "纯状态查询，无特性工作或工作区需求，所有技能均不触发"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-05-treatment-r2",
+  "selected_skill": null,
+  "reason": "仅列 worktree 状态且明确不开始工作，不满足隔离检出/工作区触发条件"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-05-baseline-r2",
+  "selected_skill": null,
+  "reason": "纯状态查询，无特性工作或工作区需求，所有技能均不触发"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-05-treatment-r3",
+  "selected_skill": null,
+  "reason": "仅列 worktree 状态且明确不开始工作，不满足隔离检出/工作区触发条件"
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-negative-05-baseline-r3",
+  "selected_skill": null,
+  "reason": "纯状态查询，无特性工作或工作区需求，所有技能均不触发"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-05-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree matches zhanggui-using-git-worktrees directly"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-05-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree request matches zhanggui-using-git-worktrees"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-05-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree matches zhanggui-using-git-worktrees directly"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-05-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree request matches zhanggui-using-git-worktrees"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-05-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "创建隔离 worktree matches zhanggui-using-git-worktrees directly"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-negative-05-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Isolated worktree request matches zhanggui-using-git-worktrees"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-01-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "About to claim fix complete; fresh verification evidence must be produced first."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-01-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Imminent completion claim needs fresh evidence; root's end-to-end triggers absent."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-01-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "About to claim fix complete; fresh verification evidence must be produced first."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-01-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Imminent completion claim needs fresh evidence; root's end-to-end triggers absent."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-01-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "About to claim fix complete; fresh verification evidence must be produced first."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-01-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Imminent completion claim needs fresh evidence; root's end-to-end triggers absent."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-02-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "最终验证 = verification-before-completion，孤立任务不归属 zhanggui 根"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-02-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "验证请求由 verification leaf 处理，zhanggui 根明确 defer 该场景"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-02-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "最终验证 = verification-before-completion，孤立任务不归属 zhanggui 根"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-02-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "验证请求由 verification leaf 处理，zhanggui 根明确 defer 该场景"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-02-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "最终验证 = verification-before-completion，孤立任务不归属 zhanggui 根"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-02-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "验证请求由 verification leaf 处理，zhanggui 根明确 defer 该场景"
+ },
+ {
+  "slot_id": "root-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of the stateful Zhanggui root for a migration."
+ },
+ {
+  "slot_id": "root-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of the root, which the baseline description says to use when invoked explicitly."
+ },
+ {
+  "slot_id": "root-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of the stateful Zhanggui root for a migration."
+ },
+ {
+  "slot_id": "root-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of the root, which the baseline description says to use when invoked explicitly."
+ },
+ {
+  "slot_id": "root-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of the stateful Zhanggui root for a migration."
+ },
+ {
+  "slot_id": "root-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui",
+  "reason": "Explicit invocation of the root, which the baseline description says to use when invoked explicitly."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-01-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer comments already arrived; judging their correctness is verifying received feedback, not requesting a new review."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-01-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Existing reviewer comments need technical verification; receiving-code-review matches, requesting-code-review does not."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-01-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer feedback has arrived and each suggestion needs checking before acceptance; receiving-code-review."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-01-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Verify existing review feedback, no new diff for independent review; receiving-code-review applies."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-01-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Reviewer already left comments, request is to judge their validity; receiving-code-review is the first-skill."
+ },
+ {
+  "slot_id": "requesting-code-review-baseline-negative-01-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "Comment verification on arrived feedback routes to receiving-code-review, and its do-not-use clause excludes a new review request."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-04-treatment-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "User request is about evaluating review feedback, which matches receiving-code-review's description"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-04-baseline-r1",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "User request is about evaluating review feedback, which matches receiving-code-review's description"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-04-treatment-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "User request is about evaluating review feedback, which matches receiving-code-review's description"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-04-baseline-r2",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "User request is about evaluating review feedback, which matches receiving-code-review's description"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-04-treatment-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "User request is about evaluating review feedback, which matches receiving-code-review's description"
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-negative-04-baseline-r3",
+  "selected_skill": "zhanggui-receiving-code-review",
+  "reason": "User request is about evaluating review feedback, which matches receiving-code-review's description"
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-03-treatment-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "About to push with no fresh evidence; checking full command output and failure count is exactly pre-push verification."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-03-baseline-r1",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated pre-push verification request; the ZVC leaf fits and zhanggui root excludes verification requests."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-03-treatment-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "About to push with no fresh evidence; checking full command output and failure count is exactly pre-push verification."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-03-baseline-r2",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated pre-push verification request; the ZVC leaf fits and zhanggui root excludes verification requests."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-03-treatment-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "About to push with no fresh evidence; checking full command output and failure count is exactly pre-push verification."
+ },
+ {
+  "slot_id": "verification-before-completion-baseline-positive-03-baseline-r3",
+  "selected_skill": "zhanggui-verification-before-completion",
+  "reason": "Isolated pre-push verification request; the ZVC leaf fits and zhanggui root excludes verification requests."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-04-treatment-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "User explicitly asks to start the feature with a worktree, which matches the worktree skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-04-baseline-r1",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "User explicitly asks to start the feature with a worktree; isolated worktree request."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-04-treatment-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "User explicitly asks to start the feature with a worktree, matching the worktree skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-04-baseline-r2",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Explicit worktree request; not an end-to-end workflow, so worktree skill applies."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-04-treatment-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "User explicitly asks to start the feature with a worktree, matching the worktree skill."
+ },
+ {
+  "slot_id": "using-git-worktrees-baseline-positive-04-baseline-r3",
+  "selected_skill": "zhanggui-using-git-worktrees",
+  "reason": "Explicit worktree request; isolated, so worktree skill applies."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-06-treatment-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Previous fix ineffective, restarting root-cause investigation matches systematic debugging, not the zhanggui umbrella."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-06-baseline-r1",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated unresolved bug whose fix didn't hold needs root-cause investigation per the skill description."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-06-treatment-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Prior fix had no effect and root-cause investigation restart is core systematic-debugging."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-06-baseline-r2",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated bug, earlier fix attempt didn't hold; systematic-debugging owns resuming root-cause."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-06-treatment-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Unresolved problem and restarted root-cause investigation matches the debugging leaf."
+ },
+ {
+  "slot_id": "systematic-debugging-baseline-positive-06-baseline-r3",
+  "selected_skill": "zhanggui-systematic-debugging",
+  "reason": "Isolated persistent bug with failed prior fix scoped to zhanggui-systematic-debugging."
+ }
+]
