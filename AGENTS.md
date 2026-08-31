@@ -54,7 +54,9 @@ description 是唯一的触发面：启动时宿主只注入 `name` + `descripti
 - 用用户真会说的具体症状和关键词（错误信息、现象、工具名），不用 `multi-deliverable` 这类内部术语。
 - 不写行为指令（“开场先说……”），那属于正文。
 
-例外：`zhanggui` 与八个 `zhanggui-*` 的 description 被 `evals/results/v0.8-catalog-pending.json` 的 digest 钉住。改它们必须同步那份快照，**并且在重跑 trigger eval 前不得引用任何命中率**。`v0.7-routing-summary.json` 里的速率属于旧 description 目录，是历史记录，不描述当前目录。重测时 catalog 里必须放入无关的第三方技能作为干扰项——v0.7 全程只开了 `--skills "zhanggui*"`，没测出竞争条件下的代价。
+例外：`zhanggui` 与八个 `zhanggui-*` 的 description 被 `evals/catalog-current.json` 的 `catalog_snapshot` digest 钉住（`tests/skill-trigger-data.test.mjs` 会校验）。改它们必须同步那份快照，并把 `status` 保持在 `pending-reevaluation`、在 `changes_since_supersede` 里写清改了哪个技能针对哪个用例——已发布的 `results/v0.*-routing-summary.json` 是只读历史记录，任何情况下都不得为了让 digest 门变绿去改写它们（那等于让结果记录谎报产生该批速率的 catalog）。未重测前不得引用任何一版历史命中率描述当前目录。重测时 catalog 必须放入无关的第三方技能作为干扰项——v0.7 全程只开了 `--skills "zhanggui*"`，没测出竞争条件下的代价；v0.8 已按此要求重测并在 summary 中记录 `failures`。
+
+判官只读 `name` + `description`（见 v0.8 summary 的 `routing_evaluation.system_prompt`）。SKILL.md 正文里的路由谓词管的是加载之后的运行时行为，在这套路由评测里恒为零变化，不要用它去修评测数字；反过来，description 里要表达排除语义时，写成正向前置条件（如 `subagent capacity is available`、`has already passed verification`），而不是被机械门禁掉的 `do not use`。
 
 ## 改动纪律
 
@@ -70,6 +72,6 @@ description 是唯一的触发面：启动时宿主只注入 `name` + `descripti
 npm run check      # node --test + validate-agent-skills.mjs
 ```
 
-`node --test` 期望 54 tests / 54 pass / 0 fail；validator 期望末行 `Validated 10 strict Agent Skills.`。
+`node --test` 期望 55 tests / 55 pass / 0 fail；validator 期望末行 `Validated 10 strict Agent Skills.`。
 
 改完 skills 后至少跑一次 `npm run check`，再跑 `./scripts/deploy-skills.sh --target <host> --dry-run` 确认部署差异符合预期。

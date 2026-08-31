@@ -13,7 +13,7 @@
 
 > 本 README 只是导览，不参与运行，也不复述规则细节——避免出现第三份会漂移的“真值”。运行契约以 [`skills/zhanggui/SKILL.md`](skills/zhanggui/SKILL.md)、各 leaf `SKILL.md`、[`skills/init-project/SKILL.md`](skills/init-project/SKILL.md) 与内部 `STAGE.md` 为准；完整设计论证见 [Skill 融合工作流设计](docs/skill-fusion-design.md)。
 
-集合打包版本 v0.8.0。WorkflowState 与 task-root schema 沿用 v0.4 语义；description 已按社区规范归一为只写触发条件，触发率待重测（见 [`evals/README.md`](evals/README.md)）。
+集合打包版本 v0.8.0。WorkflowState 与 task-root schema 沿用 v0.4 语义；description 已按社区规范归一为只写触发条件，触发路由已重测（见 [`evals/results/v0.8-routing-summary.json`](evals/results/v0.8-routing-summary.json)）。此后 tdd / finishing / dispatching 三处 description 又按 v0.8 的确定性误路由做了修订，当前目录状态是**待重测**，快照与改动明细在 [`evals/catalog-current.json`](evals/catalog-current.json)。
 
 ## 架构要点
 
@@ -222,7 +222,7 @@ node scripts/validate-agent-skills.mjs   # 或 npm run validate
 npm run check                            # 两者串跑
 ```
 
-Expected: 54 tests / 54 pass / 0 fail；validator 最终行报告 `Validated 10 strict Agent Skills.`
+Expected: 55 tests / 55 pass / 0 fail；validator 最终行报告 `Validated 10 strict Agent Skills.`
 
 validator 会给 Python 子进程注入 `PYTHONUTF8=1`，避免中文 Windows 语系下 GBK 解码 UTF-8 skill 文件时崩溃。
 
@@ -230,10 +230,21 @@ validator 会给 Python 子进程注入 `PYTHONUTF8=1`，避免中文 Windows �
 
 ```bash
 node --test tests/skill-trigger-data.test.mjs
-# 现状与重测要求见 evals/README.md；历史测量在 evals/results/v0.7-routing-summary.json
+# 当前目录快照与待重测状态在 evals/catalog-current.json
+# 历史测量：evals/results/v0.8-routing-summary.json（含对照 arm）、evals/results/v0.7-routing-summary.json
 ```
 
-Observed v0.7 summary facts（**已被取代**：这些速率是对旧 description 目录测的，description 已归一为只写触发条件，当前目录尚未重测，见 [`evals/results/v0.8-catalog-pending.json`](evals/results/v0.8-catalog-pending.json)）：
+Observed v0.8 summary facts（对**归一化后、未做后续三处修订**的 description 目录测得：catalog 含 9 个 zhanggui 技能 + 6 个无关第三方干扰项，A/B 双 arm 同批判官，见 [`evals/results/v0.8-routing-summary.json`](evals/results/v0.8-routing-summary.json)）：
+
+- 122 cases × 3 runs × 2 arms = 732 slots，全部有效（transport 错误不计分，0 残余）
+- transport retry policy: max 3 waves, backoffs `[0, 5, 15]`, transport-errors-only; valid wrong selections never retried
+- 被测目录（treatment）root rates: explicit/implicit/root-first-conflict = 1.0, root_false_positive = 0.0（全部满足阈值）
+- 被测目录 leaf: debugging/verification/receiving/dispatching/finishing positive = 1.0；tdd 0.833（`tdd-baseline-positive-02` 被 routing 到 debugging）、requesting 0.944、worktrees 0.889；负例误触发 worktrees 0.111 / dispatching 0.222 / finishing 0.167，其余 0
+- 对照 arm（旧 description 原文，同批判官同干扰项）: root rates 同样 1.0/0/1.0；leaf positive tdd/receiving/worktrees/dispatching/finishing = 1.0, debugging/verification/requesting 0.944；负例误触发 worktrees 0.056 / dispatching 0.111 / finishing 0
+- 相比对照 arm 的退化点（已记录于 summary `failures`，run 级明细在 `failure_evidence`）：tdd 正例 −0.167、worktrees 正例 −0.111、worktrees/dispatching/finishing 负例误触发 +0.056/+0.111/+0.167；其中只有 `tdd-pos-02`、`dispatching-neg-05`、`finishing-neg-01` 是 3/3 确定性误路由，其余为单次翻转、与对照 arm 噪音同量级（3 runs 的分辨率是 1/18 ≈ 0.056）。同一次归一化另把 debugging、verification 正例从 0.944 抬到 1.0。三个确定性用例已通过 description 修订处理，待 v0.9 重测验证。
+- focused trigger suite 10/10
+
+Observed v0.7 summary facts（**历史**：对旧 description 目录测得，仅含 zhanggui 自身、不含干扰项，见 [`evals/results/v0.7-routing-summary.json`](evals/results/v0.7-routing-summary.json)）：
 
 - 122 cases × 3 runs = 366 original slots
 - final total attempts 393 (366 initial + 27 transport-only retries)

@@ -8,7 +8,8 @@ import { fileURLToPath } from 'node:url';
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const datasetPath = path.join(projectRoot, 'evals', 'skill-triggering.json');
 const summaryPath = path.join(projectRoot, 'evals', 'results', 'v0.7-routing-summary.json');
-const pendingCatalogPath = path.join(projectRoot, 'evals', 'results', 'v0.8-catalog-pending.json');
+const v08SummaryPath = path.join(projectRoot, 'evals', 'results', 'v0.8-routing-summary.json');
+const currentCatalogPath = path.join(projectRoot, 'evals', 'catalog-current.json');
 // The nine skills whose routing was measured. init-project is a standalone
 // skill outside the root/leaf routing eval, so it is intentionally absent.
 const evaluatedSkills = [
@@ -30,6 +31,10 @@ const expectedThresholds = {
 };
 const APPROVED_CATALOG_SOURCE_HEAD =
   'a3b6aea89aed9f2c371deb91240e298ba947cdd3';
+const APPROVED_V08_CATALOG_SOURCE_HEAD =
+  'ed3c769094753fb8082b83f542e4f2c3aa5138b2';
+const APPROVED_V08_CATALOG_SHA256 =
+  '17dda086b86bc3be4d6d76ae841a6cfebe7d5a4255260402da36109a0a99ba96';
 const APPROVED_TRANSPORT_RETRY_POLICY = {
   max_waves: 3,
   backoff_seconds: [0, 5, 15],
@@ -240,26 +245,69 @@ test('v0.7 catalog snapshot stays an internally consistent historical record', (
   assert.deepEqual(summary.catalog_snapshot.entries.map(entry => entry.name), evaluatedSkills);
 });
 
-// The v0.7 rates were measured against the descriptions recorded in that file.
-// Descriptions have since been normalized to triggering conditions only, so the
-// current catalog is unmeasured: it is pinned to its own pending snapshot, and
-// the recorded rates must not be read as describing it.
-test('current catalog matches the pending snapshot and is declared unevaluated', async () => {
-  assert.ifError(summaryLoadError);
-  const pending = JSON.parse(await readFile(pendingCatalogPath, 'utf8'));
-  const entries = await Promise.all(evaluatedSkills.map(async name => {
+async function readLiveCatalogEntries() {
+  return Promise.all(evaluatedSkills.map(async name => {
     const content = await readFile(path.join(projectRoot, 'skills', name, 'SKILL.md'), 'utf8');
     const description = /^description:\s*(.+)$/m.exec(content)?.[1];
     assert.ok(description, `${name} description missing`);
     return { name, description, implicit: true };
   }));
-  const digest = createHash('sha256').update(JSON.stringify(entries)).digest('hex');
+}
 
-  assert.deepEqual(pending.catalog_snapshot.entries, entries);
-  assert.equal(pending.catalog_snapshot.sha256, digest);
-  assert.equal(pending.status, 'pending-reevaluation');
-  assert.equal(pending.supersedes.catalog_sha256, summary.catalog_snapshot.sha256);
-  assert.notEqual(digest, summary.catalog_snapshot.sha256);
+function catalogDigest(entries) {
+  return createHash('sha256').update(JSON.stringify(entries)).digest('hex');
+}
+
+// The live descriptions are pinned by evals/catalog-current.json, not by a
+// result record: a measured summary must keep describing the catalog that
+// produced its rates. Editing a description moves this gate and marks the
+// current catalog as pending re-evaluation; it never rewrites v0.7 or v0.8.
+test('current catalog digest gate tracks the live skill descriptions', async () => {
+  const current = JSON.parse(await readFile(currentCatalogPath, 'utf8'));
+  const entries = await readLiveCatalogEntries();
+
+  assert.deepEqual(current.catalog_snapshot.entries, entries);
+  assert.equal(current.catalog_snapshot.sha256, catalogDigest(entries));
+  assert.deepEqual(current.catalog_snapshot.entries.map(entry => entry.name), evaluatedSkills);
+  // an unmeasured catalog may not silently inherit the superseded rates
+  assert.equal(current.status, 'pending-reevaluation');
+  assert.equal(current.supersedes.file, 'results/v0.8-routing-summary.json');
+  assert.equal(current.supersedes.catalog_sha256, APPROVED_V08_CATALOG_SHA256);
+  assert.notEqual(current.catalog_snapshot.sha256, APPROVED_V08_CATALOG_SHA256);
+  // the gate must actually break when a live description drifts from the pin
+  const drifted = structuredClone(entries);
+  drifted[0] = { ...drifted[0], description: `${drifted[0].description} [drift-probe]` };
+  assert.notEqual(catalogDigest(drifted), current.catalog_snapshot.sha256);
+  assert.throws(() => assert.deepEqual(current.catalog_snapshot.entries, drifted));
+});
+
+// The v0.7 and v0.8 rates were each measured against the descriptions recorded
+// in their own file. v0.8 added unrelated third-party distractors plus a
+// same-arm baseline control, so its two sets of rates are comparable
+// slot-for-slot. Both files are immutable historical records.
+test('v0.8 summary stays an internally consistent record with rates and baseline control', async () => {
+  assert.ifError(summaryLoadError);
+  const v08 = JSON.parse(await readFile(v08SummaryPath, 'utf8'));
+
+  assert.equal(v08.catalog_snapshot.sha256, catalogDigest(v08.catalog_snapshot.entries));
+  assert.equal(v08.catalog_snapshot.sha256, APPROVED_V08_CATALOG_SHA256);
+  assert.equal(v08.catalog_snapshot.source_head, APPROVED_V08_CATALOG_SOURCE_HEAD);
+  assert.deepEqual(v08.catalog_snapshot.entries.map(entry => entry.name), evaluatedSkills);
+  assert.equal(v08.dataset_snapshot.sha256, APPROVED_TRIGGER_DATASET_SHA256);
+  assert.equal(v08.version, '0.8');
+  assert.equal(v08.runs_per_case, 3);
+  assert.equal(v08.total_cases, 122);
+  assert.equal(v08.total_slots, 366 * 2);
+  assert.ok(Array.isArray(v08.distractors));
+  assert.ok(v08.distractors.length >= 6);
+  assert.ok(v08.baseline_arm && typeof v08.baseline_arm.rates === 'object');
+  assert.deepEqual(v08.routing_evaluation.thresholds, expectedThresholds);
+  // measured current-catalog rates satisfy the approved release gates
+  assert.equal(v08.rates.explicit_root, 1);
+  assert.ok(v08.rates.implicit_root >= 0.8);
+  assert.ok(v08.rates.root_false_positive <= 0.1);
+  assert.equal(v08.rates.root_first_conflict, 1);
+  assert.equal(v08.passed, true);
 });
 
 test('v0.7 routing summary pins evaluator prompt identity', () => {

@@ -1,0 +1,90 @@
+{
+  "catalog_version": "current",
+  "status": "pending-reevaluation",
+  "reason": "Three descriptions were changed after v0.8: tdd regained a test-first trigger, finishing front-loads the already-verified precondition, dispatching front-loads the subagent-capacity precondition. These target the three deterministic v0.8 regressions (3/3 misroutes). The v0.8 rates were measured against the superseded catalog and do not describe this one.",
+  "supersedes": {
+    "file": "results/v0.8-routing-summary.json",
+    "catalog_sha256": "17dda086b86bc3be4d6d76ae841a6cfebe7d5a4255260402da36109a0a99ba96"
+  },
+  "changes_since_supersede": [
+    {
+      "skill": "zhanggui-test-driven-development",
+      "target_case": "test-driven-development-baseline-positive-02",
+      "v08_evidence": "3/3 runs routed to zhanggui-systematic-debugging",
+      "change": "added the failing/regression-test-first precondition that the v0.7 catalog carried as Red-Green-Refactor"
+    },
+    {
+      "skill": "zhanggui-finishing-a-development-branch",
+      "target_case": "finishing-a-development-branch-baseline-negative-01",
+      "v08_evidence": "3/3 runs misrouted to this leaf while the request states verification is missing",
+      "change": "moved the verification precondition to the head of the sentence as 'has already passed verification'"
+    },
+    {
+      "skill": "zhanggui-dispatching-parallel-agents",
+      "target_case": "dispatching-parallel-agents-baseline-negative-05",
+      "v08_evidence": "3/3 runs misrouted to this leaf while the request states no subagent capacity exists",
+      "change": "added the 'subagent capacity is available' precondition and stated non-overlapping files positively"
+    }
+  ],
+  "not_changed": {
+    "zhanggui-using-git-worktrees": "v0.8 deltas were 1-2 slots (1/18 = 0.056 resolution at 3 runs per case) and the baseline arm misroutes the same near-miss cases; not separable from noise, and changing a fourth description would make the next A/B unattributable"
+  },
+  "required_before_claiming_rates": [
+    "evals/skill-triggering.json 122 cases x 3 runs, both arms",
+    "catalog must include the same unrelated third-party distractors recorded in results/v0.8-routing-summary.json",
+    "judge prompt identity must match routing_evaluation.evaluator_identity_sha256",
+    "runs_per_case >= 5 or a multi-model judge, because v0.8 could not separate 1-slot deltas from noise"
+  ],
+  "unmeasurable_by_this_harness": "The judge sees only name and description (routing_evaluation.system_prompt). SKILL.md body routing predicates cannot move any rate in this eval; they govern runtime behavior after a skill loads and need a separate acceptance run.",
+  "catalog_snapshot": {
+    "source_head": "ed3c769094753fb8082b83f542e4f2c3aa5138b2",
+    "sha256": "4433554b19e77385042321fa1be7dc06c6da1b2b1c06c639abce6f670254eab7",
+    "entries": [
+      {
+        "name": "zhanggui",
+        "description": "Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-systematic-debugging",
+        "description": "Use when a test failure, production bug, build failure, integration failure, performance problem, or otherwise unexpected behavior needs its root cause found, including when earlier fix attempts did not hold or the problem is still not understood.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-test-driven-development",
+        "description": "Use when a new feature, bug fix, refactor, or behavior change is about to be implemented and the failing test or regression test must be written first, before any implementation code exists.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-verification-before-completion",
+        "description": "Use when work is about to be called complete, fixed, passing, or ready, or before a commit, push, pull request, or handoff to the next task, and no fresh evidence for that claim has been produced yet.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-requesting-code-review",
+        "description": "Use when a diff, patch, or code change needs a new independent review, including a severity-scoped report of Critical and Important findings, before verification, merge, delivery, or dependent work starts.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-receiving-code-review",
+        "description": "Use when review feedback, reviewer comments, or a findings report has arrived and each item needs technical verification before it is accepted, rejected, or implemented.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-using-git-worktrees",
+        "description": "Use when feature work needs an isolated checkout, a write scope separated from the main working tree, or a dedicated workspace for executing an implementation plan.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-dispatching-parallel-agents",
+        "description": "Use when subagent capacity is available and two or more independent problem domains can run at the same time on non-overlapping files without shared state, such as separate root-cause investigations in different components or dependency-ready tasks with distinct write scopes.",
+        "implicit": true
+      },
+      {
+        "name": "zhanggui-finishing-a-development-branch",
+        "description": "Use when branch or worktree work has already passed verification and needs an explicit decision about how to land it, such as merging, opening a pull request, keeping the branch, or discarding it, including right after the user says the tests passed.",
+        "implicit": true
+      }
+    ]
+  }
+}

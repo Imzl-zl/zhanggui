@@ -1,7 +1,7 @@
 ---
 name: zhanggui-finishing-a-development-branch
 license: MIT
-description: Use when verified branch or worktree work needs an explicit decision about how to land it, such as merging, opening a pull request, keeping the branch, or discarding it, including right after the user says the tests passed.
+description: Use when branch or worktree work has already passed verification and needs an explicit decision about how to land it, such as merging, opening a pull request, keeping the branch, or discarding it, including right after the user says the tests passed.
 ---
 
 # Finishing a Development Branch

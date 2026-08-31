@@ -1,7 +1,7 @@
 ---
 name: zhanggui-dispatching-parallel-agents
 license: MIT
-description: Use when two or more independent problem domains can run at the same time without shared state or overlapping writes, such as separate root-cause investigations in different components or dependency-ready tasks with non-overlapping files.
+description: Use when subagent capacity is available and two or more independent problem domains can run at the same time on non-overlapping files without shared state, such as separate root-cause investigations in different components or dependency-ready tasks with distinct write scopes.
 ---
 
 # Dispatching Parallel Agents

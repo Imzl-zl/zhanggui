@@ -1,7 +1,7 @@
 ---
 name: zhanggui-test-driven-development
 license: MIT
-description: Use when a new feature, bug fix, refactor, or behavior change is about to be implemented, before any implementation code is written.
+description: Use when a new feature, bug fix, refactor, or behavior change is about to be implemented and the failing test or regression test must be written first, before any implementation code exists.
 ---
 
 # Test-Driven Development (TDD)
