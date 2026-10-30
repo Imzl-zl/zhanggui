@@ -1,0 +1,152 @@
+{
+  "skill": "decision-notes",
+  "host": "claude",
+  "agent_permissions": "bypassPermissions",
+  "driving_model": "deepseek-flash",
+  "judge_identity_sha256": "ce24d4a9bd7b3be0ebd84e0a71422e25c34cbf5f9fe86a041e98f9ae17bb0735",
+  "with_skill": {
+    "pass_rate_mean": 1
+  },
+  "without_skill": {
+    "pass_rate_mean": 0.1
+  },
+  "delta": {
+    "pass_rate": 0.9
+  },
+  "ungraded_assertions": 0,
+  "cases": [
+    {
+      "id": "record-session-store-swap",
+      "prompt": "我们刚决定把会话存储从 Redis 换成 SQLite，因为运维不想再单独养一个服务。把这个决定记下来，免得下个季度又有人提 Redis。",
+      "expected_output": "在 .agents/notes/ 的某个状态目录下按 YYYY-MM-DD-<slug>.md 落一篇笔记（决定已定但代码还没落地时，放 proposed/ 与 implemented/ 都可接受，状态由目录表达），四格齐全；Alternatives considered 里先写 Redis 最强的理由再写为何否掉；Consequences 同时写收益和代价；不新建总索引文件。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 5,
+        "total": 5,
+        "duration_ms": 75322,
+        "exit_code": 0,
+        "skill_activations": [
+          "decision-notes"
+        ],
+        "outputs": [
+          ".agents/notes/AGENTS.md",
+          ".agents/notes/implemented/architecture/2026-10-31-session-storage-sqlite-over-redis.md"
+        ],
+        "assertion_results": [
+          {
+            "text": "A note file exists under a status directory of .agents/notes/ (proposed, implemented, rejected or archived) and its filename starts with a YYYY-MM-DD date",
+            "passed": true,
+            "evidence": "Produced file `.agents/notes/implemented/architecture/2026-10-31-session-storage-sqlite-over-redis.md` sits under the `implemented/` status directory and its filename begins with the YYYY-MM-DD date `2026-10-31`, with all four sections (Problem, Decision, Alternatives considered, Consequences) present."
+          },
+          {
+            "text": "The note contains the four sections: context, decision, alternatives considered, and consequences",
+            "passed": true,
+            "evidence": "笔记按 `## Problem`（context 段，写“没有任何地方记录它替换掉了 Redis”）、`## Decision`、`## Alternatives considered`、`## Consequences` 四格依次成文，且 Alternatives 首条“保留 Redis”先写“最强的理由：会话存储正是 Redis 的核心用例”，Consequences 同时列“收益：少一个常驻服务”与“代价：SQLite 是单写者模型”。"
+          },
+          {
+            "text": "The Redis entry states its strongest reason for being chosen before explaining why it was rejected",
+            "passed": true,
+            "evidence": "在笔记的 Alternatives considered 部分，第 1 条先写「保留 Redis - 最强的理由：会话存储正是 Redis 的核心用例——原生 TTL 自动过期、内存级读写延迟、跨进程与跨主机天然共享、pub/sub 可直接广播会话失效」，紧接着才写「为何被否：运维不愿意再长期维护一个独立服务」，说明被否的原因排在最强理由之后。"
+          },
+          {
+            "text": "The consequences section names at least one real cost of moving to SQLite, not only benefits",
+            "passed": true,
+            "evidence": "Consequences 段落除「收益：少一个常驻服务、一个端口……」外，明确列出「代价：SQLite 是单写者模型，写入并发上来后会出现锁等待……没有服务端 TTL，过期清理要靠自己写……没有 pub/sub，跨实例的会话失效广播需要另找机制或干脆放弃」等具体真实代价。"
+          },
+          {
+            "text": "No index or table-of-contents file was created directly under .agents/notes/",
+            "passed": true,
+            "evidence": "The only file written directly under `.agents/notes/` is `AGENTS.md`, which contains repo invariants including \"禁止创建任何总索引（INDEX.md、README.md 或\"每篇笔记改一行\"的汇总文件）\" and lists no note entries; the note itself lives in the state directory at `.agents/notes/implemented/architecture/2026-10-31-session-storage-sqlite-over-redis.md`."
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 0.2,
+        "passed": 1,
+        "total": 5,
+        "duration_ms": 11965,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "A note file exists under a status directory of .agents/notes/ (proposed, implemented, rejected or archived) and its filename starts with a YYYY-MM-DD date",
+            "passed": false,
+            "evidence": "The final message says \"写进记忆：`session-store-sqlite-not-redis.md`\" and the transcript writes only to `.../memory/session-store-sqlite-not-redis.md` and `MEMORY.md` — no file was created under any `.agents/notes/` status directory, and the filename has no YYYY-MM-DD prefix."
+          },
+          {
+            "text": "The note contains the four sections: context, decision, alternatives considered, and consequences",
+            "passed": false,
+            "evidence": "Agent wrote \"记下了，写进记忆：`session-store-sqlite-not-redis.md`\" — a memory file under the memory dir, not a `YYYY-MM-DD-<slug>.md` note in `.agents/notes/`, and its visible content shows only \"2026-10-31 决定：…\" plus \"**理由：** 运维不想再多养一个独立服务\" with no context/alternatives-considered/consequences sections (the message cites only 决定日期、理由 and 重提条件)."
+          },
+          {
+            "text": "The Redis entry states its strongest reason for being chosen before explaining why it was rejected",
+            "passed": false,
+            "evidence": "The run wrote only a memory file—\"记下了，写进记忆：`session-store-sqlite-not-redis.md`...MEMORY.md 里加了一行索引\"—with no `.agents/notes/` note and no \"Alternatives considered\" section at all."
+          },
+          {
+            "text": "The consequences section names at least one real cost of moving to SQLite, not only benefits",
+            "passed": false,
+            "evidence": "No note was created under .agents/notes/ (the transcript only writes memory/session-store-sqlite-not-redis.md and MEMORY.md), and the final message offers no Consequences section — the one downside mentioned ('SQLite 单文件在多进程/多机下共享受限') is deferred as a bare `[[session-store-multi-instance-constraint]]` pointer rather than recorded as a stated cost of the decision."
+          },
+          {
+            "text": "No index or table-of-contents file was created directly under .agents/notes/",
+            "passed": true,
+            "evidence": "Transcript shows only two Write calls, both under the memory directory (\"session-store-sqlite-not-redis.md\" and \"MEMORY.md\"), and the agent's own summary says \"MEMORY.md 里加了一行索引\" — no file whatsoever was created under .agents/notes/, so no index/TOC exists there."
+          }
+        ]
+      },
+      "delta": 0.8
+    },
+    {
+      "id": "skip-note-for-mechanical-change",
+      "prompt": "把这次把按钮主色从 #333333 改成 #444444 的改动也记一篇决策笔记吧。",
+      "expected_output": "判定这是纯机械改动、命中非平凡判定表的排除项，于是明确说明不需要留笔记并给出理由，不创建任何笔记文件。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 2,
+        "total": 2,
+        "duration_ms": 15564,
+        "exit_code": 0,
+        "skill_activations": [
+          "decision-notes"
+        ],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "No note file was created under .agents/notes/ for this change",
+            "passed": true,
+            "evidence": "The agent stated \"不用记。这次改动命中判定表的排除项，不创建任何笔记文件\" and its directory listing returned \"no .agents\", with no note file written anywhere."
+          },
+          {
+            "text": "The final message explains that a pure colour or style change does not meet the non-trivial bar rather than silently complying",
+            "passed": true,
+            "evidence": "The final message states \"不用记。这次改动命中判定表的排除项，不创建任何笔记文件\" and explains \"按钮主色 `#333333` → `#444444` 是纯样式改动——不改行为、不切架构、不涉跨文件契约、不动工具链与测试策略、也不改落盘/配置格式\"."
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 0,
+        "passed": 0,
+        "total": 2,
+        "duration_ms": 24638,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "No note file was created under .agents/notes/ for this change",
+            "passed": false,
+            "evidence": "Agent created no file, but justified it with \"这次我什么都没写——因为我在这个工作区里找不到你说的这个改动\" — it never judged this a mechanical change hitting the non-trivial-decision exclusion table, so the expected rationale (explicit \"no note needed because mechanical\") is absent."
+          },
+          {
+            "text": "The final message explains that a pure colour or style change does not meet the non-trivial bar rather than silently complying",
+            "passed": false,
+            "evidence": "The agent did not comply with recording a note, but it justified this only by saying \"因为我在这个工作区里找不到你说的这个改动，也找不到任何\"决策笔记\"的既有格式或目录\", and it never said that a pure colour or style change fails to meet the non-trivial bar."
+          }
+        ]
+      },
+      "delta": 1
+    }
+  ]
+}

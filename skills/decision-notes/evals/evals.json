@@ -1,0 +1,26 @@
+{
+  "skill_name": "decision-notes",
+  "evals": [
+    {
+      "id": "record-session-store-swap",
+      "prompt": "我们刚决定把会话存储从 Redis 换成 SQLite，因为运维不想再单独养一个服务。把这个决定记下来，免得下个季度又有人提 Redis。",
+      "expected_output": "在 .agents/notes/ 的某个状态目录下按 YYYY-MM-DD-<slug>.md 落一篇笔记（决定已定但代码还没落地时，放 proposed/ 与 implemented/ 都可接受，状态由目录表达），四格齐全；Alternatives considered 里先写 Redis 最强的理由再写为何否掉；Consequences 同时写收益和代价；不新建总索引文件。",
+      "assertions": [
+        "A note file exists under a status directory of .agents/notes/ (proposed, implemented, rejected or archived) and its filename starts with a YYYY-MM-DD date",
+        "The note contains the four sections: context, decision, alternatives considered, and consequences",
+        "The Redis entry states its strongest reason for being chosen before explaining why it was rejected",
+        "The consequences section names at least one real cost of moving to SQLite, not only benefits",
+        "No index or table-of-contents file was created directly under .agents/notes/"
+      ]
+    },
+    {
+      "id": "skip-note-for-mechanical-change",
+      "prompt": "把这次把按钮主色从 #333333 改成 #444444 的改动也记一篇决策笔记吧。",
+      "expected_output": "判定这是纯机械改动、命中非平凡判定表的排除项，于是明确说明不需要留笔记并给出理由，不创建任何笔记文件。",
+      "assertions": [
+        "No note file was created under .agents/notes/ for this change",
+        "The final message explains that a pure colour or style change does not meet the non-trivial bar rather than silently complying"
+      ]
+    }
+  ]
+}
