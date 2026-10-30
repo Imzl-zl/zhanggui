@@ -1,0 +1,3 @@
+{
+  "setup-collaboration-files": "Initializes or normalizes a project's collaboration file system, writing the root AGENTS.md and CLAUDE.md, the docs/ index, the .agents/notes/ scaffold, tools.md, and memory.md. Use when those files themselves are the deliverable, such as when the user says \"init project\", \"set up AGENTS.md\", \"initialize collaboration files\" or \"normalize rules\", or when work starts on a project whose rule files are missing, conflicting, or stale, whether greenfield or with existing files to unify."
+}

@@ -1,0 +1,175 @@
+{
+  "skill": "zhanggui-test-driven-development",
+  "host": "claude",
+  "agent_permissions": "bypassPermissions",
+  "driving_model": "7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash",
+  "judge_identity_sha256": "ce24d4a9bd7b3be0ebd84e0a71422e25c34cbf5f9fe86a041e98f9ae17bb0735",
+  "with_skill": {
+    "pass_rate_mean": 1
+  },
+  "without_skill": {
+    "pass_rate_mean": 0.8333333333333333
+  },
+  "delta": {
+    "pass_rate": 0.16666666666666674
+  },
+  "ungraded_assertions": 0,
+  "cases": [
+    {
+      "id": "fresh-cart-add-spend-200-rule",
+      "prompt": "给这个购物车加一条新规则：满 200 减 50，满 200 时不再叠加满 100 减 20。用测试先行的方式做。项目在 fresh-cart/。",
+      "expected_output": "先写一条断言新规则的测试并看到它失败，再写最小实现让它通过；新测试断言返回的总价而不是实现细节。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 5,
+        "total": 5,
+        "duration_ms": 88291,
+        "exit_code": 0,
+        "skill_activations": [
+          "zhanggui-test-driven-development"
+        ],
+        "outputs": [
+          "fresh-cart/package.json",
+          "fresh-cart/src/cart.js",
+          "fresh-cart/test/cart.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "test/cart.test.js contains a test for the new spend-200-save-50 rule",
+            "passed": true,
+            "evidence": "fresh-cart/test/cart.test.js contains `test('spending exactly 200 saves 50', () => { assert.equal(total([{ price: 100, qty: 2 }]), 150); });` plus a non-stacking test `test('spending 200 or more does not stack the 100-save-20 discount', ...)`, and the transcript shows these failed in RED (actual 180≠expected 150) before the minimal `if (sum >= 200) return sum - 50;` implementation made all 6 tests"
+          },
+          {
+            "text": "The transcript shows the new test failing before src/cart.js was changed",
+            "passed": true,
+            "evidence": "The transcript order is: Edit to test/cart.test.js adding the new tests → Bash `npm test 2>&1 | tail -30` (\"Run tests to verify RED failures\") showing \"✖ spending 200 or more does not stack the 100-save-20 discount ... 220 !== 190\" and \"actual: 180, expected: 150\" → only then Edit to src/cart.js (\"// \\\"Spend 200, save 50\\\" replaces (never stacks with)...\"), proving the new tests failed before src/"
+          },
+          {
+            "text": "src/cart.js returns subtotal minus 50 when the subtotal is 200 or more, and subtotal minus 20 when it is between 100 and 199",
+            "passed": true,
+            "evidence": "Produced src/cart.js implements `if (sum >= 200) return sum - 50; return sum >= 100 ? sum - 20 : sum;`, and the transcript shows the required TDD sequence: new tests asserting returned totals (`assert.equal(total([{ price: 100, qty: 2 }]), 150)`) were added first and failed with 'actual 180, expected 150' / '220 !== 190', then the minimal implementation was written and 'npm test → tests 6, pass 6,"
+          },
+          {
+            "text": "The new test asserts the returned total rather than internal implementation details",
+            "passed": true,
+            "evidence": "The three new tests each assert the return value of the public total() function — e.g. `test('spending exactly 200 saves 50', () => { assert.equal(total([{ price: 100, qty: 2 }]), 150); });` and `assert.equal(total([{ price: 120, qty: 2 }]), 190)` — with no spies, mocks, or inspection of internals like the discount-table or conditional structure."
+          },
+          {
+            "text": "The transcript ends with a test run in which the whole suite passes",
+            "passed": true,
+            "evidence": "The transcript's final tool call is `npm test` returning 'ℹ tests 6 / ℹ pass 6 / ℹ fail 0' with all six tests marked ✔ (including the new 'spending exactly 200 saves 50' and 'spending 200 or more does not stack the 100-save-20 discount'), preceded by a RED run showing those new assertions failing (actual 180≠expected 150), and the tests assert the returned total (e.g., `assert.equal(total([{ price"
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 1,
+        "passed": 5,
+        "total": 5,
+        "duration_ms": 42909,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [
+          "fresh-cart/package.json",
+          "fresh-cart/src/cart.js",
+          "fresh-cart/test/cart.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "test/cart.test.js contains a test for the new spend-200-save-50 rule",
+            "passed": true,
+            "evidence": "test/cart.test.js contains `test('spending 200 or more saves 50, not stacked with save-20', () => { assert.equal(total([{ price: 200, qty: 1 }]), 150); });` plus two more new-rule cases ('spending well above 200 still saves exactly 50' and 'one cent below 200 falls back to save-20 tier'), all asserting total() return values."
+          },
+          {
+            "text": "The transcript shows the new test failing before src/cart.js was changed",
+            "passed": true,
+            "evidence": "The transcript shows `node --test` output '✖ spending well above 200 still saves exactly 50 ... AssertionError ... 230 !== 200' run immediately after the test-file Edit and before the subsequent Edit to src\\cart.js, and the new tests assert totals (e.g. 200→150, 250→200) rather than implementation details."
+          },
+          {
+            "text": "src/cart.js returns subtotal minus 50 when the subtotal is 200 or more, and subtotal minus 20 when it is between 100 and 199",
+            "passed": true,
+            "evidence": "The produced src/cart.js TIERS table yields `sum - 50` when `sum >= 200` and `sum - 20` when `100 <= sum < 200`; the transcript shows the red step first ('✖ spending well above 200 still saves exactly 50 ... 230 !== 200' run before any cart.js edit), then the minimal implementation, then 'pass 6 / fail 0', and the new tests assert only the returned total (e.g. `assert.equal(total([{ price: 200, qt"
+          },
+          {
+            "text": "The new test asserts the returned total rather than internal implementation details",
+            "passed": true,
+            "evidence": "The three new tests assert the returned value of total() directly — e.g. `assert.equal(total([{ price: 200, qty: 1 }]), 150)` — with no inspection of the TIERS table or other internals; the red-phase failure (`230 !== 200`) also came from comparing total()'s return against the expected price."
+          },
+          {
+            "text": "The transcript ends with a test run in which the whole suite passes",
+            "passed": true,
+            "evidence": "The final test run shows \"ℹ tests 6 / ℹ pass 6 / ℹ fail 0\" after the red phase (new tests asserting `total(...)` return values like `assert.equal(total([{ price: 200, qty: 1 }]), 150)` failed first with \"230 !== 200\"), confirming the whole suite passes at the end."
+          }
+        ]
+      },
+      "delta": 0
+    },
+    {
+      "id": "fresh-cart-casual-phrasing",
+      "prompt": "加个规则：满 200 减 50，先写测试",
+      "expected_output": "同样的红-绿顺序：先有失败的测试，再有最小实现。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 3,
+        "total": 3,
+        "duration_ms": 153975,
+        "exit_code": 0,
+        "skill_activations": [
+          "zhanggui-test-driven-development"
+        ],
+        "outputs": [
+          "fresh-cart/package.json",
+          "fresh-cart/src/cart.js",
+          "fresh-cart/test/cart.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "A failing test for the spend-200-save-50 rule was written before the implementation was touched",
+            "passed": true,
+            "evidence": "Transcript order shows the test written first (Edit to test/cart.test.js adding 'spending 200 or more saves 50'), then `npm test` failing with '180 !== 150', and only then the src/cart.js implementation edit — matching the final message's 'RedEvidence: ... 实现前运行，失败于 `180 !== 150`'."
+          },
+          {
+            "text": "The transcript contains a test run where the new test fails, and a later run where it passes",
+            "passed": true,
+            "evidence": "Transcript first run shows the new test failing (`✖ spending 200 or more saves 50 ... 180 !== 150`) before implementation, and a later run after the DISCOUNT_TIERS edit shows it passing (`✔ spending 200 or more saves 50 ... pass 4 / fail 0`, then 6 pass / 0 fail) — the red-then-green order."
+          },
+          {
+            "text": "The change to src/cart.js was limited to what the new rule required",
+            "passed": true,
+            "evidence": "The src/cart.js edit is confined to the discount logic the new rule requires — it replaces `return sum >= 100 ? sum - 20 : sum;` with the DISCOUNT_TIERS table (200/50, 100/20) and matching comment, touching no other function — and the transcript shows the red-green order the outcome expects: the failing test ran first ('RED 确认：`180 !== 150`，失败原因正是满200减50规则缺失') before the GREEN implementation edit,"
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 0.6666666666666666,
+        "passed": 2,
+        "total": 3,
+        "duration_ms": 78224,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [
+          "fresh-cart/package.json",
+          "fresh-cart/src/cart.js",
+          "fresh-cart/test/cart.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "A failing test for the spend-200-save-50 rule was written before the implementation was touched",
+            "passed": true,
+            "evidence": "The transcript shows the test file edited first ('Edit ... test\\cart.test.js ... test(\\'spending 200 or mor...'), then 'npm test' run to 'confirm new tests fail (red)' with failing output '✖ exactly 200 saves 50 ... 180 !== 150', and only after that the implementation was written ('Write ... src\\cart.js'); the final message confirms '✅ 完成，6/6 测试全绿（TDD：先写测试 → 确认 red → 实现 → green）'."
+          },
+          {
+            "text": "The transcript contains a test run where the new test fails, and a later run where it passes",
+            "passed": true,
+            "evidence": "The first run (\"Run tests to confirm new tests fail (red)\") shows the new tests failing — '✖ exactly 200 saves 50 ... 180 !== 150' — and a later run after implementing src/cart.js (\"Run tests to verify green\") shows '✔ exactly 200 saves 50' with 'ℹ pass 6 ℹ fail 0'."
+          },
+          {
+            "text": "The change to src/cart.js was limited to what the new rule required",
+            "passed": false,
+            "evidence": "The agent's own summary states it did more than the new rule required: 「`src/cart.js:7-10` — 把原来硬编码的「满 100 减 20」重构为表驱动的档位列表 `FULL_REDUCTION_TIERS`」 — it replaced the original one-line conditional `return sum >= 100 ? sum - 20 : sum;` with a generalized table-driven tier mechanism (and a do-not-stack assumption), whereas the minimal green implementation for the new ≥200/50 rule would only add that "
+          }
+        ]
+      },
+      "delta": 0.33333333333333337
+    }
+  ]
+}

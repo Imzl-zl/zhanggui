@@ -1,7 +1,7 @@
 ---
 name: zhanggui-finishing-a-development-branch
 license: MIT
-description: Use when branch or worktree work has already passed verification and needs an explicit decision about how to land it, such as merging, opening a pull request, keeping the branch, or discarding it, including right after the user says the tests passed.
+description: Closes out branch or worktree work whose verification is already settled, turning it into one explicit landing decision — merge, open a pull request, keep the branch, or discard it. Use when the work is already verified and what remains is how it lands, such as merging, opening a pull request, keeping the branch, or discarding it, including right after the user says the tests passed, even if they never mention merging or a pull request.
 ---
 
 # Finishing a Development Branch
@@ -12,7 +12,7 @@ description: Use when branch or worktree work has already passed verification an
 
 Use this mode when the skill is activated from the catalog or invoked explicitly. Require fresh evidence that the work is verified before presenting any integration option. When evidence is missing or stale, Direct mode: activate the exact leaf name `zhanggui-verification-before-completion` through the host catalog; verification is required and blocks if unavailable. Do not invent a verified state.
 
-Direct mode owns no `WorkflowState`, `awaiting`, `Delivery`, return point, or readiness. Deliver choices through the host's structured ask capability when available. Otherwise state an explicit text-fallback reason and ask once in text.
+Direct mode owns no `WorkflowState`, `awaiting`, return point, or readiness. Deliver choices through the host's structured ask capability when available. Otherwise state an explicit text-fallback reason and ask once in text.
 
 ### Zhanggui Embedded
 

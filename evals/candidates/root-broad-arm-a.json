@@ -1,0 +1,3 @@
+{
+  "zhanggui": "Owns one development request end-to-end — resolves open design decisions, plans the path, implements with tests, and carries the work to verified delivery. Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign."
+}

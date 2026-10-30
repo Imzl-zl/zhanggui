@@ -11,7 +11,7 @@ const summaryPath = path.join(projectRoot, 'evals', 'results', 'v0.7-routing-sum
 const v08SummaryPath = path.join(projectRoot, 'evals', 'results', 'v0.8-routing-summary.json');
 const v09SummaryPath = path.join(projectRoot, 'evals', 'results', 'v0.9-routing-summary.json');
 const currentCatalogPath = path.join(projectRoot, 'evals', 'catalog-current.json');
-// The nine skills whose routing was measured. init-project is a standalone
+// The nine skills whose routing was measured. setup-collaboration-files is a standalone
 // skill outside the root/leaf routing eval, so it is intentionally absent.
 const evaluatedSkills = [
   'zhanggui',
@@ -38,6 +38,8 @@ const APPROVED_V08_CATALOG_SHA256 =
   '17dda086b86bc3be4d6d76ae841a6cfebe7d5a4255260402da36109a0a99ba96';
 const APPROVED_V09_CATALOG_SOURCE_HEAD =
   '834ee877331aa0f03d00faf542996f529c336734';
+const APPROVED_V09_CATALOG_SHA256 =
+  '4433554b19e77385042321fa1be7dc06c6da1b2b1c06c639abce6f670254eab7';
 const APPROVED_TRANSPORT_RETRY_POLICY = {
   max_waves: 3,
   backoff_seconds: [0, 5, 15],
@@ -288,9 +290,9 @@ test('current catalog digest gate tracks the live skill descriptions', async () 
     assert.equal(measured.catalog_snapshot.sha256, current.catalog_snapshot.sha256);
     assert.deepEqual(measured.catalog_snapshot.entries, current.catalog_snapshot.entries);
   }
-  // supersedes points at the previously published record
-  assert.equal(current.supersedes.file, 'results/v0.8-routing-summary.json');
-  assert.equal(current.supersedes.catalog_sha256, APPROVED_V08_CATALOG_SHA256);
+  // supersedes points at the most recent published record
+  assert.equal(current.supersedes.file, 'results/v0.9-routing-summary.json');
+  assert.equal(current.supersedes.catalog_sha256, APPROVED_V09_CATALOG_SHA256);
   const drifted = structuredClone(entries);
   drifted[0] = { ...drifted[0], description: `${drifted[0].description} [drift-probe]` };
   assert.notEqual(catalogDigest(drifted), current.catalog_snapshot.sha256);

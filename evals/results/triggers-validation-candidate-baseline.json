@@ -1,0 +1,2155 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash",
+  "workspace_fixture": null,
+  "descriptions_override": "evals/candidates/train-run1-descriptions.json",
+  "descriptions_override_sha256": "67cdba2a1293aac91da47e17303071f9dadcde19d28daaaa01bf234af550cecb",
+  "runs_per_query": 3,
+  "concurrency": 8,
+  "threshold": 0.5,
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "queries": 51,
+  "successful_runs": 152,
+  "total_runs": 153,
+  "by_split": {
+    "train": {
+      "queries": 0,
+      "passed": 0,
+      "pass_rate": null
+    },
+    "validation": {
+      "queries": 51,
+      "passed": 48,
+      "pass_rate": 0.9411764705882353
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": 1,
+      "precision": 1,
+      "tp": 9,
+      "fn": 0,
+      "fp": 0,
+      "tn": 143
+    },
+    "init-project": {
+      "recall": 1,
+      "precision": 1,
+      "tp": 9,
+      "fn": 0,
+      "fp": 0,
+      "tn": 143
+    },
+    "zhanggui": {
+      "recall": 0.9333333333333333,
+      "precision": 1,
+      "tp": 14,
+      "fn": 1,
+      "fp": 0,
+      "tn": 137
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": 1,
+      "precision": 0.75,
+      "tp": 9,
+      "fn": 0,
+      "fp": 3,
+      "tn": 140
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": 1,
+      "precision": 1,
+      "tp": 9,
+      "fn": 0,
+      "fp": 0,
+      "tn": 143
+    },
+    "zhanggui-receiving-code-review": {
+      "recall": 0.75,
+      "precision": 1,
+      "tp": 9,
+      "fn": 3,
+      "fp": 0,
+      "tn": 140
+    },
+    "zhanggui-requesting-code-review": {
+      "recall": 0.5,
+      "precision": 0.8571428571428571,
+      "tp": 6,
+      "fn": 6,
+      "fp": 1,
+      "tn": 139
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": 1,
+      "precision": 1,
+      "tp": 11,
+      "fn": 0,
+      "fp": 0,
+      "tn": 141
+    },
+    "zhanggui-test-driven-development": {
+      "recall": 1,
+      "precision": 1,
+      "tp": 12,
+      "fn": 0,
+      "fp": 0,
+      "tn": 140
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": 1,
+      "precision": 1,
+      "tp": 9,
+      "fn": 0,
+      "fp": 0,
+      "tn": 143
+    },
+    "zhanggui-verification-before-completion": {
+      "recall": 0.9166666666666666,
+      "precision": 0.8461538461538461,
+      "tp": 11,
+      "fn": 1,
+      "fp": 2,
+      "tn": 138
+    }
+  },
+  "null_target_clean_rate": 1,
+  "records": [
+    {
+      "id": "zg-pos-06",
+      "query": "这几个需求我拿不准边界和优先级，你先跟我把决策过一遍再动手",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ],
+        [],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-07",
+      "query": "只有个模糊想法：给团队做个周报自动汇总。先帮我查清到底要解决什么",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-08",
+      "query": "从零负责一个通知子系统：后端、定时任务、前端展示都要，需要一套能恢复的执行计划",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-09",
+      "query": "同一个功能要在 iOS 和 Android 两端都做，还要同步改设计稿和测试用例，帮我统筹",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents",
+        "zhanggui-test-driven-development"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-10",
+      "query": "这活从需求到上线你全包，中间不确定的问我，最后要拿出证据",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-02",
+      "query": "线上偶尔报 500，日志里看不出来规律，得挖一下到底为什么",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-08",
+      "query": "我不理解为什么这个状态会变成 null，代码看着没问题，得先搞清楚为什么",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-09",
+      "query": "bug 报告说导出偶尔少几行，重现不稳定，先别改，先找到根因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-10",
+      "query": "这个 flaky 测试到底是测试写错了还是代码真有问题",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-test-driven-development",
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ],
+          "error": "Command failed: claude -p 这个 flaky 测试到底是测试写错了还是代码真有问题 --output-format stream-json --verbose\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-04",
+      "query": "重构这块的时候可以走红绿循环吗，我想要测试先行的节奏",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-08",
+      "query": "这个模块没有测试，我想一边补测试一边改，测试先行",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-09",
+      "query": "改这个默认值，要求先看到测试变红再动代码",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-10",
+      "query": "新增一个校验规则，按 TDD 来：红、绿、重构",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-03",
+      "query": "这个修复我说它好了，但我其实没验证过，你先给我拿证据",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-08",
+      "query": "这个改动看起来很小很安全，但我不想凭感觉说没事",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-requesting-code-review"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-09",
+      "query": "开 PR 之前，给我新鲜证据，不要引用上次的结果",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch",
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-10",
+      "query": "我怀疑之前那句已修复是假的，重新验证一遍",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-verification-before-completion"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-verification-before-completion"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "req-pos-04",
+      "query": "看下我这个 patch 有没有坑",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "req-pos-08",
+      "query": "帮我对这次改动出一份审查报告，我要附在 PR 描述里",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "code-review"
+        ],
+        [],
+        [
+          "code-review"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "code-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "req-pos-09",
+      "query": "合分支之前先审一遍，注意别只盯风格，看看架构拆分对不对",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-requesting-code-review"
+        ],
+        [
+          "zhanggui-requesting-code-review"
+        ],
+        [
+          "zhanggui-requesting-code-review"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "req-pos-10",
+      "query": "对新写的这个公共接口做一次独立评审，找 Critical 级别的问题",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-requesting-code-review"
+        ],
+        [
+          "zhanggui-requesting-code-review"
+        ],
+        [
+          "zhanggui-requesting-code-review"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-requesting-code-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-07",
+      "query": "帮我处理这批反馈：要么改，要么给出不采纳的理由",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-08",
+      "query": "上一轮审查的结论我还没处理完，先把每条定个性",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        [
+          "zhanggui-receiving-code-review"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-09",
+      "query": "有人给我提了个 findings 报告，我需要逐项技术核实而不是照单全收",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        [
+          "zhanggui-receiving-code-review"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-10",
+      "query": "别performative地接受，帮我看哪条真的成立",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 1,
+      "scored": 3,
+      "rate": 0.3333333333333333,
+      "passed": false,
+      "observed": [
+        [
+          "zhanggui-receiving-code-review"
+        ],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-receiving-code-review"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-08",
+      "query": "并行做两个功能，各自一个隔离检出",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees",
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents",
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees",
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees",
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents",
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees",
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-09",
+      "query": "执行这个实现计划之前，先把工作区隔离出来",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-10",
+      "query": "我不想 stash 来 stash 去，能不能单独给我一份工作目录",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-08",
+      "query": "依赖已经就绪的任务有 4 个，一起做",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-09",
+      "query": "两条独立的排查线，同时进行，互不干扰",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-10",
+      "query": "想让多个子代理同时开工，各自负责不相交的文件集",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-08",
+      "query": "已经通过验证了，帮我选落地方式：merge、PR、保留、还是删掉",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-09",
+      "query": "上线前的最后一步：决定这个分支怎么处理",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-10",
+      "query": "tests passed，接下来这个分支要怎么办",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch",
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch",
+          "zhanggui-verification-before-completion"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch",
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch",
+            "zhanggui-verification-before-completion"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-08",
+      "query": "我需要一套项目协作文件体系：规则、文档索引、状态文件",
+      "expected_skill": "init-project",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "init-project"
+        ],
+        [
+          "init-project"
+        ],
+        [
+          "init-project"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-09",
+      "query": "这个仓库的 CLAUDE.md 和 AGENTS.md 都过期了，帮我归一",
+      "expected_skill": "init-project",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "init-project"
+        ],
+        [
+          "init-project"
+        ],
+        [
+          "init-project"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-10",
+      "query": "接手一个没有规则的陌生项目，先把协作文件立起来",
+      "expected_skill": "init-project",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "init-project"
+        ],
+        [
+          "init-project"
+        ],
+        [
+          "init-project"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init-project"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-08",
+      "query": "这次事故复盘出来的规矩，先记成笔记再进 AGENTS.md",
+      "expected_skill": "decision-notes",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-09",
+      "query": "我改了架构，需要一篇说明当初为什么这么定、代价是什么",
+      "expected_skill": "decision-notes",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-10",
+      "query": "把这条决定的状态从 proposed 挪到 implemented",
+      "expected_skill": "decision-notes",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nul-14",
+      "query": "把这段 JS 转成 TS",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-15",
+      "query": "docker compose 里 depends_on 有什么用",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-16",
+      "query": "帮我写个 cron 表达式",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-17",
+      "query": "这个算法题怎么做",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-18",
+      "query": "给我讲讲 OAuth2 的流程",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-19",
+      "query": "推荐一个 JSON 库",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-20",
+      "query": "怎么配置 nginx 反向代理",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-tdd-04",
+      "query": "帮我给这个函数写个单测",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-03",
+      "query": "帮我建一个 .editorconfig",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "init-project"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-04",
+      "query": "把这次讨论的要点整理成文档",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-zg-02",
+      "query": "这个项目整体是做什么的",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    }
+  ]
+}

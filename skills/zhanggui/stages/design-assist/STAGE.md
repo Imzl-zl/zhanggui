@@ -58,7 +58,7 @@
 
 1. 验证依赖和事实，确认当前问题仍成立。
 2. 比较可行方案；对 model-owned 明显优解形成一个决定和理由。
-3. 若存在不可消除的用户权衡，生成 user-owned node，并把已做研究按入口"提问格式"打包进该 node 的 question——同类参考背景、2-4 个选项及差异、明确推荐——交给编排器后续调度；grilling 接手时直接复用，不重做研究。
+3. 若存在不可消除的用户权衡，生成 user-owned node，并把已做研究按入口提问契约（`../references/questioning.md`）打包进该 node 的 question——同类参考背景、2-4 个选项及差异、明确推荐——交给编排器后续调度；grilling 接手时直接复用，不重做研究。
 4. 记录由本答案剪枝、否决或新暴露的节点；所有新 node 必须有稳定 id 和 `depends_on`。
 5. 检查该 node 是否需要可运行证据；需要时只返回 `PrototypeRequest`，不直接调用 prototype。
 6. 返回 delta；不设置全局 `Readiness`。

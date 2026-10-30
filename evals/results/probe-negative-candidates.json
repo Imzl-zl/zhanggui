@@ -1,0 +1,248 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash",
+  "workspace_fixture": null,
+  "descriptions_override": null,
+  "descriptions_override_sha256": null,
+  "runs_per_query": 5,
+  "concurrency": 8,
+  "threshold": 0.5,
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "queries": 3,
+  "successful_runs": 15,
+  "total_runs": 15,
+  "by_split": {
+    "train": {
+      "queries": 2,
+      "passed": 2,
+      "pass_rate": 1
+    },
+    "validation": {
+      "queries": 1,
+      "passed": 1,
+      "pass_rate": 1
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": null,
+      "precision": 0,
+      "tp": 0,
+      "fn": 0,
+      "fp": 1,
+      "tn": 14
+    },
+    "setup-collaboration-files": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-receiving-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-requesting-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-test-driven-development": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-verification-before-completion": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    }
+  },
+  "null_target_clean_rate": 0.9333333333333333,
+  "records": [
+    {
+      "id": "nul-11",
+      "query": "总结一下这个文件的内容",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 5,
+      "scored": 5,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-03",
+      "query": "把这份需求文档存下来",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 5,
+      "scored": 5,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-04",
+      "query": "把这次讨论的要点整理成文档",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 4,
+      "scored": 5,
+      "rate": 0.8,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        [
+          "decision-notes"
+        ],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    }
+  ]
+}

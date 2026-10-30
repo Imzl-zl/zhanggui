@@ -1,0 +1,10 @@
+{
+  "name": "shop-app",
+  "version": "1.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Small demo storefront used as the workspace skeleton for trigger evaluation.",
+  "scripts": {
+    "test": "node --test test/"
+  }
+}

@@ -1,7 +1,7 @@
 ---
 name: zhanggui-requesting-code-review
 license: MIT
-description: Use when a diff, patch, or code change needs a new independent review, including a severity-scoped report of Critical and Important findings, before verification, merge, delivery, or dependent work starts.
+description: Runs a new independent review of a diff, patch, or set of changed files and reports Critical and Important findings by severity. Use when someone asks for a review, 审查, 过一遍, or 独立评审 of a diff, patch, 改动, or 公共接口, asks whether a change has 坑 or 安全问题, wants a written 审查报告 for a pull request, wants only reviewing with no edit to the code, or needs a one-line change, a three-file refactor, or a release script about to go live checked by someone else.
 ---
 
 # Requesting Code Review

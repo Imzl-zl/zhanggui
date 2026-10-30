@@ -1,0 +1,302 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash",
+  "workspace_fixture": null,
+  "descriptions_override": null,
+  "descriptions_override_sha256": null,
+  "runs_per_query": 5,
+  "concurrency": 8,
+  "threshold": 0.5,
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "queries": 3,
+  "successful_runs": 15,
+  "total_runs": 15,
+  "by_split": {
+    "train": {
+      "queries": 3,
+      "passed": 2,
+      "pass_rate": 0.6666666666666666
+    },
+    "validation": {
+      "queries": 0,
+      "passed": 0,
+      "pass_rate": null
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "setup-collaboration-files": {
+      "recall": 1,
+      "precision": 0.6666666666666666,
+      "tp": 10,
+      "fn": 0,
+      "fp": 5,
+      "tn": 0
+    },
+    "zhanggui": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-receiving-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-requesting-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-test-driven-development": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    },
+    "zhanggui-verification-before-completion": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 15
+    }
+  },
+  "null_target_clean_rate": 0,
+  "records": [
+    {
+      "id": "ip-pos-03",
+      "query": "把这个项目的规则文件归一一下，现在好几份互相冲突",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 5,
+      "scored": 5,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-05",
+      "query": "这个老项目规则文件很乱，帮我整理成一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 5,
+      "scored": 5,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-02",
+      "query": "这几个规则文件应该放哪",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ],
+      "hits": 0,
+      "scored": 5,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    }
+  ]
+}

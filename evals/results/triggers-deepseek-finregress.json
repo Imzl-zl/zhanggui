@@ -1,0 +1,370 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "deepseek-flash",
+  "workspace_fixture": null,
+  "descriptions_override": null,
+  "descriptions_override_sha256": null,
+  "runs_per_query": 1,
+  "concurrency": 3,
+  "threshold": 0.5,
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "queries": 10,
+  "successful_runs": 8,
+  "total_runs": 10,
+  "by_split": {
+    "train": {
+      "queries": 7,
+      "passed": 4,
+      "pass_rate": 0.5714285714285714
+    },
+    "validation": {
+      "queries": 3,
+      "passed": 3,
+      "pass_rate": 1
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "setup-collaboration-files": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": 0.875,
+      "precision": 1,
+      "tp": 7,
+      "fn": 1,
+      "fp": 0,
+      "tn": 0
+    },
+    "zhanggui-receiving-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-requesting-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-test-driven-development": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-verification-before-completion": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    }
+  },
+  "null_target_clean_rate": null,
+  "records": [
+    {
+      "id": "fin-pos-01",
+      "query": "这个分支的活已经验完了，接下来怎么落地",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch",
+            "zhanggui-verification-before-completion"
+          ],
+          "error": "Command failed: claude -p 这个分支的活已经验完了，接下来怎么落地 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"deepseek-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"deepseek-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-02",
+      "query": "测试过了，你决定下是合还是开 PR",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ],
+          "error": "Command failed: claude -p 测试过了，你决定下是合还是开 PR --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"deepseek-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"deepseek-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-03",
+      "query": "这个功能做完了也验证过，我想收尾",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-04",
+      "query": "活干完了 测试也过了 后面咋办",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-05",
+      "query": "The branch passed verification. Decide how it lands.",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-06",
+      "query": "这个 worktree 里的工作验完了，清理还是保留",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees",
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-07",
+      "query": "我想放弃这个分支，怎么干净丢掉",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-08",
+      "query": "已经通过验证了，帮我选落地方式：merge、PR、保留、还是删掉",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-09",
+      "query": "上线前的最后一步：决定这个分支怎么处理",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-10",
+      "query": "tests passed，接下来这个分支要怎么办",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    }
+  ]
+}

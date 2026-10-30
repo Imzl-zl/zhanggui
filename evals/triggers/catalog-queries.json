@@ -1,0 +1,1213 @@
+{
+  "version": "1",
+  "runs_per_query": 3,
+  "threshold": 0.5,
+  "method": "Labelled trigger-eval corpus. Each query is run through a real agent with the full catalog installed; the run passes when the skill that actually loaded matches expected_skill. A query passes when its trigger rate is >= threshold for should-trigger and < threshold for should-not-trigger.",
+  "split_policy": "Fixed ~60/40 train/validation split, frozen in this file. Only train failures may guide description edits; the winning description is chosen by validation pass rate. Re-running after a description edit must not change this split.",
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "near_miss_rule": "A query that should load skill A is a near-miss negative for every skill listed in near_miss_for: those skills share keywords or surface vocabulary with the query but must not win. Obvious irrelevancies are deliberately not used as negatives because they test nothing.",
+  "notes": [
+    "The corpus is catalog-wide rather than one file per skill: descriptions compete inside one catalog, so tightening one skill's description shifts traffic toward another and the whole set has to be measured together.",
+    "expected_skill is null for queries that should trigger nothing at all, which is how the root's false-positive rate is measured.",
+    "Queries deliberately vary phrasing (formal / casual / typo / abbreviation), explicitness (names the domain vs describes the need), detail (terse vs context-heavy) and complexity (single-step vs buried in a larger chain)."
+  ],
+  "queries": [
+    {
+      "id": "zg-pos-01",
+      "query": "我想做个库存管理小系统，需求还没想清楚，你先帮我把要定的问题理出来，然后一路做到能验证交付",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "zg-pos-02",
+      "query": "Own this end-to-end: the permissions redesign. Resolve the open decisions first, then take it all the way to verified delivery.",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "zg-pos-03",
+      "query": "这次改动要动 api、web、shared 三个包，还要同时出迁移脚本和文档，你统一负责吧",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ]
+    },
+    {
+      "id": "zg-pos-04",
+      "query": "上次那个支付重构做到一半断了，checkpoint 还在，接着往下做，做到验证通过",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "zg-pos-05",
+      "query": "把订单数据从 MySQL 迁到 PostgreSQL，包括双写、回滚和上线验证，你全程管",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "zg-pos-06",
+      "query": "这几个需求我拿不准边界和优先级，你先跟我把决策过一遍再动手",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "zg-pos-07",
+      "query": "只有个模糊想法：给团队做个周报自动汇总。先帮我查清到底要解决什么",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "zg-pos-08",
+      "query": "从零负责一个通知子系统：后端、定时任务、前端展示都要，需要一套能恢复的执行计划",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ]
+    },
+    {
+      "id": "zg-pos-09",
+      "query": "同一个功能要在 iOS 和 Android 两端都做，还要同步改设计稿和测试用例，帮我统筹",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents",
+        "zhanggui-test-driven-development"
+      ]
+    },
+    {
+      "id": "zg-pos-10",
+      "query": "这活从需求到上线你全包，中间不确定的问我，最后要拿出证据",
+      "expected_skill": "zhanggui",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "dbg-pos-01",
+      "query": "这个单测昨天还好好的，今天挂了，帮我查下根因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ]
+    },
+    {
+      "id": "dbg-pos-02",
+      "query": "线上偶尔报 500，日志里看不出来规律，得挖一下到底为什么",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dbg-pos-03",
+      "query": "Build works locally but fails in CI. Find out why before anyone changes anything.",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dbg-pos-04",
+      "query": "为撒我这个接口返回的时间差了一个小时啊 找半天没找到原因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dbg-pos-05",
+      "query": "前面已经修过两次了，每次都是好一阵又开始抖，这次别再贴膏药了，找真正原因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "dbg-pos-06",
+      "query": "这个页面首屏从 1.2s 变成 4s 了，性能问题，帮我定位到具体原因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dbg-pos-07",
+      "query": "集成测试本地过，跑在容器里就失败，怀疑是环境差异，帮我系统地查一下",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "dbg-pos-08",
+      "query": "我不理解为什么这个状态会变成 null，代码看着没问题，得先搞清楚为什么",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dbg-pos-09",
+      "query": "bug 报告说导出偶尔少几行，重现不稳定，先别改，先找到根因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "dbg-pos-10",
+      "query": "这个 flaky 测试到底是测试写错了还是代码真有问题",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-test-driven-development",
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "tdd-pos-01",
+      "query": "先写个会失败的测试，再实现这个函数",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "tdd-pos-02",
+      "query": "给折扣计算加个新功能，按先写测试后写实现的方式来",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "tdd-pos-03",
+      "query": "修这个 bug 之前先补一个能复现它的测试",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "tdd-pos-04",
+      "query": "重构这块的时候可以走红绿循环吗，我想要测试先行的节奏",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "tdd-pos-05",
+      "query": "这个行为要改，但我想要先有回归测试锁住它再动实现",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging",
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "tdd-pos-06",
+      "query": "I need the failing test written before you touch the implementation. It is a behaviour change in the parser.",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "tdd-pos-07",
+      "query": "加这个接口之前先把契约测试写好",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "tdd-pos-08",
+      "query": "这个模块没有测试，我想一边补测试一边改，测试先行",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "tdd-pos-09",
+      "query": "改这个默认值，要求先看到测试变红再动代码",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "tdd-pos-10",
+      "query": "新增一个校验规则，按 TDD 来：红、绿、重构",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "ver-pos-01",
+      "query": "写完了，帮我确认真的能跑起来，别只是看起来没问题",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "ver-pos-02",
+      "query": "我准备提交了，先跑一遍真实命令看看是不是真的过了",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "ver-pos-03",
+      "query": "这个修复我说它好了，但我其实没验证过，你先给我拿证据",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "ver-pos-04",
+      "query": "别急着说完成了，先把测试和构建实际跑一遍",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "ver-pos-05",
+      "query": "要 push 了 帮我看下是不是真没问题",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "ver-pos-06",
+      "query": "Before you say this is done, I want the actual command output, not a summary of it.",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "ver-pos-07",
+      "query": "交接给别人之前，我想确认这些断言都是真的跑通过的",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "ver-pos-08",
+      "query": "这个改动看起来很小很安全，但我不想凭感觉说没事",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "ver-pos-09",
+      "query": "开 PR 之前，给我新鲜证据，不要引用上次的结果",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch",
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "ver-pos-10",
+      "query": "我怀疑之前那句已修复是假的，重新验证一遍",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "req-pos-01",
+      "query": "review 一下这个 diff，只审查不要改",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ]
+    },
+    {
+      "id": "req-pos-02",
+      "query": "这个改动合进主干前我想要一份独立的代码审查意见，按严重程度分级",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ]
+    },
+    {
+      "id": "req-pos-03",
+      "query": "帮我审查这三个文件的改动，重点看有没有安全问题和架构问题",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "req-pos-04",
+      "query": "看下我这个 patch 有没有坑",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "req-pos-05",
+      "query": "I want a fresh pair of eyes on this change before I merge it, ranked by severity.",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ]
+    },
+    {
+      "id": "req-pos-06",
+      "query": "这个重构动了很多模块，交给一个独立的 reviewer 过一遍",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "req-pos-07",
+      "query": "迁移脚本要上线了，先做一次代码审查",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ]
+    },
+    {
+      "id": "req-pos-08",
+      "query": "帮我对这次改动出一份审查报告，我要附在 PR 描述里",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ]
+    },
+    {
+      "id": "req-pos-09",
+      "query": "合分支之前先审一遍，注意别只盯风格，看看架构拆分对不对",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "req-pos-10",
+      "query": "对新写的这个公共接口做一次独立评审，找 Critical 级别的问题",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "rec-pos-01",
+      "query": "review 意见回来了，帮我逐条核实该不该改",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-02",
+      "query": "同事说我的实现有问题，我不确定他说的对不对，帮我验证一下再决定",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-03",
+      "query": "这些 review 评论有些我觉得不合理，帮我用证据反驳",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-04",
+      "query": "pr里一堆评论 我该改哪些",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-05",
+      "query": "The reviewer flagged five things. Verify each one technically before I accept or push back.",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-06",
+      "query": "审查报告里有一条说这是架构缺陷，我不太信，帮我验一下证据",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-07",
+      "query": "帮我处理这批反馈：要么改，要么给出不采纳的理由",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "rec-pos-08",
+      "query": "上一轮审查的结论我还没处理完，先把每条定个性",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-09",
+      "query": "有人给我提了个 findings 报告，我需要逐项技术核实而不是照单全收",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ]
+    },
+    {
+      "id": "rec-pos-10",
+      "query": "别performative地接受，帮我看哪条真的成立",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "wt-pos-01",
+      "query": "在隔离的 worktree 里改，别动我当前的工作区",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "wt-pos-02",
+      "query": "我想开个独立的工作区做这个功能，主干这边还要能继续编译",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ]
+    },
+    {
+      "id": "wt-pos-03",
+      "query": "帮我建个 worktree 执行这个计划里的任务",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "wt-pos-04",
+      "query": "我想另开一份代码副本改东西 不想切分支搞乱现在的东西",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "wt-pos-05",
+      "query": "Set up an isolated checkout for this feature so my main working tree stays clean.",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "wt-pos-06",
+      "query": "这段工作需要独立的写范围，跟我正在改的文件不能混在一起",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ]
+    },
+    {
+      "id": "wt-pos-07",
+      "query": "建完 worktree 后面还要清理掉，别留垃圾",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "wt-pos-08",
+      "query": "并行做两个功能，各自一个隔离检出",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ]
+    },
+    {
+      "id": "wt-pos-09",
+      "query": "执行这个实现计划之前，先把工作区隔离出来",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui"
+      ]
+    },
+    {
+      "id": "wt-pos-10",
+      "query": "我不想 stash 来 stash 去，能不能单独给我一份工作目录",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dis-pos-01",
+      "query": "这几件事互不依赖，并行做掉",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ]
+    },
+    {
+      "id": "dis-pos-02",
+      "query": "开几个 subagent 同时查这两个模块的问题，文件不重叠",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees",
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "dis-pos-03",
+      "query": "我有 5 个独立的任务，想同时推进，各自写不同的文件",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ]
+    },
+    {
+      "id": "dis-pos-04",
+      "query": "能不能并发跑 一个个来太慢了",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dis-pos-05",
+      "query": "Dispatch parallel agents for these two independent investigations.",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ]
+    },
+    {
+      "id": "dis-pos-06",
+      "query": "这两个包的问题没有共享状态，可以同时开工",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees",
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "dis-pos-07",
+      "query": "并行派发的时候注意别让两个 agent 改同一个文件",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ]
+    },
+    {
+      "id": "dis-pos-08",
+      "query": "依赖已经就绪的任务有 4 个，一起做",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dis-pos-09",
+      "query": "两条独立的排查线，同时进行，互不干扰",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "dis-pos-10",
+      "query": "想让多个子代理同时开工，各自负责不相交的文件集",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ]
+    },
+    {
+      "id": "fin-pos-01",
+      "query": "这个分支的活已经验完了，接下来怎么落地",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-02",
+      "query": "测试过了，你决定下是合还是开 PR",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-03",
+      "query": "这个功能做完了也验证过，我想收尾",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-04",
+      "query": "活干完了 测试也过了 后面咋办",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-05",
+      "query": "The branch passed verification. Decide how it lands.",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-06",
+      "query": "这个 worktree 里的工作验完了，清理还是保留",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees",
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-07",
+      "query": "我想放弃这个分支，怎么干净丢掉",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "fin-pos-08",
+      "query": "已经通过验证了，帮我选落地方式：merge、PR、保留、还是删掉",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-09",
+      "query": "上线前的最后一步：决定这个分支怎么处理",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "fin-pos-10",
+      "query": "tests passed，接下来这个分支要怎么办",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "ip-pos-01",
+      "query": "帮我给这个项目初始化一套协作文件",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ]
+    },
+    {
+      "id": "ip-pos-02",
+      "query": "我这个仓库没有 AGENTS.md，帮我建一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-03",
+      "query": "把这个项目的规则文件归一一下，现在好几份互相冲突",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-04",
+      "query": "新项目 啥都没有 先把规矩文档搭起来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-05",
+      "query": "这个老项目规则文件很乱，帮我整理成一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-06",
+      "query": "给项目建 docs/ 和决策笔记目录，顺手把 AGENTS.md 写出来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ]
+    },
+    {
+      "id": "ip-pos-07",
+      "query": "init project",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-08",
+      "query": "我需要一套项目协作文件体系：规则、文档索引、状态文件",
+      "expected_skill": "setup-collaboration-files",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-09",
+      "query": "这个仓库的 CLAUDE.md 和 AGENTS.md 都过期了，帮我归一",
+      "expected_skill": "setup-collaboration-files",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "ip-pos-10",
+      "query": "接手一个没有规则的陌生项目，先把协作文件立起来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-01",
+      "query": "帮我把刚才为什么选 Redis 而不是 Postgres 记成一条决策笔记",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ]
+    },
+    {
+      "id": "dn-pos-02",
+      "query": "这个方案我们讨论过又否了，得把这个结论写下来免得以后重提",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ]
+    },
+    {
+      "id": "dn-pos-03",
+      "query": "非平凡改动要留笔记，这次改动的取舍帮我落一篇",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-04",
+      "query": "记一下为啥这块代码写得这么别扭",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-05",
+      "query": "上次那个决定要升级了，旧笔记别改，新写一篇并把旧的标成被取代",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-06",
+      "query": "把这轮被放弃的三个方案和原因写进 .agents/notes/",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-07",
+      "query": "review 反馈里有一条我觉得该记成决策，帮我落盘",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ]
+    },
+    {
+      "id": "dn-pos-08",
+      "query": "这次事故复盘出来的规矩，先记成笔记再进 AGENTS.md",
+      "expected_skill": "decision-notes",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-09",
+      "query": "我改了架构，需要一篇说明当初为什么这么定、代价是什么",
+      "expected_skill": "decision-notes",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "dn-pos-10",
+      "query": "把这条决定的状态从 proposed 挪到 implemented",
+      "expected_skill": "decision-notes",
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-01",
+      "query": "rebase 和 merge 有什么区别",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch",
+        "zhanggui-using-git-worktrees"
+      ]
+    },
+    {
+      "id": "nul-02",
+      "query": "帮我写个正则匹配手机号",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-03",
+      "query": "这个 CSS 居中怎么写",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-04",
+      "query": "解释一下什么是幂等",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-05",
+      "query": "帮我做个小脚本把 csv 转成 json，就一个文件",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui",
+        "setup-collaboration-files"
+      ]
+    },
+    {
+      "id": "nul-06",
+      "query": "我想加个日志，就在这个函数里加两行",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui"
+      ]
+    },
+    {
+      "id": "nul-07",
+      "query": "git 怎么撤销上一次 commit",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ]
+    },
+    {
+      "id": "nul-08",
+      "query": "写个 SQL 查最近 7 天的订单数",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-09",
+      "query": "什么是 CAP 定理",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-10",
+      "query": "帮我起个变量名",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-11",
+      "query": "总结一下这个文件的内容",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-12",
+      "query": "这段报错什么意思：ECONNREFUSED",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ]
+    },
+    {
+      "id": "nul-13",
+      "query": "帮我看看这个正则的时间复杂度",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-14",
+      "query": "把这段 JS 转成 TS",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-15",
+      "query": "docker compose 里 depends_on 有什么用",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-16",
+      "query": "帮我写个 cron 表达式",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-17",
+      "query": "这个算法题怎么做",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-18",
+      "query": "给我讲讲 OAuth2 的流程",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-19",
+      "query": "推荐一个 JSON 库",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nul-20",
+      "query": "怎么配置 nginx 反向代理",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": []
+    },
+    {
+      "id": "nm-tdd-01",
+      "query": "这个测试挂了，你先把它改成能过的",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ]
+    },
+    {
+      "id": "nm-tdd-02",
+      "query": "测试覆盖率不够，帮我补几个测试",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ]
+    },
+    {
+      "id": "nm-tdd-03",
+      "query": "帮我把测试跑通就行，怎么改你看着办",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development",
+        "zhanggui-verification-before-completion"
+      ]
+    },
+    {
+      "id": "nm-tdd-04",
+      "query": "帮我给这个函数写个单测",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ]
+    },
+    {
+      "id": "nm-ip-01",
+      "query": "帮我把 README 整理一下",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ]
+    },
+    {
+      "id": "nm-ip-02",
+      "query": "这几个规则文件应该放哪",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": []
+    },
+    {
+      "id": "nm-ip-03",
+      "query": "帮我建一个 .editorconfig",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ]
+    },
+    {
+      "id": "nm-dn-01",
+      "query": "帮我写个注释解释这个函数",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ]
+    },
+    {
+      "id": "nm-dn-02",
+      "query": "记录一下今天的进度",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ]
+    },
+    {
+      "id": "nm-dn-03",
+      "query": "把这份需求文档存下来",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes",
+        "setup-collaboration-files"
+      ]
+    },
+    {
+      "id": "nm-dn-04",
+      "query": "把这次讨论的要点整理成文档",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "decision-notes"
+      ]
+    },
+    {
+      "id": "nm-zg-01",
+      "query": "帮我规划一下这周的排期",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui"
+      ]
+    },
+    {
+      "id": "nm-zg-02",
+      "query": "这个项目整体是做什么的",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui"
+      ]
+    },
+    {
+      "id": "nm-zg-03",
+      "query": "我有个想法，你觉得可行吗",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui"
+      ]
+    }
+  ],
+  "labelling_notes": [
+    {
+      "id": "nm-ip-02",
+      "change": "expected_skill went from null to setup-collaboration-files, and the query was removed from that skill's near_miss_for.",
+      "date": "2026-09-16",
+      "evidence": "Two description phrasings were micro-tested at five runs each and were indistinguishable - the query loaded this skill 5/5 under both. The captured transcript shows why: the model reads the skill as the reference that documents where collaboration files belong, answers the question from it, and edits nothing. Any description that names the file layout as this skill's subject makes the skill the reference for layout questions, so wording cannot reach this.",
+      "rationale": "The label asserted that a question about where collaboration files go must load nothing, but this skill's own target table is the answer to that question. Keeping an ambiguous label that no description can satisfy leaves a permanent, unfixable failure signal on the instrument.",
+      "counter_argument": "The skill runs Steps 1-12 without asking once it is loaded, so loading it for a question could start creating or rewriting files. The observed run answered and wrote nothing, but that was model restraint, not a guarantee. Reversing this relabel is a two-line edit.",
+      "compensating": "nm-dn-03 was promoted to a hard negative for the same skill so the corpus floor of 6 declared hard negatives per skill still holds; it measured clean 5/5.",
+      "split_sha256": "unchanged - no id and no split moved, so every earlier rate record stays comparable"
+    }
+  ]
+}

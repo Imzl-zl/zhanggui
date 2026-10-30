@@ -1,7 +1,7 @@
 ---
 name: zhanggui-systematic-debugging
 license: MIT
-description: Use when a test failure, production bug, build failure, integration failure, performance problem, or otherwise unexpected behavior needs its root cause found, including when earlier fix attempts did not hold or the problem is still not understood.
+description: Traces a failure to its root cause with evidence before any fix is written, then guards the finding with a regression test. Use when a test failure, production bug, build failure, integration failure, performance problem, or otherwise unexpected behavior needs its root cause found, including when earlier fix attempts did not hold or the problem is still not understood, even when it looks like a flaky test, a config difference, or an environment problem.
 ---
 
 # Systematic Debugging

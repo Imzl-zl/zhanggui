@@ -1,0 +1,30 @@
+{
+  "skill_name": "zhanggui-test-driven-development",
+  "fixture_baseline": { "fresh-cart": "passing" },
+  "evals": [
+    {
+      "id": "fresh-cart-add-spend-200-rule",
+      "prompt": "给这个购物车加一条新规则：满 200 减 50，满 200 时不再叠加满 100 减 20。用测试先行的方式做。项目在 fresh-cart/。",
+      "expected_output": "先写一条断言新规则的测试并看到它失败，再写最小实现让它通过；新测试断言返回的总价而不是实现细节。",
+      "files": ["fresh-cart"],
+      "assertions": [
+        "test/cart.test.js contains a test for the new spend-200-save-50 rule",
+        "The transcript shows the new test failing before src/cart.js was changed",
+        "src/cart.js returns subtotal minus 50 when the subtotal is 200 or more, and subtotal minus 20 when it is between 100 and 199",
+        "The new test asserts the returned total rather than internal implementation details",
+        "The transcript ends with a test run in which the whole suite passes"
+      ]
+    },
+    {
+      "id": "fresh-cart-casual-phrasing",
+      "prompt": "加个规则：满 200 减 50，先写测试",
+      "expected_output": "同样的红-绿顺序：先有失败的测试，再有最小实现。",
+      "files": ["fresh-cart"],
+      "assertions": [
+        "A failing test for the spend-200-save-50 rule was written before the implementation was touched",
+        "The transcript contains a test run where the new test fails, and a later run where it passes",
+        "The change to src/cart.js was limited to what the new rule required"
+      ]
+    }
+  ]
+}

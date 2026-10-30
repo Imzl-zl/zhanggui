@@ -1,7 +1,7 @@
 ---
 name: zhanggui
 license: MIT
-description: Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign.
+description: Owns one development request end-to-end — resolves open design decisions, plans the path, implements with tests, and carries the work to verified delivery. Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign.
 compatibility: Requires the complete Zhanggui skill collection; automatic invocation requires a host that supports model-selected skills.
 ---
 
@@ -19,7 +19,7 @@ An explicit root invocation wins over every leaf selection boundary. Start the e
 
 ### Implicit
 
-Implicit entry is valid only when the request itself provides a high-signal reason such as ambiguity requiring decisions, cross-module scope, multiple deliverables, checkpoint recovery, a high-risk migration, or explicit end-to-end ownership through verified delivery. A skill activation read may precede the notice. Before the first non-skill tool call, emit exactly one notice that begins with the exact marker `已自动进入 Zhanggui 完整工作流：`, followed by one concise freeform high-signal reason grounded in request or repository evidence. Do not invent complexity, do not ask whether to enable the skill, do not repeat the notice, and do not restrict the reason to a fixed whitelist. If no grounded high-signal reason exists, do not expand into discovery, design, or planning.
+Implicit entry is valid only when the request itself satisfies the preconditions its description names, grounded in request or repository evidence. The description is the one place those preconditions are enumerated; do not re-derive a wider set here. A skill activation read may precede the notice. Before the first non-skill tool call, emit exactly one notice that begins with the exact marker `已自动进入 Zhanggui 完整工作流：`, followed by one concise freeform high-signal reason grounded in request or repository evidence. Do not invent complexity, do not ask whether to enable the skill, do not repeat the notice, and do not restrict the reason to a fixed whitelist. If no grounded high-signal reason exists, do not expand into discovery, design, or planning.
 
 ### Root-first and narrow-task de-escalation
 
@@ -240,52 +240,11 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 - verification `not-verified` -> 合并 Gaps、恢复 return point 对应的 decision/prototype/task/validation 后**同样清空 return point**，不得声称完成；后续 debug 等 detour 按正常单槽规则重新写入。
 - 顶层 bug 请求在修复后继续其 Transient/Durable/Epic 执行路径。
 
-### 提问节奏总闸
+### 提问契约
 
-决策问题和元问题（决策模式、UI mode、worktree 同意、恢复候选、沉淀文件等）共用同一节奏：**每轮等待最多向用户提出一个问题**。约束方式：
+等待用户前读 `references/questioning.md`：它定义 `QuestionRequest` 结构、引导式提问格式、原生结构化提问通道与降级，以及决策问题与元问题共用的节奏约束。规则原文只在那里维护。
 
-1. 能从既有信号、仓库事实或本文件默认值判定的元问题不问。
-2. 可延迟的元问题（沉淀文件等）延迟到必须决定时再问，不在开局堆积。worktree 同意在开局同样不问，但一旦命中隔离触发条件进入 execute，它就是该轮最先必需的阻塞问题，不再顺延到其他领域之后。
-3. 同一时刻多个问题都必需时，按阻塞程度只问最先必需的一个，其余顺延到后续等待轮。
-
-### 原生提问分发契约
-
-“提问格式”只定义问题内容，不是普通 assistant 消息的排版模板。任何路径准备等待用户（decision、共识确认、恢复候选、worktree、prototype、finishing 或其他元问题）时，先构造同一个请求：
-
-```yaml
-QuestionRequest:
-  id: decision-or-meta-id
-  question: 一句话问题
-  context: 研究背景或 null
-  options: [{ id, label, description }]  # 纯开放问题为 []
-  recommended: option-id | null
-  free_form: true | false
-```
-
-然后按以下顺序分发：
-
-1. 从当前宿主已暴露的工具中识别结构化用户输入能力，例如 `AskUserQuestion`、`request_user_input`、`ask` 或等价工具；能力结论在本会话内复用。
-2. 工具能忠实表达当前 `QuestionRequest` 时，分发动作固定为“选择已暴露工具 → 按其真实 schema 填参 → 产生宿主可识别的 tool call event → 结束本轮等待”。**必须真实调用该工具**，一次调用只发当前一个问题；在普通 assistant 文本中写工具名、JSON、伪调用或编号菜单都不算调用，也不得与真实调用重复发送。
-3. `options` 映射到原生选项及说明，`recommended` 映射到原生推荐字段；宿主没有推荐字段时，把推荐项移到第一项并在 label/description 标注。宿主自动提供 `Other` / 自定义输入时不得再造“其他”选项，直接把它作为 `free_form` 出口。
-4. 纯开放问题优先使用支持自由文本的原生工具；只有宿主没有结构化提问工具，或工具 schema 无法在不伪造选项的前提下表达当前问题时，才退化为文字提问。首次退化时用一句话说明 `no-native-question-tool` 或 `unsupported-question-shape`，禁止静默降级。
-
-Stage 可以构造 `QuestionRequest`，但实际等待前由当前编排 frame 完成上述分发，并记录 `Delivery: native:<tool> | text-fallback:<reason>`。
-
-
-### 提问格式
-
-向用户提出的决策问题统一使用引导式格式，不裸问：
-
-1. **问题**：一句话说清要定什么、为什么现在定。
-2. **背景**（有研究时）：1-3 行同类产品做法、项目现状或研究发现；来源优先级为同类设计 > 官方指南/最佳实践 > 模型自身判断，无同类时标注"无直接同类，以下是我的理解"。
-3. **选项**：2-4 个，每个附一句差异或代价；明确标注**推荐项和理由**，但不替用户选择。
-4. **自由输入出口**：明确告知可以不选任何选项、直接描述想法或大方向。
-
-问用户独有信息（业务规则、偏好、资源约束）时用开放问题，可附示例降低回答负担，不硬造选项；是否使用原生工具只由上节分发契约决定。
-
-格式随用户对当前领域的熟悉度伸缩：Assisted 转入的卡点或用户自述不懂时用完整引导式（背景 + 选项 + 推荐），降低决策门槛；用户主导且熟悉的 Owner 领域内，开放问题 + 推荐即可，选项只在方案空间确实存在多个候选时列出，不为格式而造选项。两条路径的差异始终由 owner 分权决定（问多少、谁决定什么）；本格式只统一"怎么问"，不改变分权。
-
-用户的自由输入是一等回答：给出明确决定 -> 按答案关闭 node；给出想法、方向或部分意见 -> 进入**收敛循环**——复述理解、必要时补充研究、更新选项和推荐后继续一次一问，直到该 node 收敛为明确决定。收敛循环是用户驱动的深入，不受"仪式性追问限一次"约束；由此产生的新问题按规则生成新 node。
+留在本文件的三条不变量：**每轮只等一次用户**（核心纪律 4）；能从既有信号或仓库事实判定的元问题不问；宿主没有原生结构化提问能力时不得伪造选项，并在会话里写下 `no-native-question-tool` 或 `unsupported-question-shape`。
 
 ## 第 1 级 - 按当前决策分权
 
@@ -299,7 +258,7 @@ Stage 可以构造 `QuestionRequest`，但实际等待前由当前编排 frame �
 
 只声明部分领域时，未声明领域默认 `owner: model`；无领域限定的 Owner 信号（"逐项问我"、"grill me"、"所有/全部设计都由我定"）视为全领域声明，把全部领域设为 `user`。若用户措辞对某个已 ready node 的 owner 真有冲突，只围绕该 node 问一次，不做全局模式访谈。
 
-进入 `design` 的默认动作是先确认决策分权：用户措辞已明确给出 Owner 或 Assisted 信号（“逐项问我”/“grill me”/“这部分我来定”，或“你看着办”/“你先设计”）时不再问；否则构造并按“原生提问分发契约”发出一次决策模式问题。不得用“默认 assisted”静默跳过这道题——用户必须实际看到并做出这个选择。
+进入 `design` 的默认动作是先确认决策分权：用户措辞已明确给出 Owner 或 Assisted 信号（“逐项问我”/“grill me”/“这部分我来定”，或“你看着办”/“你先设计”）时不再问；否则按 `references/questioning.md` 的提问契约构造并发出一次决策模式问题。不得用“默认 assisted”静默跳过这道题——用户必须实际看到并做出这个选择。
 
 ```yaml
 QuestionRequest:
@@ -312,7 +271,7 @@ QuestionRequest:
   free_form: true
 ```
 
-更新等待状态后真实调用宿主工具；不得把以上问题或选项改写成普通 assistant blockquote。
+更新等待状态后按提问契约发出：宿主有结构化提问能力时真实调用它，不要用同内容的 blockquote 代替。
 
 ### Assisted 的用户卡点
 
@@ -370,7 +329,7 @@ Owner/grill-me 领域内只能跳过：
 
 `fog` 用于路径还看不清、无法直接形成完整决策树的工作：
 
-**钢人论证前置**：请求足够模糊、存在不可消除的重大权衡，或用户明确要“先论证再动手”时，先做一次钢人论证再开始映射——①用最有力的方式重述用户真正想解决的问题；②把“支持”与“反对”各自推到最强论证；③指出双方真正的分歧与最能改变结论的关键变量；④按“原生提问分发契约”只问用户一个最关键的问题。用户回答前不进入 breadth-first 扫描、不给出方案。钢人论证是 agent 的自我压力测试（用户不参与逐条决策），与 grilling 的“用户主导访谈”是两回事，不占用 owner 分权。
+**钢人论证前置**：请求足够模糊、存在不可消除的重大权衡，或用户明确要“先论证再动手”时，先做一次钢人论证再开始映射——①用最有力的方式重述用户真正想解决的问题；②把“支持”与“反对”各自推到最强论证；③指出双方真正的分歧与最能改变结论的关键变量；④按提问契约只问用户一个最关键的问题。用户回答前不进入 breadth-first 扫描、不给出方案。钢人论证是 agent 的自我压力测试（用户不参与逐条决策），与 grilling 的“用户主导访谈”是两回事，不占用 owner 分权。
 
 **专家会诊补充**：问题横跨多个互补专业域（如产品×架构×安全），单一钢人论证视角不足时，先为问题选 3 个真正互补的视角并说明各自必要性，让每个视角分别回答"如何重定义问题 / 最推荐路径 / 其他视角最容易忽略的风险 / 什么新证据会改变判断"，再让它们互相质疑，暴露共同认可的事实、真正的分歧、分歧背后的不同假设。不选高度相似的身份，不模仿或编造真实人物观点；信息不足时先只问用户一个最关键的问题。专家会诊与钢人论证同样不占用 owner 分权，用户不参与逐条决策。
 

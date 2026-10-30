@@ -2,23 +2,30 @@
 
 一个 **skills 创作项目**：产物是 Agent Skills 本身，不是应用代码。仓库根同时是分发单元（Claude Code / Codex 插件），无构建依赖。
 
-两个入口技能，共 10 个 strict Agent Skills 目录：
+三个入口技能，共 11 个 strict Agent Skills 目录：
 
 | 入口 | 内容 | 位置 |
 |---|---|---|
 | `zhanggui` | selective-hybrid 有状态编排器 + 八个可独立发现的 `zhanggui-*` 工程 leaf | `skills/zhanggui/`、`skills/zhanggui-*/` |
-| `init-project` | 项目协作文件体系初始化 / 归一（AGENTS.md、tools.md、memory.md） | `skills/init-project/` |
+| `setup-collaboration-files` | 项目协作体系初始化 / 归一（AGENTS.md、`docs/`、`.agents/notes/`、tools.md、memory.md） | `skills/setup-collaboration-files/` |
+| `decision-notes` | 决策笔记的落盘与生命周期（非平凡判定、四格、状态迁移、取代与冻结） | `skills/decision-notes/` |
 
-其余目录全是辅助设施：`commands/` 宿主入口薄壳、`scripts/` 校验与部署、`tests/` 契约断言、`evals/` 触发数据集、`docs/` 设计论证。目录布局遵循 [Agent Skills 规范](https://agentskills.io/specification)：一个技能 = 一个含 `SKILL.md` 的目录，`name` 等于目录名，按需资源分层到 `references/`、`scripts/`、`assets/`。
+其余目录全是辅助设施：`scripts/` 校验与部署、`tests/` 契约断言、`evals/` 触发数据集、`docs/` 设计论证。目录布局遵循 [Agent Skills 规范](https://agentskills.io/specification)：一个技能 = 一个含 `SKILL.md` 的目录，`name` 等于目录名，按需资源分层到 `references/`、`scripts/`、`assets/`。
 
-> 本 README 只是导览，不参与运行，也不复述规则细节——避免出现第三份会漂移的“真值”。运行契约以 [`skills/zhanggui/SKILL.md`](skills/zhanggui/SKILL.md)、各 leaf `SKILL.md`、[`skills/init-project/SKILL.md`](skills/init-project/SKILL.md) 与内部 `STAGE.md` 为准；完整设计论证见 [Skill 融合工作流设计](docs/skill-fusion-design.md)。
+> 本 README 只是导览，不参与运行，也不复述规则细节——避免出现第三份会漂移的“真值”。运行契约以 [`skills/zhanggui/SKILL.md`](skills/zhanggui/SKILL.md)、各 leaf `SKILL.md`、[`skills/setup-collaboration-files/SKILL.md`](skills/setup-collaboration-files/SKILL.md)、[`skills/decision-notes/SKILL.md`](skills/decision-notes/SKILL.md) 与内部 `STAGE.md` 为准；完整设计论证见 [Skill 融合工作流设计](docs/skill-fusion-design.md)。
 
-集合打包版本 v0.8.0。WorkflowState 与 task-root schema 沿用 v0.4 语义；description 已按社区规范归一为只写触发条件，触发路由已重测（见 [`evals/results/v0.8-routing-summary.json`](evals/results/v0.8-routing-summary.json)）。此后 tdd / finishing / dispatching 三处 description 又按 v0.8 的确定性误路由做了修订，当前目录状态是**待重测**，快照与改动明细在 [`evals/catalog-current.json`](evals/catalog-current.json)。
+集合打包版本 v0.9.0。WorkflowState 与 task-root schema 沿用 v0.4 语义。
+
+description 现已对齐开放规范：规范要求「既描述这个技能做什么，也描述何时用它」，官方作者指南的示例一律是**能力在前、`Use when` 触发子句在后**，并要求「宁可写得多一点」（显式列出用户没直接点名领域也算的场景）。此前十一个 description 全部只写触发条件，能力那半个信号完全缺席，已整体改写（触发关键词与前置条件逐字保留）。九个被钉子评测的 description 因此进入**待重测**状态。
+
+评测方法也已换成社区标准的两族：**触发族**用真 agent 观测宿主实际加载了哪个技能（`evals/triggers/`，144 条语料 + 固定 train/validation 划分），**质量族**用 with_skill / without_skill 对照看 delta（`skills/<skill>/evals/`）。运行状态、测量条件与现有数字**只在 [`evals/README.md`](evals/README.md) 维护**，本文不复制。旧判官 harness 降级为廉价的历史描述冲突检查，**不是发布门槛**。
+
+tdd / finishing / dispatching 三处按 v0.8 的确定性误路由做的修订，以及两个 standalone 技能（`setup-collaboration-files`、`decision-notes`，不在路由评测范围内）的情况，见 [`evals/catalog-current.json`](evals/catalog-current.json)。
 
 ## 架构要点
 
-- **Ten strict catalog entries**：十个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
-- **选中只靠 description**：宿主启动时只注入 `name` + `description`。所以 description 只写触发条件，不写仲裁条款、不写行为指令、不概述工作流；这条约束由 `tests/skill-discovery.test.mjs` 机械卡住。
+- **Eleven strict catalog entries**：十一个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
+- **选中只靠 description**：宿主启动时只注入 `name` + `description`，规范要求它同时说清「做什么」和「何时用」。所以 description 先写能力、再接 `Use when` 触发子句，不写仲裁条款、不写行为指令、不概述工作流；这条约束由 `tests/skill-discovery.test.mjs` 机械卡住。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 边界、`Invocation Modes` 全在正文——那里才会被执行。
 - **选择性 Hybrid 根**：高信号复杂请求可自动进入；任何时候也可用宿主原生命令手动进入。
 - **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段。
@@ -28,7 +35,7 @@
 
 ## 快速使用
 
-复杂、跨模块、多交付物、checkpoint 恢复或明确端到端的请求可以直接描述；支持 model-selected skills 的宿主会选择性自动加载 `zhanggui`，根在首次工具调用前说明进入原因。调试、TDD、验证、审查、反馈、worktree、并行派发和分支收尾等窄请求仍由对应 leaf 自动匹配。
+复杂请求可以直接描述；支持 model-selected skills 的宿主会按 `zhanggui` 的 description 选择性自动加载它，根在首次工具调用前说明进入原因。触发面以该 description 为唯一出处，本文不复述——根只对"一次做不完"的请求负责，实现与交付细节归对应 leaf。调试、TDD、验证、审查、反馈、worktree、并行派发和分支收尾等窄请求仍由对应 leaf 自动匹配。
 
 需要确定性进入完整流程时，只显式调用一次根：
 
@@ -63,18 +70,26 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
 ├── package.json                  # npm scripts + pi package skills entry
 ├── AGENTS.md / CLAUDE.md         # 本仓库开发规则（CLAUDE.md 只指向 AGENTS.md）
 ├── LICENSE / README.md
-├── commands/init-project.md      # 宿主 slash 入口薄壳，只转发到技能
 ├── docs/                         # design rationale, not loaded at runtime
 │   └── history/                   # 已完成变更的计划/设计快照，只作追溯
-├── evals/                        # trigger datasets + 运行记录（现状看 evals/README.md）
+├── evals/
+│   ├── README.md                 # 两族方法论、运行方式与成本
+│   ├── triggers/                 # 族 1 语料：全域触发用例 + 固定 train/validation 划分
+│   ├── results/                  # 运行记录（旧判官 summary 只读）
+│   └── catalog-current.json      # 当前 description 目录的 digest 门
 ├── scripts/
 │   ├── validate-agent-skills.mjs # strict Agent Skills validation（自动发现 skills/）
+│   ├── run-trigger-eval.mjs      # 族 1 runner：真 agent 观测激活
+│   ├── run-quality-eval.mjs      # 族 2 runner：with/without 对照看 delta
 │   └── deploy-skills.sh          # mirror skills/ into a host skills dir
 ├── tests/                        # discovery / routing / trigger contracts
 └── skills/                       # the only source of truth
-    ├── init-project/             # standalone bootstrap skill
+    ├── setup-collaboration-files/             # standalone bootstrap skill
     │   ├── SKILL.md
-    │   └── references/{rules,templates}.md
+    │   └── references/{rules,templates,scan-signals}.md
+    ├── decision-notes/           # standalone note lifecycle skill
+    │   ├── SKILL.md
+    │   └── references/{notes-contract,note-template}.md
     ├── zhanggui/                 # selective-hybrid strict orchestrator
     │   ├── SKILL.md
     │   ├── RECOVERY.md
@@ -89,10 +104,12 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
     ├── zhanggui-systematic-debugging/
     │   ├── SKILL.md
     │   ├── references/           # root-cause tracing, defense in depth, waiting
-    │   └── scripts/find-polluter.sh
+    │   ├── scripts/find-polluter.sh
+    │   └── evals/                # 族 2 语料 + buggy-cart 夹具（故意 1 个测试失败）
     ├── zhanggui-test-driven-development/
     │   ├── SKILL.md
-    │   └── references/testing-anti-patterns.md
+    │   ├── references/testing-anti-patterns.md
+    │   └── evals/                # 族 2 语料 + fresh-cart 夹具（全绿）
     ├── zhanggui-requesting-code-review/
     │   ├── SKILL.md
     │   └── references/code-reviewer.md
@@ -103,13 +120,15 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
     └── zhanggui-finishing-a-development-branch/SKILL.md
 ```
 
-`skills/` 是唯一真值源。宿主 skills 目录（`~/.claude/skills/` 等）与仓库内 `.claude/`、`.codex/`、`.pi/` 快照一律视为生成产物（已 gitignore），只能由安装或 `scripts/deploy-skills.sh` 写入，不在那里改规则。Bundled resource 按 Agent Skills 惯例分层：`references/` 放按需加载的文档，`scripts/` 放可执行脚本。
+`skills/` 是唯一真值源。宿主 skills 目录（`~/.claude/skills/`、`~/.agents/skills/`、`~/.codex/skills/`）与仓库内 `.pi/` 快照一律视为生成产物，只能由安装或 `scripts/deploy-skills.sh` 写入，不在那里改规则。仓库内 `.claude/`、`.codex/` 快照已删除：它们只是为了让人直观看到该放哪儿，而本节的安装命令已经表达同一件事，留实体副本只会制造第二个真值源。
+
+各宿主读哪个目录（**实测**，不是推测）：`~/.agents/skills/` 是 Codex / Copilot / Gemini / pi 认的跨运行时别名，**Claude Code 不读它**；Claude Code 只认 `~/.claude/skills/` 或插件安装。所以共享部署放 `.agents`，Claude Code 单独走插件或 `--target claude`。Bundled resource 按 Agent Skills 惯例分层：`references/` 放按需加载的文档，`scripts/` 放可执行脚本。
 
 开发本仓库用的第三方技能放 `.agents/skills/`，与交付物隔离（plugin manifest、validator、deploy 都只看 `skills/`）。目前只装了 [`writing-skills`](.agents/skills/README.md)——superpowers 的技能创作方法论，新建或大改技能前先读它。
 
 ### 安装单元：完整 collection
 
-完整可移植单元是 `skills/` 下的全部目录（`zhanggui/` + 八个 `zhanggui-*/` + `init-project/`），无需构建。按宿主能力优先选择正式安装方式：
+完整可移植单元是 `skills/` 下的全部目录（`zhanggui/` + 八个 `zhanggui-*/` + `setup-collaboration-files/` + `decision-notes/`），无需构建。按宿主能力优先选择正式安装方式：
 
 **1. Claude Code 插件（首选）**
 
@@ -140,38 +159,49 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
 也可以直接手工复制——插件不是必需的：
 
 ```bash
-cp -R skills/zhanggui skills/zhanggui-* skills/init-project ~/.agents/skills/
+cp -R skills/zhanggui skills/zhanggui-* skills/setup-collaboration-files skills/decision-notes ~/.agents/skills/
 ```
 
 手工复制和脚本的唯一区别是脚本会清掉目标里源已删除的残留文件。改名或删除文件后用手工复制会留下过期副本，所以重复部署优先用脚本。
 
-只复制 `skills/zhanggui/` 会缺少 Embedded leaf 依赖，不是完整安装；`init-project` 可单独复制，它不依赖 Zhanggui。Agent Skills 仍是渐进加载：启动只注入每个技能的 frontmatter；实际匹配后才加载对应 `SKILL.md`。根编排器通过 Skill Activation Contract 激活 leaf，而不是把 sibling 路径当作业务接口。不要同时启用插件与裸 collection，也不要同时启用另一套默认强编排入口。
+只复制 `skills/zhanggui/` 会缺少 Embedded leaf 依赖，不是完整安装；`setup-collaboration-files` 和 `decision-notes` 都可单独复制，它们不依赖 Zhanggui，但两个一起装才完整——一个铺骨架，一个写笔记。Agent Skills 仍是渐进加载：启动只注入每个技能的 frontmatter；实际匹配后才加载对应 `SKILL.md`。根编排器通过 Skill Activation Contract 激活 leaf，而不是把 sibling 路径当作业务接口。不要同时启用插件与裸 collection，也不要同时启用另一套默认强编排入口。
 
 ### 宿主调用模型
 
-- 十个技能的 `name` + `description` 全部 catalog-visible，均可被宿主按 description 自动匹配或用宿主原生命令手动调用；description 里没有任何互斥仲裁，`init-project` 不参与根/leaf 路由。
+- 十一个技能的 `name` + `description` 全部 catalog-visible，均可被宿主按 description 自动匹配或用宿主原生命令手动调用；description 里没有任何互斥仲裁，`setup-collaboration-files` 与 `decision-notes` 不参与根/leaf 路由。
 - `skills/zhanggui/SKILL.md` 是唯一默认强编排入口，采用选择性 Hybrid：高信号完整生命周期请求可自动进入，也可显式调用；Codex profile 设置 `allow_implicit_invocation: true`。
-- 八个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和 `Use when ...` description；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
+- 八个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和「能力 + `Use when ...`」description；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
 - 确定性进入完整工作流时只显式调用一次根编排器（OMP 交互式为 `/skill:zhanggui`；逻辑 alias 为 `/zhanggui`）；阶段切换不要求继续输入命令。
 - Embedded 路径只接受根提供的 `SkillRequest`，leaf/stage 返回 `SkillResult` 或请求；根按 native activation → catalog location → collection fallback 激活，并校验 frontmatter 身份后合并 delta。
 - `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 也不参与 discovery。
 
-## init-project（第二个入口）
+## 协作文件体系（setup-collaboration-files + decision-notes）
 
-一次性为项目建立或归一协作文件体系，与 Zhanggui 完全解耦，不共用 `WorkflowState`：
+两个独立入口技能，与 Zhanggui 完全解耦，不共用 `WorkflowState`。它们是**同一套体系的两半**，靠一条单向依赖相连：`setup-collaboration-files` 铺骨架并写仓库不变量，`decision-notes` 执行写作与生命周期，任一方都不复述另一方的规则（由 `tests/collaboration-contract.test.mjs` 机械卡住）。
+
+| 技能 | 时机 | 职责 |
+|---|---|---|
+| `setup-collaboration-files` | 一次性接入或归一 | 建目录、写根 `AGENTS.md` 军规、生成 `.agents/notes/AGENTS.md` 与 `docs/AGENTS.md` |
+| `decision-notes` | 每次非平凡改动 | 非平凡判定、四格写法、状态迁移、取代与冻结 |
+
+`setup-collaboration-files` 的产物：
 
 | 产物 | 用途 |
 |---|---|
-| `AGENTS.md` / `CLAUDE.md` | 项目唯一 canonical 规则文件 |
+| `AGENTS.md` / `CLAUDE.md` | 全仓 canonical 规则文件；`CLAUDE.md` 仅为 `@AGENTS.md` 兼容入口 |
+| `<子目录>/AGENTS.md` | 模块就近规则，不往根上堆 |
+| `docs/` + `docs/AGENTS.md` | 现状真理源与文档标准（字数预算、去废话、禁手抄生成物） |
+| `.agents/notes/` + `.agents/notes/AGENTS.md` | 因果真理源与其仓库不变量 |
 | `tools.md` | 稳定协作知识、常用命令、模式、坑点 |
-| `memory.md` | 当前状态快照 + 最近活跃窗口 |
-| `memory/archive/YYYY-MM.md` | 按月追加的重要协作历史 |
+| `memory.md` | 当前状态快照 + 最近活跃窗口（不含决策条目） |
 
-描述“初始化项目协作文件”类请求即可自动匹配；Claude Code 安装插件后也可用 `/init-project` 薄壳命令进入。全新初始化与已有规则归一两种模式由技能内部自动识别，重写前自动备份；规则与模板原文只在 [`skills/init-project/`](skills/init-project/SKILL.md)。
+旧的 `memory/archive/YYYY-MM.md` 月度流水已退役：已有文件保留不动、不再追加，仍在生效的条目建议迁入 `.agents/notes/` 或 `docs/postmortem/`。
+
+描述“初始化项目协作文件”或“写决策笔记 / 记录为什么这么选”类请求即可自动匹配对应技能；Claude Code 安装插件后也可用 `/setup-collaboration-files`、`/decision-notes` 薄壳命令进入。全新初始化与已有规则归一两种模式由技能内部自动识别，重写前自动备份；规则与模板原文只在 [`skills/setup-collaboration-files/`](skills/setup-collaboration-files/SKILL.md) 与 [`skills/decision-notes/`](skills/decision-notes/SKILL.md)。
 
 ## 核心概念地图
 
-规则原文只在右列出处维护（内部 `stages/...` 相对 `skills/zhanggui/`；leaf 位于 `skills/zhanggui-*/`），此表只是索引：
+规则原文只在右列出处维护（内部 `stages/...`、`references/...` 相对 `skills/zhanggui/`；leaf 位于 `skills/zhanggui-*/`），此表只是索引：
 
 | 概念 | 一句话 | 规则出处 |
 |---|---|---|
@@ -179,6 +209,7 @@ cp -R skills/zhanggui skills/zhanggui-* skills/init-project ~/.agents/skills/
 | SkillRequest/Result | 根拥有的 Embedded 激活/合并协议 | SKILL.md「Skill Activation Contract」 |
 | 意图路由 | 恢复/问答/bug/计划/局部改动/想法/fog 的入口分流 | SKILL.md「第 0 级」 |
 | Decision owner | 以决策节点为单位分权：Assisted / Owner / Mixed | SKILL.md「第 1 级」 |
+| 提问契约 | `QuestionRequest`、引导式格式、原生结构化通道与降级、一次一问的节奏 | `references/questioning.md` |
 | UI mode | Prototype-Assisted / Design-Owner / Direct / Text-Only，与业务 owner 正交 | SKILL.md「第 1.5 级」 |
 | Prototype | 用可运行证据回答一个决策节点，delta 合并回 parent | `stages/prototype/` |
 | Fog discovery | 大而模糊工作的发现循环，只产生决定不产生实现 | SKILL.md「Fog 发现循环」 |
@@ -202,7 +233,8 @@ cp -R skills/zhanggui skills/zhanggui-* skills/init-project ~/.agents/skills/
 - `zhanggui-using-git-worktrees`
 - `zhanggui-dispatching-parallel-agents`
 - `zhanggui-finishing-a-development-branch`
-- `init-project`（独立入口，不参与根/leaf 路由）
+- `decision-notes`（独立入口，不参与根/leaf 路由）
+- `setup-collaboration-files`（独立入口，不参与根/leaf 路由）
 
 ### 任务目录与迁移
 
@@ -217,24 +249,45 @@ cp -R skills/zhanggui skills/zhanggui-* skills/init-project ~/.agents/skills/
 ### Automated verification
 
 ```bash
-node --test                              # 或 npm test
-node scripts/validate-agent-skills.mjs   # 或 npm run validate
+npm test                                 # node --test "tests/**/*.test.mjs"
+npm run validate                         # node scripts/validate-agent-skills.mjs
 npm run check                            # 两者串跑
 ```
 
-Expected: 56 tests / 56 pass / 0 fail；validator 最终行报告 `Validated 10 strict Agent Skills.`
+Expected: 68 tests / 68 pass / 0 fail；validator 最终行报告 `Validated 11 strict Agent Skills.`
+
+测试命令**必须**限定在 `tests/`：`skills/*/evals/files/` 下的评测夹具是故意会失败的（比如 `buggy-cart` 有一个测试就该挂），裸跑 `node --test` 会把它当成仓库测试招进来。
 
 validator 会给 Python 子进程注入 `PYTHONUTF8=1`，避免中文 Windows 语系下 GBK 解码 UTF-8 skill 文件时崩溃。
 
-### Trigger eval
+### Skill eval（两族）
+
+方法、成本与当前状态见 [`evals/README.md`](evals/README.md)。两族不得混用：触发族回答“技能会不会加载”，质量族回答“加载后有没有比没技能更好”。
+
+```bash
+# 族 1：触发质量（标注语料 + 真 agent，看宿主实际加载了哪个技能）
+npm run eval:triggers -- --dry-run
+npm run eval:triggers -- --host claude --filter '^tdd-pos' --runs 1     # 先校准 adapter
+npm run eval:triggers -- --host claude --out evals/results/triggers.json
+
+# 族 2：输出质量（with_skill / without_skill 各跑一遍，看 delta）
+npm run eval:quality -- --skill zhanggui-systematic-debugging --dry-run
+npm run eval:quality -- --skill zhanggui-systematic-debugging --out evals/results/quality-debugging.json
+```
+
+两族语料已就位并通过结构校验（`tests/trigger-corpus.test.mjs` / `tests/quality-corpus.test.mjs`）。运行状态、速率与方差警告以 [`evals/README.md`](evals/README.md) 为唯一出处，本文不复述任何数字——复述过一次，几天内就过期了。全量触发评测是 144 条 × 3 次 = 432 次 agent 调用。
+
+### 历史：旧判官 harness（非发布门槛）
 
 ```bash
 node --test tests/skill-trigger-data.test.mjs
-# 当前目录快照与测量状态在 evals/catalog-current.json
-# 历史测量：evals/results/v0.9-routing-summary.json（当前目录，含对照 arm）、evals/results/v0.8-routing-summary.json、evals/results/v0.7-routing-summary.json
+# 当前目录快照与测量状态在 evals/catalog-current.json（现为 pending-reevaluation）
+# 历史测量：evals/results/v0.9-routing-summary.json（被取代的目录，含对照 arm）、evals/results/v0.8-routing-summary.json、evals/results/v0.7-routing-summary.json
 ```
 
-Observed v0.9 summary facts（对**当前** description 目录测得——三处修订后的 catalog，catalog 含 9 个 zhanggui 技能 + 6 个无关第三方干扰项，A/B 双 arm 同批判官模型，见 [`evals/results/v0.9-routing-summary.json`](evals/results/v0.9-routing-summary.json)）：
+旧做法让判官**只读 name + description 在候选里挑一个**，测出来的是“描述之间打不打架”，不是“技能会不会触发”：判官没有“这任务模型自己就能干、不必查技能”这个选项，用例又是作者手写、措辞贴近 description 原文，而且没有 train/validation 划分。它是廉价的描述冲突冒烟测试，**不是发布门槛，也不得当作触发率引用**。
+
+Observed v0.9 summary facts（**历史**：对 v0.9 当时的 description 目录测得——三处修订后的 catalog，catalog 含 9 个 zhanggui 技能 + 6 个无关第三方干扰项，A/B 双 arm 同批判官模型，见 [`evals/results/v0.9-routing-summary.json`](evals/results/v0.9-routing-summary.json)）。该目录此后已按规范整体改写，下列速率**不描述当前目录**：
 
 - 732/732 slots 有效（主批判官 deepseek-v4-flash:off；最后 4 个 root-side case 因该模型配额耗尽改用 glm-5.3-flash 补评，全部命中预期）
 - 处理组 root rates: explicit/implicit/root-first-conflict = 1.0, root_false_positive = 0.019（全部满足阈值）

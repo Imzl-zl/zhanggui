@@ -1,7 +1,7 @@
 ---
 name: zhanggui-test-driven-development
 license: MIT
-description: Use when a new feature, bug fix, refactor, or behavior change is about to be implemented and the failing test or regression test must be written first, before any implementation code exists.
+description: Drives implementation from a failing test — red first, then the minimum code to go green. Use when a new feature, bug fix, refactor, or behavior change is about to be implemented and the failing test or regression test must be written first, before any implementation code exists, even when the request only says to add or change a feature.
 ---
 
 # Test-Driven Development (TDD)

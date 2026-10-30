@@ -1,0 +1,681 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash",
+  "workspace_fixture": null,
+  "descriptions_override": null,
+  "descriptions_override_sha256": null,
+  "runs_per_query": 3,
+  "concurrency": 8,
+  "threshold": 0.5,
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "queries": 14,
+  "successful_runs": 39,
+  "total_runs": 42,
+  "by_split": {
+    "train": {
+      "queries": 10,
+      "passed": 10,
+      "pass_rate": 1
+    },
+    "validation": {
+      "queries": 4,
+      "passed": 4,
+      "pass_rate": 1
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "setup-collaboration-files": {
+      "recall": 1,
+      "precision": 0.967741935483871,
+      "tp": 30,
+      "fn": 0,
+      "fp": 1,
+      "tn": 8
+    },
+    "zhanggui": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-receiving-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-requesting-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-test-driven-development": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    },
+    "zhanggui-verification-before-completion": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 39
+    }
+  },
+  "null_target_clean_rate": 0.8888888888888888,
+  "records": [
+    {
+      "id": "ip-pos-01",
+      "query": "帮我给这个项目初始化一套协作文件",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 1,
+          "loaded": [
+            "setup-collaboration-files"
+          ],
+          "error": "Command failed: claude -p 帮我给这个项目初始化一套协作文件 --output-format stream-json --verbose\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-02",
+      "query": "我这个仓库没有 AGENTS.md，帮我建一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-03",
+      "query": "把这个项目的规则文件归一一下，现在好几份互相冲突",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-04",
+      "query": "新项目 啥都没有 先把规矩文档搭起来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-05",
+      "query": "这个老项目规则文件很乱，帮我整理成一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-06",
+      "query": "给项目建 docs/ 和决策笔记目录，顺手把 AGENTS.md 写出来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "setup-collaboration-files"
+          ],
+          "error": "Command failed: claude -p 给项目建 docs/ 和决策笔记目录，顺手把 AGENTS.md 写出来 --output-format stream-json --verbose\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-07",
+      "query": "init project",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 1,
+          "loaded": [
+            "setup-collaboration-files"
+          ],
+          "error": "Command failed: claude -p init project --output-format stream-json --verbose\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"7b80f484-2d41-435f-aa82-b0165384c92b:qwen3.8-flash\",\"query_source\":\"generate_session_title\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-08",
+      "query": "我需要一套项目协作文件体系：规则、文档索引、状态文件",
+      "expected_skill": "setup-collaboration-files",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-09",
+      "query": "这个仓库的 CLAUDE.md 和 AGENTS.md 都过期了，帮我归一",
+      "expected_skill": "setup-collaboration-files",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-10",
+      "query": "接手一个没有规则的陌生项目，先把协作文件立起来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-01",
+      "query": "帮我把 README 整理一下",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-02",
+      "query": "这几个规则文件应该放哪",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-03",
+      "query": "帮我建一个 .editorconfig",
+      "expected_skill": null,
+      "split": "validation",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-03",
+      "query": "把这份需求文档存下来",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes",
+        "setup-collaboration-files"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    }
+  ]
+}

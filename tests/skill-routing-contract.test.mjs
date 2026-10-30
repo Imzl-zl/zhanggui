@@ -99,7 +99,8 @@ test('root uses strict hybrid catalog metadata', async () => {
   const keys = frontmatterKeys(root);
   const standard = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
   assert.deepEqual(keys.filter(key => !standard.has(key)), []);
-  assert.match(root, /^description: Use when\b/m);
+  assert.match(root, /^description: [A-Z]/m, 'root description must lead with what the skill does');
+  assert.match(root, /^description:.*\bUse when\b/m, 'root description must carry a "Use when" trigger clause');
   assert.doesNotMatch(root, /^description:.*\bdo not use\b/im);
   assert.doesNotMatch(root, /^description:.*\bdefer to\b/im);
   assert.doesNotMatch(root, /^description:.*已自动进入/m);
@@ -151,7 +152,8 @@ test('requesting and receiving review descriptions distinguish new review from e
     'utf8',
   );
 
-  assert.match(requesting, /^description: Use when\b/m);
+  assert.match(requesting, /^description: [A-Z]/m, 'requesting description must lead with what the skill does');
+  assert.match(requesting, /^description:.*\bUse when\b/m);
   assert.match(
     requesting,
     /^description:.*(?:new independent review|new review).*(?:diff|code change)|^description:.*(?:diff|patch|code change).*new independent review/im,
@@ -161,7 +163,8 @@ test('requesting and receiving review descriptions distinguish new review from e
     /^description:.*Critical and Important/im,
   );
 
-  assert.match(receiving, /^description: Use when\b/m);
+  assert.match(receiving, /^description: [A-Z]/m, 'receiving description must lead with what the skill does');
+  assert.match(receiving, /^description:.*\bUse when\b/m);
   assert.match(
     receiving,
     /^description:.*(?:review feedback|reviewer comments|findings report)/im,

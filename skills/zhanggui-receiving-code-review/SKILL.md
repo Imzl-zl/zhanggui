@@ -1,7 +1,7 @@
 ---
 name: zhanggui-receiving-code-review
 license: MIT
-description: Use when review feedback, reviewer comments, or a findings report has arrived and each item needs technical verification before it is accepted, rejected, or implemented.
+description: Verifies incoming review feedback item by item and gives each one an explicit disposition — accepted, rejected with evidence, or implemented. Use when review feedback, reviewer comments, or a 审查报告 has arrived and each 条 needs technical checking before it is accepted or pushed back, including when a 同事 claims the implementation is wrong, when a 上一轮审查 left 结论 still unresolved, and when someone wants to know 哪条真的成立 instead of accepting it performatively.
 ---
 
 # Receiving Code Review Feedback

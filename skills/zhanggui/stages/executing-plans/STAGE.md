@@ -48,7 +48,7 @@ The root activates the leaf, validates SkillResult, then resumes this same numbe
 
 ## 开工前检查
 
-0. 项目根若存在 init-project 协作文件，先读 `memory.md`（当前状态、进行中、坑点）与 `tools.md`（命令、路径、模式、坑点）找北，用项目已验证的信息开工，不重复调查；`memory/archive/` 只按需读当月或最近一个归档，不批量加载。
+0. 项目根若存在 setup-collaboration-files 协作文件，先读 `memory.md`（当前状态、进行中、坑点）与 `tools.md`（命令、路径、模式、坑点）找北，用项目已验证的信息开工，不重复调查；`memory/archive/` 只按需读当月或最近一个归档，不批量加载。
 
 1. 目标、boundary、依赖和 validation 是否足以开始。
 2. 文件、符号和接口是否仍与仓库一致。
@@ -141,7 +141,7 @@ Next: 一个明确动作
 3. 返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-verification-before-completion`，`mode: zhanggui-embedded`，`input` 含完整证据，`return_to: { phase: execute, node: <task-id> }`，由根核对需求与证据后恢复本步骤。
 4. `not-verified` 记录 gaps 并回原 task/debug，Durable/Epic 保持 `pending-validation`；`verified` 恢复 execution 后，Durable/Epic 改为 `pending-cleanup`，Transient 继续完成会话交付。
 5. 未被用户要求时不自行 commit、push 或创建 PR；工作在独立分支/worktree 上或用户要求收尾时，返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-finishing-a-development-branch`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，由根呈现收尾选项并执行用户选择。
-6. 沉淀到项目协作记忆（init-project 体系）：项目根存在 `memory.md` 时，把本次仍有效且跨任务成立的"关键决策 / 可复用坑点 / 新完成能力"滚动写进 `memory.md`（遵守 ≤120 行、删失效项、只留仍有效决策的规则），有重要根因分析或踩坑时追加到 `memory/archive/YYYY-MM.md`（只追加、不覆盖历史）；任务内部的一次性决策留在 SPEC/PROGRESS，不升进项目记忆。项目根没有这套协作文件、但本次产生了可复用领域决策或坑点时，才问一次是否创建轻量沉淀文件（如 `docs/DECISIONS.md`），用户拒绝则本 effort 内不再问。`SPEC.md` / `EPIC.md` 是否保留遵循项目文档约定；清理临时 raw 和无价值恢复信息。
+6. 沉淀到项目协作记忆（setup-collaboration-files 体系）：项目根存在 `memory.md` 时，把本次仍有效且跨任务成立的"关键决策 / 可复用坑点 / 新完成能力"滚动写进 `memory.md`（遵守 ≤120 行、删失效项、只留仍有效决策的规则），有重要根因分析或踩坑时追加到 `memory/archive/YYYY-MM.md`（只追加、不覆盖历史）；任务内部的一次性决策留在 SPEC/PROGRESS，不升进项目记忆。项目根没有这套协作文件、但本次产生了可复用领域决策或坑点时，才问一次是否创建轻量沉淀文件（如 `docs/DECISIONS.md`），用户拒绝则本 effort 内不再问。`SPEC.md` / `EPIC.md` 是否保留遵循项目文档约定；清理临时 raw 和无价值恢复信息。
 7. Transient 确认会话 plan 全部 completed 后结束。Durable/Epic 还要确认 CSV 没有未完成/失败行且 cleanup 已结束，设置 `FinalizationStatus: complete`；只有此后才可删除临时 `TODO.csv` / `SUBTASKS.csv`。`complete` 的 PROGRESS 可按项目归档约定保留或删除。
 
 ## 输出 delta

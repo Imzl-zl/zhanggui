@@ -1,7 +1,7 @@
 {
   "name": "zhanggui",
-  "version": "0.8.0",
-  "description": "Ten strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone init-project bootstrap.",
+  "version": "0.9.0",
+  "description": "Eleven strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.",
   "author": {
     "name": "zhanglu"
   },
@@ -19,8 +19,8 @@
   "hooks": {},
   "interface": {
     "displayName": "Zhanggui（掌柜）",
-    "shortDescription": "One selective-hybrid root, eight dual-mode leaves, one standalone bootstrap",
-    "longDescription": "Ten strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator with automatic or manual loading, eight zhanggui-* leaves with Direct and Zhanggui Embedded contracts, and the standalone init-project bootstrap. The root owns WorkflowState and activates leaves by SkillRequest; narrow requests stay with their corresponding leaf.",
+    "shortDescription": "One selective-hybrid root, eight dual-mode leaves, two standalone bootstraps",
+    "longDescription": "Eleven strict Agent Skills: one selective-hybrid stateful Zhanggui orchestrator with automatic or manual loading, eight zhanggui-* leaves with Direct and Zhanggui Embedded contracts, and the standalone setup-collaboration-files bootstrap paired with the decision-notes lifecycle. The root owns WorkflowState and activates leaves by SkillRequest; narrow requests stay with their corresponding leaf.",
     "developerName": "zhanglu",
     "category": "Developer Tools",
     "capabilities": [

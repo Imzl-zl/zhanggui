@@ -1,0 +1,30 @@
+{
+  "skill_name": "zhanggui-systematic-debugging",
+  "fixture_baseline": { "buggy-cart": "failing" },
+  "evals": [
+    {
+      "id": "buggy-cart-diagnose-and-fix",
+      "prompt": "这个仓库的测试挂了。先别急着改，帮我查清楚根因，再修掉，并留下能复现它的测试。项目在 buggy-cart/。",
+      "expected_output": "被指名的具体根因（折扣按第一件商品的金额判断，而不是购物车小计）、来自真实运行的证据、修复后全套测试通过，以及一条覆盖多件商品的回归测试。",
+      "files": ["buggy-cart"],
+      "assertions": [
+        "The final message names the specific root cause: the discount is decided from the first line item's amount instead of the cart subtotal",
+        "The root cause is supported by evidence quoted from an actual test or command run",
+        "The transcript shows the failing test was observed before any source file was edited",
+        "src/cart.js now decides the discount from the cart subtotal",
+        "test/cart.test.js contains a regression test for a multi-item cart whose subtotal qualifies for the discount"
+      ]
+    },
+    {
+      "id": "buggy-cart-explain-without-editing",
+      "prompt": "同事问这个购物车的折扣为什么算错。你把根因和证据整理一段话给他，先别动代码。",
+      "expected_output": "一段能直接转发的说明：具体根因、支撑它的实际运行证据，并且没有修改任何源码文件。",
+      "files": ["buggy-cart"],
+      "assertions": [
+        "The final message explains the root cause well enough for a teammate to act on it",
+        "The cited evidence comes from an actual run rather than from reading the code alone",
+        "src/cart.js still contains the original discount calculation from the first line item"
+      ]
+    }
+  ]
+}

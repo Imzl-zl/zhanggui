@@ -1,12 +1,13 @@
 # Skill 融合工作流设计
 
-**状态：** 当前权威设计文档（集合 v0.8.0）  
+**状态：** 当前权威设计文档（集合 v0.9.0）  
 **首版日期：** 2026-07-25  
 **实现入口：** [`skills/`](../README.md)
 
 ## 0. 运行架构摘要
 
-- **Ten strict catalog entries**：十个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权；`init-project` 是并列的独立技能，不参与根/leaf 路由。
+- **Eleven strict catalog entries**：十一个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权；`setup-collaboration-files` 与 `decision-notes` 是并列的独立技能，不参与根/leaf 路由。
+- **协作文件体系是并列的另一套体系**：`setup-collaboration-files` 一次性铺设骨架并写仓库不变量，`decision-notes` 每次非平凡改动写单篇笔记；两者单向耦合于 `.agents/notes/AGENTS.md` 这一份仓库运行时契约，互相不复述对方规则。设计论证见 [`history/specs/2026-09-16-collaboration-notes-workflow-design.md`](history/specs/2026-09-16-collaboration-notes-workflow-design.md)。
 - **选中只靠 description**：宿主启动时只注入 `name` + `description`，选哪个技能完全由它决定。因此 description 只写触发条件：不写 `Do not use for...` 一类仲裁条款（等于在自己招牌上写“别选我”），不写行为指令，不概述工作流（概述了模型会照摘要拄而不读正文）。根与 leaf 的边界靠各自具体的触发词自然分开。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 的 `Invocation Modes`、技能间边界全部写在正文——那里才是它们真正被执行的地方。
 - **状态在磁盘**：规范不提供跳轮次的内存状态，能跳会话存活的只有文件；task root 下的 `DESIGN.md` / `PROGRESS.md` / CSV tracker 是真值，上下文里的 WorkflowState 只是它的投影。
@@ -31,7 +32,7 @@
 
 ## 2. 目标
 
-- 高信号复杂、跨模块、多交付物、checkpoint 恢复或明确端到端请求可自动进入根；熟悉用户仍可通过宿主原生命令确定性进入。
+- 满足 `zhanggui` description 所声明前置条件的高信号请求可自动进入根（触发面只在 description 里维护，本文不复述）；熟悉用户仍可通过宿主原生命令确定性进入。
 - 内部路由遵守宿主真实 invocation 规则；root-first 是唯一入口优先级。
 - runtime plugin 发现九个 strict Agent Skills：一个 selective-hybrid 有状态根与八个可独立匹配的 dual-mode leaf skills。
 - leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 `SkillResult`。
@@ -83,7 +84,7 @@ task-root ownership 与冷启动恢复细则仍位于根旁的 `RECOVERY.md`，�
 ### 4.1.1 Explicit / Implicit / root-first / de-escalation
 
 - **Explicit**：宿主原生命令或逻辑 alias 显式调用根时，root-first 覆盖全部 leaf 边界；窄意图也可由根通过最小 state + Embedded leaf 处理。
-- **Implicit**：无命令但请求满足高信号完整生命周期条件时，根自动进入；首次工具调用前输出一次真实进入原因，不询问是否启用。
+- **Implicit**：无命令但请求满足 description 声明的隐式前置条件时，根自动进入；首次工具调用前输出一次真实进入原因，不询问是否启用。
 - **Root-first**：同一帧根与 leaf 同时加载时，根拥有入口与状态；leaf 不得执行 Direct 分支，只能由根经 `SkillRequest` 进入 Embedded。
 - **Narrow-task de-escalation**：隐式误匹配后发现窄意图时，可降级到最小 route state + Embedded leaf；trigger eval 仍计为 root false positive。
 
@@ -176,9 +177,9 @@ DESIGN→SPEC/EPIC 是单次 cutover：候选工件核对期间 DESIGN 仍胜出
 
 所有向用户的决策问题统一为引导式格式：问题 + 研究背景（同类设计 > 官方指南 > 模型自身判断，无同类时标注）+ 2-4 个带差异的选项 + 明确推荐 + 自由输入出口。用户独有信息用开放问题，不硬造选项。格式随熟悉度伸缩：陌生领域（Assisted 卡点）用完整引导式，用户熟悉的 Owner 领域以开放问题 + 推荐为主、选项按需；格式只统一"怎么问"，不改变 owner 分权（问多少、谁决定）。
 
-问题内容与交付通道分离：所有等待用户的路径先构造统一 `QuestionRequest`（question、context、options、recommended、free_form），再由编排器检查当前宿主暴露的能力。`AskUserQuestion`、`request_user_input`、`ask` 或等价结构化工具能忠实表达请求时必须真实调用，不能用普通消息里的编号菜单替代；推荐项使用原生元数据，宿主自动提供的 `Other` / 自定义输入直接承担自由输入出口，不重复造选项。
+问题内容与交付通道分离：所有等待用户的路径先构造统一 `QuestionRequest`（question、context、options、recommended、free_form），再由编排器检查当前宿主暴露的能力。`AskUserQuestion`、`request_user_input`、`ask` 或等价结构化工具能忠实表达请求时优先真实调用，不要在等待同一问题的同一轮里再用文本重复一份等价编号菜单；推荐项使用原生元数据，宿主自动提供的 `Other` / 自定义输入直接承担自由输入出口，不重复造选项。
 
-只有宿主没有原生结构化提问能力，或工具 schema 无法表达不带伪造选项的纯开放问题时，才允许文字提问，并以 `no-native-question-tool` 或 `unsupported-question-shape` 显式记录降级。Skill 只能强制使用已存在的宿主能力，不能为不提供该能力的客户端制造弹框。
+只有宿主没有原生结构化提问能力，或工具 schema 无法表达不带伪造选项的纯开放问题时，才退化为文字提问，并在会话里写明实际原因（`no-native-question-tool` / `unsupported-question-shape`）。Skill 只能使用已存在的宿主能力，不能为不提供该能力的客户端制造弹框；把一次文字提问当成失败，只会让模型为了满足格式而伪造选项。
 
 
 用户自由输入是一等回答：明确决定关闭节点；想法/方向触发收敛循环——复述理解、补研究、更新选项后继续一次一问直到收敛，不受"仪式性追问限一次"约束。design-assist 转出的 user-owned 卡点必须把研究与选项预填进 node，grilling 复用不重做。
@@ -311,11 +312,11 @@ DONE 必须有当前 validation 的新鲜证据。
 
 ## 10. Invocation 与隔离
 
-- plugin 发现十个 strict Agent Skills：selective-hybrid 根 `zhanggui`、八个 dual-mode leaf，以及并列的独立技能 `init-project`；全部 `name` + `description` catalog-visible。
+- plugin 发现十个 strict Agent Skills：selective-hybrid 根 `zhanggui`、八个 dual-mode leaf，以及并列的独立技能 `setup-collaboration-files`；全部 `name` + `description` catalog-visible。
 - 根支持选择性自动与手动进入：Codex profile 设置 `allow_implicit_invocation: true`；高信号请求可自动进入，任何时候也可用宿主原生命令手动进入。
 - `/zhanggui` 是逻辑 alias；OMP 交互式原生显式入口为 `/skill:zhanggui`，在模型工作前 host-direct 注入根 `SKILL.md`。`omp -p "/zhanggui ..."` / `omp -p "/skill:zhanggui ..."` 将未知 slash 当作普通文本，不能作为 native-root 证据。
 - leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过 `SkillRequest` 激活同一 leaf 的 `Zhanggui Embedded` 模式。
-- 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 collection 布局（`init-project` 无依赖，可单独复制）。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
+- 完整 collection 自包含：插件安装加载 `./skills/`；裸安装必须把 `zhanggui/` 与全部 `zhanggui-*` 目录一起复制并保持 collection 布局（`setup-collaboration-files` 无依赖，可单独复制）。Agent Skills 渐进加载保证未使用的正文不进上下文；插件与裸 collection 不得同时启用。
 - 五个共享状态阶段仍是 `STAGE.md`，不参与 discovery，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 同样只由根按需读取。
 - 不得同时启用另一套默认强编排入口。
 - trigger eval 证据：`evals/results/v0.7-routing-summary.json`（122 cases / 366 slots / 393 attempts；max 3 transport-only retry waves）。**已被取代**：该测量对应旧 description 目录（含仲裁条款），且 catalog 只开了 `--skills "zhanggui*"`。归一后的目录尚未重测，现状与重测要求见 [`evals/README.md`](../evals/README.md)。
@@ -399,8 +400,8 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 34. Minimal 投影下命中完整 state 触发点（写 return_point、新建 node/fog、写任务工件）-> 先补齐完整字段再执行该动作。
 35. 一轮中误发多个问题 -> 用户任答其一后，其余问题重新入队按节奏逐轮问，不并行追问。
 36. 用户中途明确放弃目标 -> 执行 scope reset：剪枝 nodes/fog、作废受影响 decisions、重置 consensus、重新路由，DESIGN.md 按用户意愿处理。
-37. 宿主暴露可表达当前选项的原生结构化提问工具 -> 实际发生一次宿主可识别的 tool call event，推荐使用原生字段，自动 `Other` 不重复添加，assistant 文本不再出现等价编号菜单；只输出工具名、JSON 或伪调用同样判失败；grilling、共识确认和 finishing 均适用。
-38. 宿主没有原生提问工具，或纯开放问题无法被其 schema 忠实表达 -> 记录明确 fallback reason 后只问一个文字问题，不伪造选项，不静默假装已弹框。
+37. 宿主暴露可表达当前选项的原生结构化提问工具 -> 实际发生一次宿主可识别的 tool call event，推荐使用原生字段，自动 `Other` 不重复添加；同一轮不再用文本重复同一份选项。grilling、共识确认和 finishing 均适用。
+38. 宿主没有原生提问工具，或纯开放问题无法被其 schema 忠实表达 -> 直接用文字只问一个问题，不伪造选项，不静默假装已弹框，并在会话里写明 `no-native-question-tool` / `unsupported-question-shape`。
 39. Detached HEAD 的 finishing 选项删除 `local-merge` -> `recommended` 只能是仍存在的 `push-pr` 或 `keep`；无 PR 流程时推荐 `keep`，不得生成 schema 无效的推荐 id。
 40. finishing 收到无法等价到四个稳定 id 的自由输入 -> 保持同一 `finishing-choice` 未决并进入收敛循环；收敛前无动作、无临时第五 id，最终 `Choice` 仍是稳定 id。
 41. Direct leaf 在没有 Zhanggui frame 时 -> 从请求推导输入，不创建 WorkflowState/return point/readiness/tracker，输出自身终态。

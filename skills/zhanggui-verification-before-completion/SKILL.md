@@ -1,7 +1,7 @@
 ---
 name: zhanggui-verification-before-completion
 license: MIT
-description: Use when work is about to be called complete, fixed, passing, or ready, or before a commit, push, pull request, or handoff to the next task, and no fresh evidence for that claim has been produced yet.
+description: Proves a completion claim with fresh evidence — real command output, test results, an actual run — before anyone acts on that claim. Use when work is about to be called done, fixed, passing, or ready, when a commit, push, or handoff is about to rest on it, when someone wants the actual command output rather than a summary, when an earlier 已修复 or 通过 claim has to be re-checked, or when the change looks small and safe and still needs evidence instead of a feeling.
 ---
 
 # Verification Before Completion

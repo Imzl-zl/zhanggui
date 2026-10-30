@@ -1,7 +1,7 @@
 {
   "name": "zhanggui",
-  "version": "0.8.0",
-  "description": "Authoring project for ten strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone init-project bootstrap.",
+  "version": "0.9.0",
+  "description": "Authoring project for eleven strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.",
   "type": "module",
   "private": true,
   "license": "MIT",
@@ -28,9 +28,11 @@
     ]
   },
   "scripts": {
-    "test": "node --test",
+    "test": "node --test \"tests/**/*.test.mjs\"",
     "validate": "node scripts/validate-agent-skills.mjs",
     "deploy": "bash scripts/deploy-skills.sh",
+    "eval:triggers": "node scripts/run-trigger-eval.mjs",
+    "eval:quality": "node scripts/run-quality-eval.mjs",
     "check": "npm run test && npm run validate"
   }
 }

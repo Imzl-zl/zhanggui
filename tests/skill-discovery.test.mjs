@@ -18,7 +18,7 @@ const leafSkills = [
   { name: 'zhanggui-finishing-a-development-branch', enabled: true },
 ];
 
-const standaloneSkills = ['init-project'];
+const standaloneSkills = ['setup-collaboration-files', 'decision-notes'];
 
 const statefulStages = [
   'design-assist',
@@ -121,24 +121,25 @@ test('all relative skill navigation paths resolve', async () => {
   }
 });
 
-function assertPluginManifestV08(manifest) {
+function assertPluginManifestV09(manifest) {
   assert.equal(manifest.skills, './skills/');
-  assert.equal(manifest.version, '0.8.0');
+  assert.equal(manifest.version, '0.9.0');
   assert.equal(
     manifest.description,
-    'Ten strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone init-project bootstrap.',
+    'Eleven strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.',
   );
   assert.match(manifest.interface.shortDescription, /selective-hybrid root/i);
   assert.match(manifest.interface.shortDescription, /eight dual-mode leaves/i);
-  assert.match(manifest.interface.longDescription, /Ten strict Agent Skills/i);
+  assert.match(manifest.interface.longDescription, /Eleven strict Agent Skills/i);
   assert.match(manifest.interface.longDescription, /automatic or manual/i);
   assert.match(manifest.interface.longDescription, /eight zhanggui-\* leaves/i);
-  assert.match(manifest.interface.longDescription, /init-project/i);
+  assert.match(manifest.interface.longDescription, /setup-collaboration-files/i);
+  assert.match(manifest.interface.longDescription, /decision-notes/i);
   assert.ok(manifest.interface.defaultPrompt.some(line => /automatically match Zhanggui/i.test(line)));
   assert.ok(manifest.interface.defaultPrompt.some(line => /narrow task/i.test(line)));
 }
 
-test('plugin manifest pins the v0.8 hybrid packaging contract', async () => {
+test('plugin manifest pins the v0.9 hybrid packaging contract', async () => {
   const manifest = JSON.parse(
     await readFile(path.join(projectRoot, '.codex-plugin', 'plugin.json'), 'utf8'),
   );
@@ -151,16 +152,16 @@ test('plugin manifest pins the v0.8 hybrid packaging contract', async () => {
   mutated.interface.longDescription = 'Legacy packaging description without leaf contract.';
   mutated.interface.defaultPrompt = ['Type /zhanggui for the full workflow.'];
   assert.throws(
-    () => assertPluginManifestV08(mutated),
+    () => assertPluginManifestV09(mutated),
     /Expected values to be strictly equal|AssertionError/,
   );
 
-  assertPluginManifestV08(manifest);
+  assertPluginManifestV09(manifest);
 });
 
 test('root orchestrator supports strict hybrid invocation', async () => {
   const rootSkill = await readFile(path.join(skillsRoot, 'zhanggui', 'SKILL.md'), 'utf8');
-  const { metadata } = parseFrontmatter(rootSkill);
+  const { metadata, body } = parseFrontmatter(rootSkill);
   assert.equal(metadata.name, 'zhanggui');
   assert.equal(metadata['disable-model-invocation'], undefined);
 
@@ -169,11 +170,12 @@ test('root orchestrator supports strict hybrid invocation', async () => {
   ]);
   const rootExtensions = Object.keys(metadata).filter(key => !standardFrontmatterFields.has(key));
   assert.deepEqual(rootExtensions, []);
-  assert.match(metadata.description ?? '', /^Use when\b/);
+  assertDiscoveryDescription(metadata.name, metadata.description ?? '');
   assert.match(metadata.description ?? '', /unclear idea|unresolved design decisions/i);
   assert.match(metadata.description ?? '', /multiple modules|multiple deliverables/i);
   assert.match(metadata.description ?? '', /checkpoint/i);
   assert.match(metadata.description ?? '', /end-to-end/i);
+  assertBodyDefersToDescription(extractSection(body, '### Implicit', '### Root-first'));
   assert.match(metadata.compatibility ?? '', /complete Zhanggui skill collection/i);
   assert.match(metadata.compatibility ?? '', /model-selected skills/i);
 
@@ -196,45 +198,114 @@ for (const { name: skillName, enabled } of leafSkills) {
     const { metadata, body } = parseFrontmatter(content);
 
     assert.equal(metadata.name, skillName);
-    assert.match(metadata.description ?? '', /^Use when\b/);
+    assertDiscoveryDescription(metadata.name, metadata.description ?? '');
     assert.equal(metadata['disable-model-invocation'], undefined);
     assertDualModeContract(body);
   });
 }
 
-// Discovery only ever sees name + description. A description that arbitrates
-// against sibling skills tells the host "don't pick me" on its own label, and a
-// description that carries behavior instructions duplicates rules that belong in
-// the body, where they are actually executed.
-function assertTriggerOnlyDescription(name, description) {
-  assert.match(description, /^Use when\b/, `${name}: description must start with "Use when"`);
+// Discovery only ever sees name + description, and the open spec asks for both
+// halves: "Should describe both what the skill does and when to use it". The
+// spec's own good examples lead with the capability and end with the trigger
+// clause. A description that opens with "Use when" spends its whole budget on
+// conditions and never says what the agent gets; one that arbitrates against a
+// sibling tells the host "don't pick me" on its own label; one that carries
+// behavior instructions or a step list duplicates rules that belong in the body,
+// where they are actually executed. The house cap sits well under the
+// 1024-character spec ceiling because every skill's metadata is injected at
+// startup and competes with the conversation.
+const DESCRIPTION_HOUSE_LIMIT = 600;
+const MIN_CAPABILITY_CHARS = 30;
+
+function assertDiscoveryDescription(name, description) {
+  assert.ok(
+    description.length <= DESCRIPTION_HOUSE_LIMIT,
+    `${name}: description must stay within ${DESCRIPTION_HOUSE_LIMIT} characters, got ${description.length}`,
+  );
+  assert.doesNotMatch(
+    description,
+    /^Use when\b/,
+    `${name}: description must lead with what the skill does, not with the trigger clause`,
+  );
+  assert.match(description, /^[A-Z]/, `${name}: description must open with a capability sentence`);
+  const [capability = '', trigger = ''] = description.split(/\bUse when\b/);
+  assert.ok(
+    capability.trim().length >= MIN_CAPABILITY_CHARS,
+    `${name}: description needs a capability clause of at least ${MIN_CAPABILITY_CHARS} characters before its "Use when" clause`,
+  );
+  assert.ok(
+    trigger.trim().length >= 10,
+    `${name}: description needs an actual trigger clause after "Use when"`,
+  );
   assert.doesNotMatch(description, /\bdo not use\b/i, `${name}: description must not carry negative selection clauses`);
   assert.doesNotMatch(description, /\bdefer to\b/i, `${name}: description must not defer selection to another skill`);
   assert.doesNotMatch(description, /begin with|已自动进入/, `${name}: description must not carry behavior instructions`);
-  assert.ok(
-    description.length <= 500,
-    `${name}: description must stay within 500 characters, got ${description.length}`,
+  assert.doesNotMatch(
+    description,
+    /\bStep \d|\b\d+\.\s+\S/,
+    `${name}: description must not summarize the workflow as steps`,
+  );
+  // A plain YAML scalar cannot carry ": " (mapping indicator) or " #" (comment
+  // indicator). The line-based frontmatter parser used above happily reads such
+  // a line, so only the official validator rejects the file outright - catching
+  // it here keeps the failure one step closer to the edit that caused it.
+  assert.doesNotMatch(
+    description,
+    /: | #/,
+    `${name}: description must stay a plain YAML scalar - no ": " or " #"`,
   );
 }
 
-test('every catalog description carries triggering conditions only', async () => {
+// A measured A/B on the full 144-query corpus (two arms, only the root
+// description differing) found the root taking a leaf-positive query zero times:
+// precision 1.000 in both arms. The "generalist description steals the leaves'
+// territory" hypothesis is therefore not supported by evidence and is not
+// encoded here as a rule -- a test that forbids breadth would be enforcing an
+// unmeasured preference. What is encoded is the part independent of that
+// hypothesis: the body must defer to the description instead of keeping a
+// second, hand-maintained enumeration of the same preconditions.
+function assertBodyDefersToDescription(implicitSection) {
+  assert.match(
+    implicitSection,
+    /preconditions its description names/i,
+    'the implicit-entry predicate must defer to the description instead of restating it',
+  );
+}
+
+test('implicit-entry predicate defers to the description', () => {
+  // Mutation probe: a second, hand-maintained precondition list must fail.
+  assert.throws(
+    () => assertBodyDefersToDescription(
+      'Implicit entry is valid when the request spans multiple modules or produces multiple deliverables.',
+    ),
+    /must defer to the description/,
+  );
+});
+
+test('every catalog description states what the skill does and when to use it', async () => {
   const names = await discoverSkillNames();
-  assert.equal(names.length, 10);
+  assert.equal(names.length, 11);
 
   for (const name of names) {
     const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
     const { metadata } = parseFrontmatter(content);
-    assertTriggerOnlyDescription(name, metadata.description ?? '');
+    assertDiscoveryDescription(name, metadata.description ?? '');
   }
 });
 
-test('trigger-only gate rejects arbitration, behavior instructions and overlong text', () => {
-  assert.throws(() => assertTriggerOnlyDescription('probe', 'Handles bug reports as needed'));
-  assert.throws(() => assertTriggerOnlyDescription('probe', 'Use when a test fails; do not use for builds'));
-  assert.throws(() => assertTriggerOnlyDescription('probe', 'Use when a test fails; defer to the zhanggui root otherwise'));
-  assert.throws(() => assertTriggerOnlyDescription('probe', 'Use when a test fails. When selected implicitly, begin with the notice.'));
-  assert.throws(() => assertTriggerOnlyDescription('probe', `Use when ${'trigger '.repeat(80)}`));
-  assertTriggerOnlyDescription('probe', 'Use when a test failure needs its root cause found');
+test('discovery-description gate rejects trigger-only, arbitrating and overlong text', () => {
+  const capability = 'Traces a failing test to its root cause. ';
+  assert.throws(() => assertDiscoveryDescription('probe', 'Use when a test fails'));
+  assert.throws(() => assertDiscoveryDescription('probe', 'Handles bug reports as needed'));
+  assert.throws(() => assertDiscoveryDescription('probe', 'Short. Use when a test fails'));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when a test fails; do not use for builds`));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when a test fails; defer to the zhanggui root otherwise`));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when a test fails. When selected implicitly, begin with the notice.`));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when ${'trigger '.repeat(80)}`));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when a test fails. Step 1 read the log.`));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when a test fails, see: the log`));
+  assert.throws(() => assertDiscoveryDescription('probe', `${capability}Use when a test fails # not a comment`));
+  assertDiscoveryDescription('probe', `${capability}Use when a test failure needs its root cause found`);
 });
 
 test('dual-mode contract rejects hollow mode headings', () => {

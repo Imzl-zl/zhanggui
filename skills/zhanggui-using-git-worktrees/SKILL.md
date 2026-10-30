@@ -1,7 +1,7 @@
 ---
 name: zhanggui-using-git-worktrees
 license: MIT
-description: Use when feature work needs an isolated checkout, a write scope separated from the main working tree, or a dedicated workspace for executing an implementation plan.
+description: Creates an isolated git worktree for feature work so the main working tree stays untouched, and tears one down again when the work is done. Use when feature work needs an isolated checkout, a write scope separated from the main working tree, or a dedicated workspace for executing an implementation plan, when parallel features each need their own checkout, when the workspace has to be isolated before a plan starts, and when an existing worktree has to be set up or cleaned up rather than left behind, even if the request never says 'worktree'.
 ---
 
 # Using Git Worktrees
