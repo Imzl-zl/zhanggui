@@ -167,9 +167,8 @@
     },
     {
       "scope": "four low-recall leaf descriptions",
-      "target_case": "ver-pos-01/02/04/05/07, req-pos-01/03/04/08/10, rec-pos-02/05/06/08/10, wt-pos-05/07/09",
       "evidence": "results/triggers-deepseek-full-broad.json — the shipped catalog, all 144 queries, 1 run each, host claude (reference adapter, stream-json), driving model deepseek-flash, split_sha256 c980836bdcc1. Only train-split failures guided the wording; validation failures in the same report were not consulted.",
-      "caveat": "One run per query. Leaf-description-identical arms in the root experiment swung by up to 0.244, so an individual single-run miss can be a flip. The wording changes below are aimed at mechanisms visible across several misses, not at any single case.",
+      "caveat": "One run per query, and the before/after arms ran in different batches several hours apart. Batch effects on this instrument are real (the root experiment swung 0.39 to 0.67 for an identical description across batches), so the absolute rates below are indicative while the direction on the same 19 ids is the load-bearing part.",
       "per_skill": [
         {
           "skill": "zhanggui-verification-before-completion",
@@ -192,7 +191,58 @@
           "change": "Named the before-the-plan moment and the parallel-features case, so isolation requested as a precondition or as one of several parallel scopes is covered without relying on the literal word worktree."
         }
       ],
-      "measurement": "not re-measured after this edit; a re-run of these four skills' own positives is required before quoting any rate for it."
+      "measurement": "not re-measured after this edit; a re-run of these four skills' own positives is required before quoting any rate for it.",
+      "target_case_train": [
+        "ver-pos-01",
+        "ver-pos-02",
+        "ver-pos-04",
+        "ver-pos-05",
+        "ver-pos-07",
+        "req-pos-01",
+        "req-pos-03",
+        "rec-pos-02",
+        "rec-pos-05",
+        "rec-pos-06",
+        "wt-pos-05",
+        "wt-pos-07"
+      ],
+      "target_case_validation_observed_only": [
+        "req-pos-04",
+        "req-pos-08",
+        "req-pos-10",
+        "rec-pos-08",
+        "rec-pos-10",
+        "wt-pos-08",
+        "wt-pos-09"
+      ],
+      "guidance_rule": "Only the train ids above guided the wording. The validation ids were kept as observation only and were not consulted while choosing wording.",
+      "measured_outcome": {
+        "measurement_condition": "host claude (reference adapter, stream-json), driving model deepseek-flash via a private Anthropic-compatible gateway, concurrency 3, --timeout-ms 600000, split_sha256 c980836bdcc1",
+        "corpus": "the 19 queries that missed in the shipped-catalog run (ver 5, req 5, rec 5, wt 4)",
+        "before": {
+          "record": "results/triggers-deepseek-full-broad.json",
+          "note": "the shipped catalog measured before these four descriptions were edited",
+          "completed": 17,
+          "hits": 0
+        },
+        "after": {
+          "record": "results/triggers-deepseek-after19.json",
+          "completed": 18,
+          "hits": 5,
+          "hits_by_skill": {
+            "zhanggui-verification-before-completion": "ver-pos-01",
+            "zhanggui-requesting-code-review": "req-pos-10",
+            "zhanggui-receiving-code-review": "rec-pos-08, rec-pos-10",
+            "zhanggui-using-git-worktrees": "wt-pos-05"
+          },
+          "still_missing_due_to_other_causes": {
+            "req-pos-01": "taken by the host built-in code-review skill, the known collision already recorded in this file",
+            "wt-pos-08": "routed to zhanggui-dispatching-parallel-agents"
+          }
+        },
+        "reading": "The targeted ids went from 0/17 to 5/18. The direction holds and the wording is not inert, but the absolute level is still about 28 percent, so description wording is a secondary lever. The dominant failure mode in these batches is the model not consulting the skill catalog at all, which no wording can fix.",
+        "next_lever": "If higher recall is wanted, the evidence points at invocation mode or driving model, not at more description edits. Do not re-open the wording without a new failing case."
+      }
     }
   ],
   "required_before_claiming_rates": [

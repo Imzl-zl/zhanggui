@@ -1,0 +1,517 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "glm-5.3-flash",
+  "workspace_fixture": null,
+  "descriptions_override": "evals/candidates/four-leaves-before.json",
+  "descriptions_override_sha256": "3a58c0947abb65dd57e10351dbfd7921bff9a721e603d3c0a8ca20089c275d2a",
+  "runs_per_query": 1,
+  "concurrency": 1,
+  "threshold": 0.5,
+  "split_sha256": "c980836bdcc157d7ae28dfca91ad2c0996f22064d36426ccb63233334bce1126",
+  "queries": 19,
+  "successful_runs": 10,
+  "total_runs": 19,
+  "by_split": {
+    "train": {
+      "queries": 12,
+      "passed": 0,
+      "pass_rate": 0
+    },
+    "validation": {
+      "queries": 7,
+      "passed": 0,
+      "pass_rate": 0
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "setup-collaboration-files": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-receiving-code-review": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-requesting-code-review": {
+      "recall": 0,
+      "precision": null,
+      "tp": 0,
+      "fn": 5,
+      "fp": 0,
+      "tn": 5
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-test-driven-development": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 10
+    },
+    "zhanggui-verification-before-completion": {
+      "recall": 0,
+      "precision": null,
+      "tp": 0,
+      "fn": 5,
+      "fp": 0,
+      "tn": 5
+    }
+  },
+  "null_target_clean_rate": null,
+  "records": [
+    {
+      "id": "ver-pos-01",
+      "query": "写完了，帮我确认真的能跑起来，别只是看起来没问题",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-02",
+      "query": "我准备提交了，先跑一遍真实命令看看是不是真的过了",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-04",
+      "query": "别急着说完成了，先把测试和构建实际跑一遍",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-05",
+      "query": "要 push 了 帮我看下是不是真没问题",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "ver-pos-07",
+      "query": "交接给别人之前，我想确认这些断言都是真的跑通过的",
+      "expected_skill": "zhanggui-verification-before-completion",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "req-pos-01",
+      "query": "review 一下这个 diff，只审查不要改",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "req-pos-03",
+      "query": "帮我审查这三个文件的改动，重点看有没有安全问题和架构问题",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "req-pos-04",
+      "query": "看下我这个 patch 有没有坑",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "req-pos-08",
+      "query": "帮我对这次改动出一份审查报告，我要附在 PR 描述里",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-receiving-code-review"
+      ],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "req-pos-10",
+      "query": "对新写的这个公共接口做一次独立评审，找 Critical 级别的问题",
+      "expected_skill": "zhanggui-requesting-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-02",
+      "query": "同事说我的实现有问题，我不确定他说的对不对，帮我验证一下再决定",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 同事说我的实现有问题，我不确定他说的对不对，帮我验证一下再决定 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-05",
+      "query": "The reviewer flagged five things. Verify each one technically before I accept or push back.",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p The reviewer flagged five things. Verify each one technically before I accept or push back. --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-06",
+      "query": "审查报告里有一条说这是架构缺陷，我不太信，帮我验一下证据",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 审查报告里有一条说这是架构缺陷，我不太信，帮我验一下证据 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-08",
+      "query": "上一轮审查的结论我还没处理完，先把每条定个性",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-requesting-code-review"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 上一轮审查的结论我还没处理完，先把每条定个性 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "rec-pos-10",
+      "query": "别performative地接受，帮我看哪条真的成立",
+      "expected_skill": "zhanggui-receiving-code-review",
+      "split": "validation",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 别performative地接受，帮我看哪条真的成立 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-05",
+      "query": "Set up an isolated checkout for this feature so my main working tree stays clean.",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p Set up an isolated checkout for this feature so my main working tree stays clean. --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-07",
+      "query": "建完 worktree 后面还要清理掉，别留垃圾",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 建完 worktree 后面还要清理掉，别留垃圾 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-08",
+      "query": "并行做两个功能，各自一个隔离检出",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 并行做两个功能，各自一个隔离检出 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-09",
+      "query": "执行这个实现计划之前，先把工作区隔离出来",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "validation",
+      "near_miss_for": [
+        "zhanggui"
+      ],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 执行这个实现计划之前，先把工作区隔离出来 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"glm-5.3-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    }
+  ]
+}
