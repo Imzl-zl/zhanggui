@@ -76,7 +76,7 @@ agent 臂以 `--dangerously-skip-permissions` 启动：默认权限模式下 Bas
 - **delta(有技能 − 无技能)是承重指标**。delta ≤ 0 的技能没挣到它的 token:要么删掉,要么改到能赢过基线。
 - 夹具必须声明 `fixture_baseline`(`passing` / `failing`),由 `tests/quality-corpus.test.mjs` 实际跑一遍验证。故意失败的夹具一旦悄悄变绿,依赖它的用例就什么也没在测。
 
-**当前覆盖**:4 个技能有语料。`zhanggui-systematic-debugging`(2 例,夹具 `buggy-cart` 故意 1 个测试失败)、`zhanggui-test-driven-development`(2 例,夹具 `fresh-cart` 全绿)、`zhanggui-verification-before-completion`(3 例,夹具 `claim-app` / `stale-log-app` 故意失败、`clean-app` 全绿)、`decision-notes`(2 例,无夹具)。其余 7 个技能尚未写语料。
+**当前覆盖**:6 个技能有语料。`zhanggui-systematic-debugging`(2 例,夹具 `buggy-cart` 故意 1 个测试失败)、`zhanggui-test-driven-development`(2 例,夹具 `fresh-cart` 全绿)、`zhanggui-verification-before-completion`(3 例,夹具 `claim-app` / `stale-log-app` 故意失败、`clean-app` 全绿)、`decision-notes`(2 例,无夹具)、`zhanggui-requesting-code-review`(2 例,夹具 `review-app` / `weak-test-app` 全绿)、`zhanggui-receiving-code-review`(2 例,夹具 `reviewed-app` 全绿)。其余 5 个技能尚未写语料。
 
 ## 当前状态
 
@@ -108,18 +108,21 @@ agent 臂以 `--dangerously-skip-permissions` 启动：默认权限模式下 Bas
 
 两例的 with 臂都确认加载了对应技能、without 臂都没有。**方差警告**：每技能 2 例、每臂 1 次，delta 在配置微调之间摆动明显，这组数字只能作为“技能目前跑赢了自己的基线”，不足以判断稳定性。
 
-2026-10-30 追加的两个技能（**另一套测量条件**，与上面两行不可直接合并）：host `claude`、驱动模型 `deepseek-flash`、私有 Anthropic 兼容网关、判官身份 `ce24d4a9bd7b3be0`、并发 4。
+2026-10-30 追加的四个技能（**另一套测量条件**，与上面两行不可直接合并）：host `claude`、驱动模型 `deepseek-flash`、私有 Anthropic 兼容网关、判官身份 `ce24d4a9bd7b3be0`、并发 4。
 
-| 技能 | with_skill | without_skill | delta | 报告 |
-|---|---|---|---|---|
-| `zhanggui-verification-before-completion` | 1.000（3 例） | 1.000 | **+0.000** | `results/quality-verification.json` |
-| `decision-notes` | 1.000（2 例） | 0.100–0.600 | **+0.300 ~ +0.900** | `results/quality-decision-notes.json` |
+| 技能 | 类型 | with_skill | without_skill | delta | 报告 |
+|---|---|---|---|---|---|
+| `zhanggui-verification-before-completion` | 过程纪律 | 1.000（3 例） | 1.000 | **+0.000** | `results/quality-verification.json` |
+| `zhanggui-requesting-code-review` | 过程纪律 | 1.000（2 例） | 1.000 | **+0.000** | `results/quality-requesting.json` |
+| `zhanggui-receiving-code-review` | 过程纪律 | 1.000（2 例） | 1.000 | **+0.000** | `results/quality-receiving.json` |
+| `decision-notes` | 仓库特有工件 | 1.000（2 例） | 0.100–0.600 | **+0.300 ~ +0.900** | `results/quality-decision-notes.json` |
 
 读法:
 
-- `verification` 的 delta 为 0 且两臂满分,包括一条"拿昨天的通过报告当证据、今天代码其实已挂"的对抗案例——无技能臂自己就去跑了测试。**这条技能在当前驱动模型上没测出增量**。按本文件第 76 行的规矩,它要么退役,要么改写成模型做不到的东西(例如本仓特有的证据口径),不能靠继续改描述挽救。
-- `decision-notes` 的 with 臂两轮都是 1.000,without 臂在两轮之间从 0.600 掉到 0.100,**delta 区间写在表里而不是取一个数**。方向明确,绝对值不稳定。
-- 这一轮的判官臂波动比触发族更大:同一提示、同一用例,without 臂两次跑出 1.00 和 0.00。任何单次质量族结论都不足以下判断,至少 3 轮取中位数。
+- **三个过程纪律型技能全部是 0，且两臂都满分**。案例是刻意挑的对抗形状：一份"昨天的通过报告"而今天代码已挂、把外部值直接拼进 SQL、`assert.equal(f(100), f(100))` 这种自我复算的假测试、一条**错的**评审意见。无技能臂在这 7 条上全部自己做到了——跑测试、找出注入、看破假测试、驳回错意见。按本文件第 76 行的规矩，这三条要么退役，要么改写成模型自己做不到的内容，不能靠继续调 description 挽救。
+- `decision-notes` 的 with 臂两轮都是 1.000，without 臂在两轮之间从 0.600 掉到 0.100，**delta 区间写在表里而不是取一个数**。方向明确，绝对值不稳定。
+- 由此得到的分类假设（尚未在其余 5 个技能上验证）：**内容里有"模型推不出来的仓库事实"的技能才有增量，纯工程纪律没有**。
+- 这一轮的判官臂波动比触发族更大：同一提示、同一用例，without 臂两次跑出 1.00 和 0.00。任何单次质量族结论都不足以下判断，至少 3 轮取中位数。
 
 `evals/catalog-current.json` 的 `status` 仍为 `pending-reevaluation`：当前目录的触发数字由新的触发族产出，而该门的 `measured` 分支要求一份判官 harness 形态的 summary，本批没有为让门变绿去改它。
 

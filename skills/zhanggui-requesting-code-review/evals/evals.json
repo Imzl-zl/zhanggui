@@ -1,0 +1,29 @@
+{
+  "skill_name": "zhanggui-requesting-code-review",
+  "fixture_baseline": { "review-app": "passing", "weak-test-app": "passing" },
+  "evals": [
+    {
+      "id": "review-app-find-injection-no-edits",
+      "prompt": "帮我把 src/users.js 审一遍，只要问题清单，别动代码。项目在 review-app/。",
+      "expected_output": "一份只读的审查结论：指出两条查询把外部值直接拼进 SQL（注入风险）并指明具体函数，给出分级或架构/细节归类，且不修改任何源码。",
+      "files": ["review-app"],
+      "assertions": [
+        "No file under review-app/src or review-app/test was modified",
+        "The report names the string-concatenated SQL queries as an injection risk and points at the specific functions",
+        "Each finding carries a severity or an architecture-versus-detail classification rather than an unranked list",
+        "The report does not conclude that the code is safe or ready to ship"
+      ]
+    },
+    {
+      "id": "weak-test-app-spot-the-tautology",
+      "prompt": "再看一下 weak-test-app/，重点是测试质量。同样只给结论，不改代码。",
+      "expected_output": "指出 test/discount.test.js 里那条断言把函数的输出和自己比较（assert.equal(discountFor(100), discountFor(100))），因此永远为真、什么也没验证；并给出可执行的修法方向。",
+      "files": ["weak-test-app"],
+      "assertions": [
+        "The report identifies the tautological assertion in test/discount.test.js as proving nothing",
+        "The report explains the mechanism, that the expected value is recomputed the same way as the actual value",
+        "No file under weak-test-app/src or weak-test-app/test was modified"
+      ]
+    }
+  ]
+}

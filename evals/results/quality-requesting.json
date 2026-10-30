@@ -1,0 +1,163 @@
+{
+  "skill": "zhanggui-requesting-code-review",
+  "host": "claude",
+  "agent_permissions": "bypassPermissions",
+  "driving_model": "deepseek-flash",
+  "judge_identity_sha256": "ce24d4a9bd7b3be0ebd84e0a71422e25c34cbf5f9fe86a041e98f9ae17bb0735",
+  "with_skill": {
+    "pass_rate_mean": 1
+  },
+  "without_skill": {
+    "pass_rate_mean": 1
+  },
+  "delta": {
+    "pass_rate": 0
+  },
+  "ungraded_assertions": 0,
+  "cases": [
+    {
+      "id": "review-app-find-injection-no-edits",
+      "prompt": "帮我把 src/users.js 审一遍，只要问题清单，别动代码。项目在 review-app/。",
+      "expected_output": "一份只读的审查结论：指出两条查询把外部值直接拼进 SQL（注入风险）并指明具体函数，给出分级或架构/细节归类，且不修改任何源码。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 4,
+        "total": 4,
+        "duration_ms": 23965,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [
+          "review-app/package.json",
+          "review-app/src/users.js",
+          "review-app/test/users.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "No file under review-app/src or review-app/test was modified",
+            "passed": true,
+            "evidence": "Transcript shows only Read/Bash listing tools used, and the final message explicitly states \"未改动任何代码。\" with src/users.js and test/users.test.js matching the original contents."
+          },
+          {
+            "text": "The report names the string-concatenated SQL queries as an injection risk and points at the specific functions",
+            "passed": true,
+            "evidence": "报告将两条查询都列为注入风险并点名函数：\"**1. SQL 注入 — `findUserByName`（严重，users.js:7）**\" 和 \"**2. SQL 注入 — `findUser`（严重，users.js:2）**\"，附 \"未改动任何代码。\"，并给出严重/中/低的严重度分级。"
+          },
+          {
+            "text": "Each finding carries a severity or an architecture-versus-detail classification rather than an unranked list",
+            "passed": true,
+            "evidence": "每条发现都带有严重程度标签，例如“**1. SQL 注入 — `findUserByName`（严重，users.js:7）**”和“**5. 错误处理缺失（低，全部）**”，因此该报告不是一份未分级的问题列表。"
+          },
+          {
+            "text": "The report does not conclude that the code is safe or ready to ship",
+            "passed": true,
+            "evidence": "报告将注入列为**1. SQL 注入 — `findUserByName`（严重，users.js:7）** 和 **2. SQL 注入 — `findUser`（严重，users.js:2）**，结论为**优先级建议**：1、2、3 是必须修的（安全 + 真会线上报错）\"，随后以\"未改动任何代码。\"收尾，全程未称代码安全或可发布。"
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 1,
+        "passed": 4,
+        "total": 4,
+        "duration_ms": 20089,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [
+          "review-app/package.json",
+          "review-app/src/users.js",
+          "review-app/test/users.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "No file under review-app/src or review-app/test was modified",
+            "passed": true,
+            "evidence": "The transcript records only Bash `find`/`ls` and Read calls on `review-app/src/users.js` and `review-app/test/users.test.js` — no Edit/Write — and the produced files still contain the original code, e.g. `db.query(`SELECT * FROM users WHERE id = ${id}`)` and `function fakeDb(rows) { return { query: () => rows }; }`."
+          },
+          {
+            "text": "The report names the string-concatenated SQL queries as an injection risk and points at the specific functions",
+            "passed": true,
+            "evidence": "报告以“**1. SQL 注入 — `src/users.js:2`**”和“**2. SQL 注入更要命 — `src/users.js:7`**”为标题，指出这两条拼接查询有注入风险，并分别引用 `db.query(\\`SELECT * FROM users WHERE id = ${id}\\`)` 与 `db.query(\\`SELECT * FROM users WHERE name = '${name}'\\`)`；行号与代码对应 `findUser` 和 `findUserByName`，并按“严重/中/轻”分级。"
+          },
+          {
+            "text": "Each finding carries a severity or an architecture-versus-detail classification rather than an unranked list",
+            "passed": true,
+            "evidence": "Findings are grouped under severity headings — \"## 严重\", \"## 中\", \"## 轻\" — with the two injection findings naming the specific functions (\"**1. SQL 注入 — `src/users.js:2`**\" / \"**2. SQL 注入更要命 — `src/users.js:7`**\"), and the transcript shows only Read/Bash calls, no edits."
+          },
+          {
+            "text": "The report does not conclude that the code is safe or ready to ship",
+            "passed": true,
+            "evidence": "报告通篇只是缺陷清单（\"下面按严重程度从高到低排列\"），末尾停在\"**10. 未覆盖空结果与异常路径**\"，全文没有任何\"代码是安全的/可以发布\"之类的结论性表述。"
+          }
+        ]
+      },
+      "delta": 0
+    },
+    {
+      "id": "weak-test-app-spot-the-tautology",
+      "prompt": "再看一下 weak-test-app/，重点是测试质量。同样只给结论，不改代码。",
+      "expected_output": "指出 test/discount.test.js 里那条断言把函数的输出和自己比较（assert.equal(discountFor(100), discountFor(100))），因此永远为真、什么也没验证；并给出可执行的修法方向。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 3,
+        "total": 3,
+        "duration_ms": 149715,
+        "exit_code": 0,
+        "skill_activations": [
+          "zhanggui-requesting-code-review"
+        ],
+        "outputs": [
+          "weak-test-app/package.json",
+          "weak-test-app/src/discount.js",
+          "weak-test-app/test/discount.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "The report identifies the tautological assertion in test/discount.test.js as proving nothing",
+            "passed": true,
+            "evidence": "The report states `assert.equal(discountFor(100), discountFor(100))` 「拿函数和它自己比，恒真……却零信息量」 and prescribes 「断言改成生产规格中的具体期望值，如 `assert.equal(discountFor(100), 10)`」."
+          },
+          {
+            "text": "The report explains the mechanism, that the expected value is recomputed the same way as the actual value",
+            "passed": true,
+            "evidence": "报告指出 `assert.equal(discountFor(100), discountFor(100))` 拿函数和它自己比，恒真……零信息量，并给出修法 `assert.equal(discountFor(100), 10)`。"
+          },
+          {
+            "text": "No file under weak-test-app/src or weak-test-app/test was modified",
+            "passed": true,
+            "evidence": "Agent final message states \"未改动任何文件\", and the produced src/discount.js and test/discount.test.js are byte-identical to the versions read at the start of the transcript (no edits/writes appear in any tool call); it also flags the tautology \"assert.equal(discountFor(100), discountFor(100)) 拿函数和它自己比，恒真\" and offers the runnable fix \"断言改成…assert.equal(discountFor(100), 10)\"."
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 1,
+        "passed": 3,
+        "total": 3,
+        "duration_ms": 58263,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [
+          "weak-test-app/package.json",
+          "weak-test-app/src/discount.js",
+          "weak-test-app/test/discount.test.js"
+        ],
+        "assertion_results": [
+          {
+            "text": "The report identifies the tautological assertion in test/discount.test.js as proving nothing",
+            "passed": true,
+            "evidence": "报告写明「`test/discount.test.js:7` 是同义反复，实际上没有校验」，并引用了 `assert.equal(discountFor(100), discountFor(100)); // 恒真`，同时解释了「它把当时的生产函数返回值，和同一个函数再算一次的返回值做比较……只要这个函数是确定性的，这条断言就永远成立」，还给出了可执行的修法：让测试断言 `discountFor(100) === 10` 这类精确值、补上 99/100/101 这三个边界值，以及补上 105 → 11 这条取整规则。"
+          },
+          {
+            "text": "The report explains the mechanism, that the expected value is recomputed the same way as the actual value",
+            "passed": true,
+            "evidence": "报告指出「它把当时的生产函数返回值，和同一个函数再算一次的返回值做比较。因此，实现无论怎么改，只要这个函数是确定性的，这条断言就永远成立」，说明期望值是由生产代码本身重新算出来的；报告还建议把具体值写进断言，例如「没有测试覆盖 `discountFor(100) === 10` 这类精确值」，并建议补测边界值 99/100/101 和取整（105 → 11）。"
+          },
+          {
+            "text": "No file under weak-test-app/src or weak-test-app/test was modified",
+            "passed": true,
+            "evidence": "The transcript shows only Read and Bash inspection commands (mutants evaluated via in-memory `node -e` functions, no Write/Edit), and the produced files still contain the original `assert.equal(discountFor(100), discountFor(100));` in test/discount.test.js and the unchanged `if (total >= 100) return Math.round(total * 0.1);` in src/discount.js."
+          }
+        ]
+      },
+      "delta": 0
+    }
+  ]
+}
