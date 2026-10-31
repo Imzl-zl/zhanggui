@@ -34,7 +34,7 @@
 
 - 满足 `zhanggui` description 所声明前置条件的高信号请求可自动进入根（触发面只在 description 里维护，本文不复述）；熟悉用户仍可通过宿主原生命令确定性进入。
 - 内部路由遵守宿主真实 invocation 规则；root-first 是唯一入口优先级。
-- runtime plugin 发现九个 strict Agent Skills：一个 selective-hybrid 有状态根与八个可独立匹配的 dual-mode leaf skills。
+- runtime plugin 发现八个 strict Agent Skills：一个 selective-hybrid 有状态根、五个可独立匹配的 dual-mode leaf skills，以及两个并列的独立技能。
 - leaf 在 Direct 模式不虚构根状态，在 `Zhanggui Embedded` 模式返回可由根合并的 `SkillResult`。
 - 决策 owner 可按业务、技术、UI 等领域分别设置。
 - 严格 Owner/grill-me 路径保持一次一问、用户决策、明确共识。

@@ -125,7 +125,7 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
 
 ### 安装单元：完整 collection
 
-完整可移植单元是 `skills/` 下的全部目录（`zhanggui/` + 八个 `zhanggui-*/` + `setup-collaboration-files/` + `decision-notes/`），无需构建。按宿主能力优先选择正式安装方式：
+完整可移植单元是 `skills/` 下的全部目录（`zhanggui/` + 五个 `zhanggui-*/` + `setup-collaboration-files/` + `decision-notes/`），无需构建。按宿主能力优先选择正式安装方式：
 
 **1. Claude Code 插件（首选）**
 
