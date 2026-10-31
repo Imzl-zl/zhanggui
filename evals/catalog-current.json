@@ -250,6 +250,31 @@
       "evidence": "results/quality-verification.json, results/quality-requesting.json, results/quality-receiving.json (host claude, driving model deepseek-flash, judge identity ce24d4a9bd7b3be0). The no-skill arm scored 1.000 on every adversarial case, so these leaves did not earn their tokens.",
       "change": "Deleted zhanggui-verification-before-completion, zhanggui-requesting-code-review and zhanggui-receiving-code-review. Their discipline now lives once in stages/executing-plans/references/{verification,code-review,receiving-feedback,code-reviewer}.md.",
       "corpus_change": "Trigger corpus pruned from 144 to 120 queries: the 30 queries targeting the retired skills were removed, stale near_miss_for references stripped, and 6 near-miss queries added (4 train / 2 validation) to keep the corpus above the 120 floor and restore the finishing hard-negative count. split_sha256 re-frozen to 117eabe7. Historical v0.6-v0.9 records remain immutable and are compared against a frozen nine-entry list in tests."
+    },
+    {
+      "scope": "v0.10 baseline after retiring three leaves",
+      "target_case": null,
+      "evidence": "results/triggers-v010-smoke.json — all 120 queries, 1 run each, host claude, driving model deepseek-flash, split_sha256 117eabe7.",
+      "measured_outcome": {
+        "corpora": "120 queries / 8 skills (144 -> 120 after the corpus was pruned and re-frozen)",
+        "overall": {
+          "train": 0.722,
+          "validation": 0.78,
+          "null_clean": 0.974
+        },
+        "per_skill_recall": {
+          "decision-notes": 1.0,
+          "setup-collaboration-files": 0.8,
+          "zhanggui": 0.5,
+          "zhanggui-dispatching-parallel-agents": 0.7,
+          "zhanggui-finishing-a-development-branch": 0.9,
+          "zhanggui-systematic-debugging": 0.6,
+          "zhanggui-test-driven-development": 0.8,
+          "zhanggui-using-git-worktrees": 0.6
+        },
+        "caveat": "One run per query and about 11 percent of invocations failed at transport level, so the root and setup-collaboration-files recalls rest on 4 and 5 scored queries. This is a shape check, not a citable rate; --runs 3 is still required.",
+        "reading": "The new baseline is not comparable to v0.9 (different catalog and different corpus). The root remains the weakest router at 0.5, unchanged by the retirement, while decision-notes stays at 1.000 — consistent with its positive quality delta."
+      }
     }
   ],
   "required_before_claiming_rates": [
