@@ -24,7 +24,7 @@ tdd / finishing / dispatching 三处按 v0.8 的确定性误路由做的修订�
 
 ## 架构要点
 
-- **Eleven strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
+- **Eight strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
 - **选中只靠 description**：宿主启动时只注入 `name` + `description`，规范要求它同时说清「做什么」和「何时用」。所以 description 先写能力、再接 `Use when` 触发子句，不写仲裁条款、不写行为指令、不概述工作流；这条约束由 `tests/skill-discovery.test.mjs` 机械卡住。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 边界、`Invocation Modes` 全在正文——那里才会被执行。
 - **选择性 Hybrid 根**：高信号复杂请求可自动进入；任何时候也可用宿主原生命令手动进入。

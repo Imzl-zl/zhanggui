@@ -1,6 +1,6 @@
 # Receiving Feedback - 逐条核实外部审查意见
 
-执行阶段的同步子步骤。处理**已经存在**的反馈；产出新审查属于 [code-review.md](code-review.md)。规则原文只在这里维护；`zhanggui-receiving-code-review` 只保留调用契约并指向本文件。
+执行阶段的同步子步骤。处理**已经存在**的反馈；产出新审查属于 [code-review.md](code-review.md)。规则原文只在这里维护；`zhanggui-receiving-code-review` 已退役，此处是唯一维护处。
 
 ## 循环
 

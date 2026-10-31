@@ -57,7 +57,7 @@ Never report a domain as finished without that domain's own diff or result in ha
 3. Dispatch all independent agents in one tool message. One dispatch per message is serial, not parallel.
 4. When write scopes may touch adjacent areas, isolate each writer through exact catalog composition:
    - Direct mode: activate the exact leaf name `zhanggui-using-git-worktrees` through the host catalog; if the optional worktree capability is unavailable, fall back to non-overlapping scopes or serialize and say so.
-   - Embedded mode: return `SkillResult.status=skill-required` with `next_skill_request` set to the exact leaf; do not load sibling files directly.
+   - Embedded mode: record the review verdict in `delta` instead of dispatching it to a leaf; the retired `zhanggui-requesting-code-review` is no longer in the catalog.
 
 ```text
 next_skill_request:
@@ -76,13 +76,12 @@ For every result:
 3. Detect same-location or semantic conflicts before combining work.
 4. Run each domain's focused validation, then the integrated complete suite or smoke scenario.
 5. For high-risk domains, request independent review through exact catalog composition:
-   - Direct mode: activate the exact leaf name `zhanggui-requesting-code-review` through the host catalog; if the optional review capability is unavailable, record the skip/fallback and continue with integrated validation evidence.
-   - Embedded mode: return `SkillResult.status=skill-required` with `next_skill_request` set to the exact leaf; do not load sibling files directly.
+   - Direct mode: read `../zhanggui/stages/executing-plans/references/code-review.md` and run the review inline; when review does not apply, record the skip reason and continue with integrated validation evidence.
+   - Embedded mode: record the review verdict in `delta` instead of dispatching it to a leaf; the retired `zhanggui-requesting-code-review` is no longer in the catalog.
 
 ```text
-next_skill_request:
-  name: zhanggui-requesting-code-review
-  mode: zhanggui-embedded
+ReviewDiscipline: ../zhanggui/stages/executing-plans/references/code-review.md
+ReviewVerdict: review-passed | fixes-required | skipped
 ```
 
 Direct mode records integration in its report only. Embedded mode returns evidence; `/zhanggui` updates tracker rows after verification and derives parent status from child truth.
@@ -117,7 +116,7 @@ SkillResult:
     Validation: 各域和集成后的新鲜结果
     StageStatus: integrated | conflicts-found | blocked | serial-fallback
   question_request: <QuestionRequest-or-null>
-  next_skill_request: <SkillRequest-or-null；isolation 用 zhanggui-using-git-worktrees，高风险审查用 zhanggui-requesting-code-review>
+  next_skill_request: <SkillRequest-or-null；isolation 用 zhanggui-using-git-worktrees，高风险审查读 references/code-review.md>
 ```
 
 This skill does not set readiness or mark tasks complete. `/zhanggui` merges the delta into the original frame and completion claims still require verification. `skill-required` is handled by the root through `next_skill_request`, then this procedure resumes.

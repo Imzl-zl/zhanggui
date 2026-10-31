@@ -16,6 +16,13 @@ const leafNames = [
   'zhanggui-finishing-a-development-branch',
 ];
 
+// The two leaves that still carry their own procedure; the other three were
+// retired into stages/executing-plans/references/.
+const coreLeafNames = [
+  'zhanggui-systematic-debugging',
+  'zhanggui-test-driven-development',
+];
+
 function frontmatterKeys(content) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(content);
   assert.ok(match, 'missing frontmatter');
@@ -218,32 +225,20 @@ test('root rejects invalid skill results instead of merging them', async () => {
   assertOperationalSkillRequestRows(root);
 });
 
-test('internal stages request leaves through the root and contain no sibling skill loads', async () => {
-  const stagePath = path.join(skillsRoot, 'zhanggui', 'stages', 'executing-plans', 'STAGE.md');
-  const stage = await readFile(stagePath, 'utf8');
-  assert.doesNotMatch(stage, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
-  assert.doesNotMatch(stage, /\bdebug-required\b/);
-  assert.doesNotMatch(stage, /\bverification-required\b/);
-  assert.match(stage, /StageStatus: skill-required/);
-  assert.match(stage, /SkillRequest:/);
-  assert.match(stage, /SkillRequest\.return_to/);
-  assert.match(stage, /SkillRequest\.return_to[\s\S]*sole resume target|sole resume target[\s\S]*SkillRequest\.return_to|only resume channel[\s\S]*SkillRequest\.return_to|SkillRequest\.return_to[\s\S]*only resume channel/i);
+test('internal stages carry the review and verification disciplines locally', async () => {
+  const stage = await readFile(path.join(skillsRoot, 'zhanggui/stages/executing-plans/STAGE.md'), 'utf8');
+  assert.match(stage, /references\/code-review\.md/);
+  assert.match(stage, /references\/verification\.md/);
+  // These three leaves were retired; a stage that still dispatches them by name
+  // would fail at activation time with missing-skill.
   for (const name of [
-    'zhanggui-using-git-worktrees',
-    'zhanggui-dispatching-parallel-agents',
-    'zhanggui-test-driven-development',
     'zhanggui-requesting-code-review',
-    'zhanggui-systematic-debugging',
+    'zhanggui-receiving-code-review',
     'zhanggui-verification-before-completion',
-    'zhanggui-finishing-a-development-branch',
-  ]) assert.match(stage, new RegExp(`\\b${name}\\b`));
+  ]) {
+    assert.doesNotMatch(stage, new RegExp('name: ' + name), name + ' is retired but still dispatched by name');
+  }
 });
-
-const coreLeafNames = [
-  'zhanggui-systematic-debugging',
-  'zhanggui-test-driven-development',
-];
-
 test('core leaves return identity-bearing Embedded SkillResult envelopes', async () => {
   for (const name of coreLeafNames) {
     const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
@@ -346,34 +341,24 @@ test('leaf business flow contains no hardcoded sibling SKILL paths', async () =>
   }
 });
 
-test('Embedded parallel requests worktree or review by exact name instead of loading sibling files', async () => {
-  const content = await readFile(path.join(skillsRoot, 'zhanggui-dispatching-parallel-agents', 'SKILL.md'), 'utf8');
-  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
-  assert.match(
-    content,
-    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-using-git-worktrees/,
+test('Embedded parallel reads the review discipline instead of dispatching a retired leaf', async () => {
+  const content = await readFile(
+    path.join(skillsRoot, 'zhanggui-dispatching-parallel-agents', 'SKILL.md'),
+    'utf8',
   );
-  assert.match(
-    content,
-    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-requesting-code-review/,
-  );
-  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-using-git-worktrees[\s\S]{0,200}?(?:optional|fallback|unavailable)/i);
-  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-requesting-code-review[\s\S]{0,200}?(?:optional|fallback|unavailable)/i);
+  assert.match(content, /references\/code-review\.md/);
+  assert.doesNotMatch(content, /name: zhanggui-requesting-code-review/);
+  assert.match(content, /zhanggui-using-git-worktrees/);
 });
-
-test('Embedded finishing requests verification by exact name when evidence is stale or missing', async () => {
-  const content = await readFile(path.join(skillsRoot, 'zhanggui-finishing-a-development-branch', 'SKILL.md'), 'utf8');
-  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
-  assert.match(
-    content,
-    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-verification-before-completion/,
+test('finishing applies the verification discipline itself when evidence is stale', async () => {
+  const content = await readFile(
+    path.join(skillsRoot, 'zhanggui-finishing-a-development-branch', 'SKILL.md'),
+    'utf8',
   );
-  assert.match(
-    content,
-    /Direct mode:[\s\S]{0,220}?zhanggui-verification-before-completion[\s\S]{0,220}?(?:required[\s\S]{0,80}?block|block[\s\S]{0,80}?unavailable)/i,
-  );
+  assert.match(content, /references\/verification\.md/);
+  assert.doesNotMatch(content, /name: zhanggui-verification-before-completion/);
+  assert.match(content, /Verified: verified \| not-verified/);
 });
-
 test('worktree isolation triggers on readiness instead of a subjective risk self-assessment', async () => {
   const root = await readFile(rootPath, 'utf8');
   const stage = await readFile(

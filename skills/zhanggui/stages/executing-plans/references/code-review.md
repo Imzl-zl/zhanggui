@@ -1,6 +1,6 @@
 # Code Review - 独立审查一次改动
 
-执行阶段的同步子步骤，不是 detour，不占 `return_point` 单槽。规则原文只在这里维护；`zhanggui-requesting-code-review` 只保留调用契约并指向本文件。
+执行阶段的同步子步骤，不是 detour，不占 `return_point` 单槽。规则原文只在这里维护；`zhanggui-requesting-code-review` 已退役，此处是唯一维护处。
 
 ## 何时必须审
 

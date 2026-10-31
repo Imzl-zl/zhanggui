@@ -10,7 +10,7 @@ description: Closes out branch or worktree work whose verification is already se
 
 ### Direct
 
-Use this mode when the skill is activated from the catalog or invoked explicitly. Require fresh evidence that the work is verified before presenting any integration option. When evidence is missing or stale, Direct mode: activate the exact leaf name `zhanggui-verification-before-completion` through the host catalog; verification is required and blocks if unavailable. Do not invent a verified state.
+Use this mode when the skill is activated from the catalog or invoked explicitly. Require fresh evidence that the work is verified before presenting any integration option. When evidence is missing or stale, Direct mode: apply `../zhanggui/stages/executing-plans/references/verification.md` yourself; verification is required and blocks if unavailable. Do not invent a verified state.
 
 Direct mode owns no `WorkflowState`, `awaiting`, return point, or readiness. Deliver choices through the host's structured ask capability when available. Otherwise state an explicit text-fallback reason and ask once in text.
 
@@ -28,12 +28,11 @@ SkillResult:
   next_skill_request: <SkillRequest-or-null>
 ```
 
-Use this mode only when `/zhanggui` supplies `Verified: verified` plus current branch/workspace state. If verification is not current and verified, return `SkillResult.status=skill-required` with `next_skill_request` set to the exact leaf; do not invent a verified state and do not load sibling files directly.
+Use this mode only when `/zhanggui` supplies `Verified: verified` plus current branch/workspace state. If verification is not current and verified, return `SkillResult.status=blocked` naming the missing evidence. The retired `zhanggui-verification-before-completion` leaf is no longer in the catalog, so verification is applied from `../zhanggui/stages/executing-plans/references/verification.md`.
 
 ```text
-next_skill_request:
-  name: zhanggui-verification-before-completion
-  mode: zhanggui-embedded
+VerificationDiscipline: ../zhanggui/stages/executing-plans/references/verification.md
+Verified: verified | not-verified
 ```
 
 Construct the `QuestionRequest`, but before waiting let `/zhanggui` update its shared awaiting state and deliver the question through the root native-question contract. This skill returns only the selected action delta and never sets readiness.
@@ -126,7 +125,7 @@ SkillResult:
     Cleanup: worktree/branch 清理状态
     StageStatus: finished | kept | blocked
   question_request: <QuestionRequest-or-null；finishing-choice 等根投递问题>
-  next_skill_request: <SkillRequest-or-null；证据缺失/过期时用 zhanggui-verification-before-completion>
+  next_skill_request: <SkillRequest-or-null；证据缺失/过期时按 references/verification.md 取证>
 ```
 
 `/zhanggui` ends the effort or continues after merging this delta. `skill-required` is handled by the root through `next_skill_request`, then this procedure resumes.

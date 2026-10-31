@@ -76,7 +76,7 @@ agent 臂以 `--dangerously-skip-permissions` 启动：默认权限模式下 Bas
 - **delta(有技能 − 无技能)是承重指标**。delta ≤ 0 的技能没挣到它的 token:要么删掉,要么改到能赢过基线。
 - 夹具必须声明 `fixture_baseline`(`passing` / `failing`),由 `tests/quality-corpus.test.mjs` 实际跑一遍验证。故意失败的夹具一旦悄悄变绿,依赖它的用例就什么也没在测。
 
-**当前覆盖**:6 个技能有语料。`zhanggui-systematic-debugging`(2 例,夹具 `buggy-cart` 故意 1 个测试失败)、`zhanggui-test-driven-development`(2 例,夹具 `fresh-cart` 全绿)、`zhanggui-verification-before-completion`(3 例,夹具 `claim-app` / `stale-log-app` 故意失败、`clean-app` 全绿)、`decision-notes`(2 例,无夹具)、`zhanggui-requesting-code-review`(2 例,夹具 `review-app` / `weak-test-app` 全绿)、`zhanggui-receiving-code-review`(2 例,夹具 `reviewed-app` 全绿)。其余 5 个技能尚未写语料。
+**当前覆盖**:3 个技能有语料（三个零增量技能已退役，其语料随目录一并删除，运行记录保留在 `results/quality-RETIRED-*`）。`zhanggui-systematic-debugging`(2 例,夹具 `buggy-cart` 故意 1 个测试失败)、`zhanggui-test-driven-development`(2 例,夹具 `fresh-cart` 全绿)、`decision-notes`(2 例,无夹具)、`zhanggui-requesting-code-review`(2 例,夹具 `review-app` / `weak-test-app` 全绿)、`zhanggui-receiving-code-review`(2 例,夹具 `reviewed-app` 全绿)。其余 5 个技能尚未写语料。
 
 ## 当前状态
 
@@ -108,13 +108,13 @@ agent 臂以 `--dangerously-skip-permissions` 启动：默认权限模式下 Bas
 
 两例的 with 臂都确认加载了对应技能、without 臂都没有。**方差警告**：每技能 2 例、每臂 1 次，delta 在配置微调之间摆动明显，这组数字只能作为“技能目前跑赢了自己的基线”，不足以判断稳定性。
 
-2026-10-30 追加的四个技能（**另一套测量条件**，与上面两行不可直接合并）：host `claude`、驱动模型 `deepseek-flash`、私有 Anthropic 兼容网关、判官身份 `ce24d4a9bd7b3be0`、并发 4。
+2026-10-30 追加的四个技能（其中三个已按这批数据退役）（**另一套测量条件**，与上面两行不可直接合并）：host `claude`、驱动模型 `deepseek-flash`、私有 Anthropic 兼容网关、判官身份 `ce24d4a9bd7b3be0`、并发 4。
 
 | 技能 | 类型 | with_skill | without_skill | delta | 报告 |
 |---|---|---|---|---|---|
-| `zhanggui-verification-before-completion` | 过程纪律 | 1.000（3 例） | 1.000 | **+0.000** | `results/quality-verification.json` |
-| `zhanggui-requesting-code-review` | 过程纪律 | 1.000（2 例） | 1.000 | **+0.000** | `results/quality-requesting.json` |
-| `zhanggui-receiving-code-review` | 过程纪律 | 1.000（2 例） | 1.000 | **+0.000** | `results/quality-receiving.json` |
+| `zhanggui-verification-before-completion` | 过程纪律 | 1.000（3 例） | 1.000 | **+0.000** | `results/quality-RETIRED-verification.json` |
+| `zhanggui-requesting-code-review` | 过程纪律 | 1.000（2 例） | 1.000 | **+0.000** | `results/quality-RETIRED-requesting.json` |
+| `zhanggui-receiving-code-review` | 过程纪律 | 1.000（2 例） | 1.000 | **+0.000** | `results/quality-RETIRED-receiving.json` |
 | `decision-notes` | 仓库特有工件 | 1.000（2 例） | 0.100–0.600 | **+0.300 ~ +0.900** | `results/quality-decision-notes.json` |
 
 读法:

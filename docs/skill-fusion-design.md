@@ -6,7 +6,7 @@
 
 ## 0. 运行架构摘要
 
-- **Eleven strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权；`setup-collaboration-files` 与 `decision-notes` 是并列的独立技能，不参与根/leaf 路由。
+- **Eight strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权；`setup-collaboration-files` 与 `decision-notes` 是并列的独立技能，不参与根/leaf 路由。
 - **协作文件体系是并列的另一套体系**：`setup-collaboration-files` 一次性铺设骨架并写仓库不变量，`decision-notes` 每次非平凡改动写单篇笔记；两者单向耦合于 `.agents/notes/AGENTS.md` 这一份仓库运行时契约，互相不复述对方规则。设计论证见 [`history/specs/2026-09-16-collaboration-notes-workflow-design.md`](history/specs/2026-09-16-collaboration-notes-workflow-design.md)。
 - **选中只靠 description**：宿主启动时只注入 `name` + `description`，选哪个技能完全由它决定。因此 description 只写触发条件：不写 `Do not use for...` 一类仲裁条款（等于在自己招牌上写“别选我”），不写行为指令，不概述工作流（概述了模型会照摘要拄而不读正文）。根与 leaf 的边界靠各自具体的触发词自然分开。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 的 `Invocation Modes`、技能间边界全部写在正文——那里才是它们真正被执行的地方。
@@ -77,7 +77,7 @@
 
 根是唯一 Embedded `SkillRequest` 消费者，按固定顺序激活目标 skill：native activation → catalog location → controlled collection fallback。激活后校验 frontmatter `name` 与请求名一致，再按保留的 request input 执行 Embedded contract 并合并 `SkillResult`。这样既保留单一默认编排 frame，也让窄任务能被宿主独立发现；leaf 不是要求用户手工接力的一组主线命令。
 
-完整可移植单元因此是整个 `skills/` collection，而不再只是 `skills/zhanggui/`。裸安装必须复制根与八个 leaf 并保持 collection 布局。
+完整可移植单元因此是整个 `skills/` collection，而不再只是 `skills/zhanggui/`。裸安装必须复制根与五个 leaf 并保持 collection 布局。
 
 task-root ownership 与冷启动恢复细则仍位于根旁的 `RECOVERY.md`，只在第一次写盘前或存在恢复候选信号时读取；它不参与 discovery。Agent Skills 的渐进加载保证启动时只注入九个 frontmatter，实际匹配后才加载正文，未使用的 stage/leaf 不占完整上下文。
 

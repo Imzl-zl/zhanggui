@@ -1,6 +1,6 @@
 # Verification - 声称前先拿新鲜证据
 
-执行阶段的收尾纪律。规则原文只在这里维护；`zhanggui-verification-before-completion` 只保留调用契约并指向本文件。
+执行阶段的收尾纪律。规则原文只在这里维护；`zhanggui-verification-before-completion` 已退役，此处是唯一维护处。
 
 **未经验证就声称完成是不诚实，不是效率。**
 

@@ -57,7 +57,7 @@ The root activates the leaf, validates SkillResult, then resumes this same numbe
 | 处理已到达的外部审查意见、反驳规则、逐条处置 | `references/receiving-feedback.md` |
 | 声称完成前的证据纪律、禁止措辞、声称与证据对照 | `references/verification.md` |
 
-`zhanggui-requesting-code-review`、`zhanggui-receiving-code-review`、`zhanggui-verification-before-completion` 三个 leaf 现在只保留调用契约（字段与 Completion Contract），指向这里。纪律有改动时改本目录，不改 leaf。
+这三条流程原先是独立 leaf，已按 agentskills.io 的 "Add what the agent lacks, omit what it knows" 退役（质量族 with/without 全平）。纪律有改动时改本目录，不存在需要同步的 leaf。
 
 ## 开工前检查
 
@@ -93,7 +93,7 @@ TODO → IN_PROGRESS → DONE
 5. 对每个 `sync_target` 使用符号 references、schema/route/config 搜索重新发现真实影响面；更新所有必要调用方。
 6. 运行该行 `validation`，阅读完整结果。
 7. 通过：写 `DONE`、`completed_at` 和关键 notes；更新 `PROGRESS.md` 恢复区。
-   涉及安全、迁移或公开接口的高风险 task 可在标记 DONE 前返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-requesting-code-review`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，做任务级审查。
+   涉及安全、迁移或公开接口的高风险 task 可在标记 DONE 前按 `references/code-review.md` 做任务级审查，把 findings 记在本 stage 的 delta 里，不再派发到 leaf。
    所有任务尚未结束时保持 `FinalizationStatus: active`。
 8. 未通过：返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-systematic-debugging`，`mode: zhanggui-embedded`，`input` 含失败证据，`return_to: { phase: execute, node: <task-id> }`；根激活 debug leaf，修复后恢复同一 task。
 9. 继续下一 dependency-ready 项。
@@ -149,9 +149,9 @@ Next: 一个明确动作
 
 所有任务完成后：
 
-1. 命中 code-review 触发条件（安全、迁移、公开接口、存量数据、跨多文件、Epic child 完成、合并/交付前）时返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-requesting-code-review`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`：Critical/Important findings 由根合并后重开或新增任务行回执行循环（此时 `FinalizationStatus` 仍为 `active`），修复并重跑对应 validation；`review-passed` 或按该 skill 规则记录跳过理由后才继续。
+1. 命中 code-review 触发条件（安全、迁移、公开接口、存量数据、跨多文件、Epic child 完成、合并/交付前）时，按 `references/code-review.md` 审查；Critical/Important findings 由根合并后重开或新增任务行回执行循环（此时 `FinalizationStatus` 仍为 `active`），修复并重跑对应 validation；`review-passed` 或按该 skill 规则记录跳过理由后才继续。
 2. Durable/Epic 把 `FinalizationStatus` 设为 `pending-validation`；Transient 不创建该字段。随后根据会话验收或 SPEC/EPIC final validation 运行整体 smoke、相关测试、lint 或 build，只运行能证明本次声称的完整检查。
-3. 返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-verification-before-completion`，`mode: zhanggui-embedded`，`input` 含完整证据，`return_to: { phase: execute, node: <task-id> }`，由根核对需求与证据后恢复本步骤。
+3. 按 `references/verification.md` 取证并给出 `Verified: verified | not-verified` 与完整证据；由根核对需求与证据后恢复本步骤。
 4. `not-verified` 记录 gaps 并回原 task/debug，Durable/Epic 保持 `pending-validation`；`verified` 恢复 execution 后，Durable/Epic 改为 `pending-cleanup`，Transient 继续完成会话交付。
 5. 未被用户要求时不自行 commit、push 或创建 PR；工作在独立分支/worktree 上或用户要求收尾时，返回 `StageStatus: skill-required` 与 `SkillRequest`：`name: zhanggui-finishing-a-development-branch`，`mode: zhanggui-embedded`，`return_to: { phase: execute, node: <task-id> }`，由根呈现收尾选项并执行用户选择。
 6. 沉淀到项目协作记忆（setup-collaboration-files 体系）：项目根存在 `memory.md` 时，把本次仍有效且跨任务成立的"关键决策 / 可复用坑点 / 新完成能力"滚动写进 `memory.md`（遵守 ≤120 行、删失效项、只留仍有效决策的规则），有重要根因分析或踩坑时追加到 `memory/archive/YYYY-MM.md`（只追加、不覆盖历史）；任务内部的一次性决策留在 SPEC/PROGRESS，不升进项目记忆。项目根没有这套协作文件、但本次产生了可复用领域决策或坑点时，才问一次是否创建轻量沉淀文件（如 `docs/DECISIONS.md`），用户拒绝则本 effort 内不再问。`SPEC.md` / `EPIC.md` 是否保留遵循项目文档约定；清理临时 raw 和无价值恢复信息。
