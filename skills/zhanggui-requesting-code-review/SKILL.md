@@ -39,44 +39,8 @@ ReturnPhase / ReturnNode: 从 execution 调用时提供
 
 This is a synchronous procedure, not a detour. Preserve supplied return fields inside `delta`, do not write `WorkflowState.return_point`, and leave `awaiting` and global readiness unchanged.
 
-## When to Review
 
-Required before verification when changes involve security, migrations, public interfaces, existing data, multiple files, an Epic child boundary, merge/delivery, or an explicit review request.
-
-A single-file low-risk change, documentation-only edit, or throwaway prototype may skip review only when `/zhanggui` records the reason. Direct mode does not create such notes; it simply runs when invoked.
-
-## Review Workflow
-
-1. Resolve the exact git range or working-tree diff and state it.
-2. Resolve the review contract. If absent in Direct mode, mark the fidelity axis unchecked.
-3. If subagents are available, dispatch one independent reviewer using [references/code-reviewer.md](references/code-reviewer.md):
-   - `DESCRIPTION` = concise implementation summary.
-   - `PLAN_OR_REQUIREMENTS` = the actual contract, or `not provided - quality review only`.
-   - `BASE_SHA` / `HEAD_SHA` = the resolved range.
-4. Without subagents, read the complete diff and apply the same two axes:
-   - **Fidelity:** implementation matches the supplied requirements; deviations are identified.
-   - **Quality:** correctness, error handling, edge cases, security, real-behavior tests, migrations, compatibility, and production readiness.
-5. Keep review read-only. Never mutate the working tree, index, HEAD, or branch.
-6. Classify every finding as **architecture** or **detail** before assigning severity:
-   - **Architecture** — duplicated logic, a second source of truth, missing or
-     needless abstraction, wrong module boundary, or a design that forces many
-     future edits. Severity is at least Important; the fix is a redesign routed
-     back to design, never a local patch.
-   - **Detail** — localized bug, edge case, naming, error handling, or test gap;
-     fix in place; severity follows actual impact.
-   Then cite `file:line`, impact, and a concrete fix for every finding.
-
-## Findings Semantics
-
-- **Critical:** bugs, security flaws, data loss, or broken behavior.
-- **Important:** missing behavior, architecture defects, poor error handling, or material test gaps.
-- **Minor:** style, optimization, or documentation polish.
-- **Plan defect:** identify it explicitly; do not redesign inside the review.
-- **Incorrect reviewer claim:** rebut it with code, tests, or build evidence rather than accepting it performatively.
-
-All severities are report-only in this skill. In Embedded mode, emit the findings and `delta.StageStatus`; `/zhanggui` or the execution loop decides which tasks to reopen, what notes to record, whether design drift applies, and when verification may begin.
-
-A passed review is not completion verification. Fresh verification remains mandatory.
+审查纪律的唯一维护处是 [`../zhanggui/stages/executing-plans/references/code-review.md`](../zhanggui/stages/executing-plans/references/code-review.md)：何时必须审、只读流程、architecture 与 detail 分类、级别语义、报告形状。审查者提示词在同目录 `code-reviewer.md`。本技能只提供调用契约，不复述纪律。
 
 ## Completion Contracts
 

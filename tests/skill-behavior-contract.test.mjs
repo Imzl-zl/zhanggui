@@ -39,8 +39,12 @@ test('prototype stage produces runnable HTML evidence with a smoke check', async
   assert.match(prototype, /smoke check/);
 });
 
+// The review, feedback and verification disciplines live once, in the executing
+// stage's references. The leaves keep only their invocation contract, so these
+// pins moved with the rules instead of staying on a leaf that no longer carries
+// them.
 test('code reviewer classifies architecture vs detail and checks SSOT/duplication/abstraction', async () => {
-  const reviewer = await read('zhanggui-requesting-code-review/references/code-reviewer.md');
+  const reviewer = await read('zhanggui/stages/executing-plans/references/code-reviewer.md');
   assert.match(reviewer, /Architecture defect/);
   assert.match(reviewer, /Detail defect/);
   assert.match(reviewer, /Single source of truth/);
@@ -50,10 +54,11 @@ test('code reviewer classifies architecture vs detail and checks SSOT/duplicatio
   assert.match(reviewer, /Reuse/);
 });
 
-test('review skill classifies findings before severity and routes architecture back to design', async () => {
-  const review = await read('zhanggui-requesting-code-review/SKILL.md');
-  assert.match(review, /Classify every finding as \*\*architecture\*\* or \*\*detail\*\*/);
-  assert.match(review, /redesign routed\s*back to design/i);
+test('review discipline classifies findings before severity and routes architecture back to design', async () => {
+  const review = await read('zhanggui/stages/executing-plans/references/code-review.md');
+  assert.match(review, /每条发现先定性质再定级别/);
+  assert.match(review, /\*\*Architecture\*\*[\s\S]*路由回 design/);
+  assert.match(review, /不等于\s*\*\*?完成验证|不等于\*\*完成验证|不等于\*\* 完成验证/);
 });
 
 test('design-assist treats architecture as an explicit decision domain', async () => {

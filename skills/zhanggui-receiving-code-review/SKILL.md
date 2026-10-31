@@ -40,25 +40,8 @@ ReturnPhase / ReturnNode: 从 execution 调用时提供
 
 This is a synchronous procedure, not a detour. Preserve supplied return fields inside `delta`, do not write `WorkflowState.return_point`, and leave `awaiting` and readiness unchanged. If feedback conflicts with an `owner:user` decision, return the conflict as `blocked`; `/zhanggui` owns recap and design changes.
 
-## Feedback Workflow
 
-```text
-1. READ: read all feedback before reacting
-2. UNDERSTAND: restate the requirement or ask a precise question
-3. VERIFY: check the suggestion against repository reality
-4. EVALUATE: decide whether it is technically correct here
-5. RESPOND: acknowledge technically or rebut with evidence
-6. IMPLEMENT: handle one accepted item at a time and verify it
-```
-
-## Rules
-
-- If any item is unclear, pause all implementation and clarify first. Related items make partial understanding unsafe.
-- Implement clear items in order: crash/security blockers, simple fixes, then complex fixes. Verify each item and check for regressions.
-- Push back when a suggestion breaks working behavior, lacks necessary context, violates YAGNI, is wrong for this stack, or conflicts with a recorded user decision.
-- Ground pushback in code, references, tests, or build evidence.
-- Do not perform agreement: avoid praise, gratitude, or "You're absolutely right". Correct feedback is acknowledged by a concise technical statement and the verified change.
-- If your pushback was wrong, correct the fact directly without a long apology or defense.
+反馈处理纪律的唯一维护处是 [`../zhanggui/stages/executing-plans/references/receiving-feedback.md`](../zhanggui/stages/executing-plans/references/receiving-feedback.md)：READ/VERIFY/EVALUATE/RESPOND/IMPLEMENT 循环、反驳规则、不表演式同意。本技能只提供调用契约，不复述纪律。
 
 ## Completion Contracts
 

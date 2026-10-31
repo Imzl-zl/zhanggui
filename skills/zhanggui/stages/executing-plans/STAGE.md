@@ -46,6 +46,19 @@ SkillRequest:
 
 The root activates the leaf, validates SkillResult, then resumes this same numbered step. This stage never loads a sibling SKILL.md, never asks on behalf of an Embedded leaf, and never merges the leaf delta itself.
 
+## 纪律原文
+
+审查、反馈处理与验证这三条纪律的原文只在本目录维护，执行时按需读取，不指望任何 leaf 复述：
+
+| 场景 | 文件 |
+|---|---|
+| 验证前必须审、只读流程、architecture/detail 分类、级别语义、报告形状 | `references/code-review.md` |
+| 审查者提示词（派独立 subagent 时使用） | `references/code-reviewer.md` |
+| 处理已到达的外部审查意见、反驳规则、逐条处置 | `references/receiving-feedback.md` |
+| 声称完成前的证据纪律、禁止措辞、声称与证据对照 | `references/verification.md` |
+
+`zhanggui-requesting-code-review`、`zhanggui-receiving-code-review`、`zhanggui-verification-before-completion` 三个 leaf 现在只保留调用契约（字段与 Completion Contract），指向这里。纪律有改动时改本目录，不改 leaf。
+
 ## 开工前检查
 
 0. 项目根若存在 setup-collaboration-files 协作文件，先读 `memory.md`（当前状态、进行中、坑点）与 `tools.md`（命令、路径、模式、坑点）找北，用项目已验证的信息开工，不重复调查；`memory/archive/` 只按需读当月或最近一个归档，不批量加载。
