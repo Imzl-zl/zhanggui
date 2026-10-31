@@ -14,7 +14,7 @@
 
 > 本 README 只是导览，不参与运行，也不复述规则细节——避免出现第三份会漂移的“真值”。运行契约以 [`skills/zhanggui/SKILL.md`](skills/zhanggui/SKILL.md)、各 leaf `SKILL.md`、[`skills/setup-collaboration-files/SKILL.md`](skills/setup-collaboration-files/SKILL.md)、[`skills/decision-notes/SKILL.md`](skills/decision-notes/SKILL.md) 与内部 `STAGE.md` 为准；完整设计论证见 [Skill 融合工作流设计](docs/skill-fusion-design.md)。
 
-集合打包版本 v0.10.0。WorkflowState 与 task-root schema 沿用 v0.4 语义。
+集合打包版本 v0.11.0。WorkflowState 与 task-root schema 沿用 v0.4 语义。
 
 description 现已对齐开放规范：规范要求「既描述这个技能做什么，也描述何时用它」，官方作者指南的示例一律是**能力在前、`Use when` 触发子句在后**，并要求「宁可写得多一点」（显式列出用户没直接点名领域也算的场景）。此前八个 description 全部只写触发条件，能力那半个信号完全缺席，已整体改写（触发关键词与前置条件逐字保留）。六个被钉子评测的 description 因此进入**待重测**状态。
 

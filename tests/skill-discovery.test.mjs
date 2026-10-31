@@ -119,7 +119,7 @@ test('all relative skill navigation paths resolve', async () => {
 
 function assertPluginManifestV09(manifest) {
   assert.equal(manifest.skills, './skills/');
-  assert.equal(manifest.version, '0.10.0');
+  assert.equal(manifest.version, '0.11.0');
   assert.equal(
     manifest.description,
     'Seven strict Agent Skills: the Zhanggui selective-hybrid orchestrator, four dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.',
