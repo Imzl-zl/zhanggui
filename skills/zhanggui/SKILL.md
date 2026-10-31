@@ -1,7 +1,7 @@
 ---
 name: zhanggui
 license: MIT
-description: Owns one development request end-to-end — resolves open design decisions, plans the path, implements with tests, and carries the work to verified delivery. Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign.
+description: Owns one development request end-to-end — resolves open design decisions, plans the path, implements with tests, and carries the work to verified delivery. Use when a request hands over whole ownership of the job, when multiple modules, packages or deliverables are named at once and nobody has decided how the work is split, when a previous session stopped mid-task and its checkpoint must be resumed through verified delivery, when several independent pieces have to run concurrently, or when unresolved design decisions block implementation of a feature, migration or redesign.
 compatibility: Requires the complete Zhanggui skill collection; automatic invocation requires a host that supports model-selected skills.
 ---
 
@@ -34,7 +34,7 @@ After implicit entry, re-run the existing level-0 intent route before expanding 
 1. **用户所有权**：user-owned decision 未经用户回答不得替用户决定；推荐只是信息，不是默认答案。user-owned 领域内拿不准是可查事实还是真实决策时，按决策处理。
 2. **单一真值**：任一范围只有一个状态真值；候选、镜像或会话记忆与真值分歧时以真值为准。
 3. **硬门**：存在 user-owned decisions 且 `consensus != confirmed` 时不得 planning/execute；无新鲜验证证据不得声称完成。
-4. **一次一问**：每轮等待最多一个用户问题；提问格式的完整性让位于节奏。
+4. **一次一问**：每轮等待最多一次用户交互；只有满足提问契约成批资格的无依赖成员才可同批，同一决策域内仍一次一问；提问格式的完整性让位于节奏。
 5. **状态可恢复**：等待、detour 和落盘触发点前先更新 state；无法两全时，先保住可恢复性再继续推进。
 
 ## 宿主调用契约
@@ -92,6 +92,29 @@ Omit an empty `skill_requests` field from Minimal state. Synchronous requests ar
 
 Stable failures are: `missing-skill`, `skill-identity-mismatch`, `unsupported-mode`, `invalid-embedded-input`, `invalid-skill-result`, and `state-ownership-violation`.
 
+### 返回状态消费
+
+`StageStatus` / `Outcome` 只由根消费；叶子与 stage 不据此自行切换 phase、清空 return point 或设置 readiness。`SkillResult.status` 由 delta 决定，不独立取值：成功类 -> `completed`，`blocked` -> `blocked`，`awaiting-user` -> `awaiting-user`，`skill-required` -> `skill-required`。
+
+| 返回状态 | 根的动作 |
+|---|---|
+| `resolved`、`tdd-complete`、`isolated`、`in-place`、`finished` | `status: completed`；按 `return_to` 合并证据并恢复原 phase/node，readiness 不变 |
+| `kept` | `status: completed`；保留分支与 worktree 原样，readiness -> `stop`，不请求收尾 |
+| `node-resolved` | 合并 `Resolved`/`Assumptions`/`NewNodes`/`Pruned` 后重算 frontier，不改变 readiness |
+| `ownership-changed` | 必须带 `OwnershipChanges`；按箭头重新调度（`model -> user` 交 grilling，`user -> model` 交 design-assist），node 保持 open，`return_point` 不变 |
+| `needs-prototype` | 写入 `prototype.parent_id` 后按 Stage 导航表读 prototype，等待同一 parent node |
+| `awaiting-user` | 必须有 `question_request`；先置 `awaiting` 并写 checkpoint，再按提问契约投递 |
+| `consensus-pending`、`consensus-confirmed` | 按"共识与 Readiness 硬门"处理，不改其他领域 state |
+| `plan-ready` | Durable/Epic 进入 `execute`；Transient 不走此返回 |
+| `design-drift` | 走"Design drift 唯一路径" |
+| `architecture-review-required` | 按 Detour 节的 finding 路由建 architecture open node |
+| `verified`、`not-verified` | 按"Verification dispatch"处理；`not-verified` 同样清空 return point |
+| `finalization-complete` | readiness -> `stop`，清空 return point |
+| `skill-required` | 同步处理 `next_skill_request` 后恢复父请求，不占用全局 detour 槽 |
+| `blocked` | 保留 return point；按缺失内容落 `missing-skill` 或 `invalid-skill-result` 等稳定失败，不得伪装继续 |
+
+表里没有的返回值属于协议违约：落 `blocked: invalid-skill-result`，不得临场发明合并规则。
+
 ### Fallback Registry
 
 | Skill name | Collection fallback |
@@ -99,7 +122,6 @@ Stable failures are: `missing-skill`, `skill-identity-mismatch`, `unsupported-mo
 | `zhanggui-systematic-debugging` | `../zhanggui-systematic-debugging/SKILL.md` |
 | `zhanggui-test-driven-development` | `../zhanggui-test-driven-development/SKILL.md` |
 | `zhanggui-using-git-worktrees` | `../zhanggui-using-git-worktrees/SKILL.md` |
-| `zhanggui-dispatching-parallel-agents` | `../zhanggui-dispatching-parallel-agents/SKILL.md` |
 | `zhanggui-finishing-a-development-branch` | `../zhanggui-finishing-a-development-branch/SKILL.md` |
 
 ## WorkflowState - 唯一设计状态
@@ -212,7 +234,7 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 4. 每次提问前用一句话说明上一条回答更新了什么判断。
 5. 只问可能改变结论的问题；信息足够立即停止，不凑满固定问数。
 
-问诊收敛后回填 `intent` 与 `goal`（必要时新建 fog 条目），再走第 0 级路由。问诊遵循"每轮最多一问"总闸，只在本轮等待当前一个问题。
+问诊收敛后回填 `intent` 与 `goal`（必要时新建 fog 条目），再走第 0 级路由。问诊遵循"每轮一次等待"总闸；本轮只等待当前一个问题——下一问依赖本答，不满足成批资格。
 
 已有计划同时满足以下条件才直接执行：
 
@@ -230,7 +252,8 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 同一时刻只允许一个 active detour。`return_point` 非空时禁止覆盖；当前 debugging/verification/design-drift 必须先把 delta 合并回保存的 phase/node，再允许发起下一 detour。detour 内发现的新失败由当前 stage 处理或作为 gap 返回，不能另开一层 return point。code-review 是执行/路由的同步子步骤，不是 detour，不占用 `return_point` 单槽。
 
 - debug `resolved` -> 合并证据后恢复 return point；design/prototype 不强制进入执行，execute 回原 task。
-- debug `blocked` / `architecture-review-required` -> 保留 return point，不得伪装继续。
+- debug `blocked` -> 保留 return point，不得伪装继续。
+- debug `architecture-review-required` -> 保留 return point 且不覆盖它；把 `ArchitectureFinding` 建成 `domain: architecture` 的 open node，owner 按下方 Assisted 卡点判定（命中不可逆迁移、公开接口、存量数据或安全边界转 `user`，否则 `model`），随后按"Design drift 唯一路径"重算设计。不得就地打补丁，也不得在 finding 未处理时声称完成。
 - verification `verified` -> 允许对应声称，清空 return point。
 - verification `not-verified` -> 合并 Gaps、恢复 return point 对应的 decision/prototype/task/validation 后**同样清空 return point**，不得声称完成；后续 debug 等 detour 按正常单槽规则重新写入。
 - 顶层 bug 请求在修复后继续其 Transient/Durable/Epic 执行路径。
@@ -310,7 +333,7 @@ Owner/grill-me 领域内只能跳过：
 
 这些规则只定 UI mode，不改变 node owner；例如 `Text-Only + owner:user` 仍由 grilling 用文字逐项询问。
 
-真实涉及视觉、布局或交互的工作，进入 `design` 时默认把 UI mode 一并确认为开局问题：用户措辞已明确给出上表任一信号时不再问；否则与 decision-mode 合并为开局的一次交互（同一轮同时问 decision-mode 与 ui-mode 两个维度，仍遵守“每轮最多一问”的总闸）。不得用“默认 Text-Only/Direct”静默跳过原型选项。视觉-only 请求在结论吸收且全局节点关闭后可以 `stop`，不强迫实现。
+真实涉及视觉、布局或交互的工作，进入 `design` 时默认把 UI mode 一并确认为开局问题：用户措辞已明确给出上表任一信号时不再问；否则与 decision-mode 合并为开局的一次交互：两个维度同属元问题、彼此无依赖，满足 `references/questioning.md` 的成批资格，因此在同一次等待里一并发出；真实 decision node 仍一次一问。不得用“默认 Text-Only/Direct”静默跳过原型选项。视觉-only 请求在结论吸收且全局节点关闭后可以 `stop`，不强迫实现。
 
 ## 全局 Mixed 调度
 
@@ -387,13 +410,13 @@ destination 是"搞懂一个陌生产品、技术、行业或人物"时，用横
 | `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `SkillRequest(name=zhanggui-systematic-debugging, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `SkillRequest(name=zhanggui-finishing-a-development-branch, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | `phase = execute` 开始前 ∧ 隔离触发（`readiness ∈ {durable-plan, epic-plan}` ∨ 并行写范围 ∨ 脏工作区 ∨ 用户要求） | `SkillRequest(name=zhanggui-using-git-worktrees, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
-| 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `SkillRequest(name=zhanggui-dispatching-parallel-agents, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
+| 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | 读 `stages/executing-plans/references/parallel-dispatch.md` 内联执行，不派发第二个 skill |
 
 Transient 直接进入 execution stage；Durable/Epic 先进入 planning stage。永久生产功能和 bugfix 在写实现前发出 `SkillRequest(name=zhanggui-test-driven-development, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；throwaway prototype 不加载。
 
 ### Design drift 唯一路径
 
-execution 返回 `design-drift` 时，确认 `return_point` 为空后写入 `{ phase: execute, node: <task-id>, evidence_ref: <finding> }`，把受影响决定重新建为 open node，并按共识失效规则重置 consensus 后进入 design/discovery。design-drift 是 detour：活跃性由非空 `return_point` 表示；drift 重设计期间 `awaiting` 按设计阶段正常取值，不新增枚举值。设计再次通过全局 readiness 后，Transient 重算会话 plan；Durable/Epic 重新进入 planning 更新 SPEC/EPIC、任务边界、依赖和 validation，之后才恢复原 task。只需更新事实文字而不改变决定时属于 fact drift，不走此分支。
+execution 返回 `design-drift` 时，确认 `return_point` 为空后写入 `{ phase: execute, node: <task-id>, evidence_ref: <finding> }`，把受影响决定重新建为 open node，并按共识失效规则重置 consensus 后进入 design/discovery。design-drift 是 detour：活跃性由非空 `return_point` 表示；drift 重设计期间 `awaiting` 按设计阶段正常取值，不新增枚举值。debug 返回 `architecture-review-required` 是同一路径的第二个入口：此时 `return_point` 已存在，只新增 architecture open node、重算 frontier 并重置 consensus，**不重写 `return_point`**，重设计通过 readiness 后回到原 return point。设计再次通过全局 readiness 后，Transient 重算会话 plan；Durable/Epic 重新进入 planning 更新 SPEC/EPIC、任务边界、依赖和 validation，之后才恢复原 task。只需更新事实文字而不改变决定时属于 fact drift，不走此分支。
 
 ### Verification dispatch
 

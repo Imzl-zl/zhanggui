@@ -3,9 +3,14 @@
 # deploy-skills.sh — install this collection into a host skills directory.
 #
 # skills/ in this repository is the single source of truth. Every host
-# directory is a generated artifact: this script mirrors the source into the
-# target and deletes anything the source no longer contains, so a stale copy
-# can never become a second source of truth.
+# directory is a generated artifact: this script mirrors the owned skills into
+# the target and prunes the skills it deployed previously but no longer ships,
+# so a retired skill cannot keep loading from a stale copy and become a second
+# source of truth.
+#
+# Pruning is scoped to names recorded in the deploy state file (see
+# STATE_FILE below). Skill directories from other collections are never
+# touched, and a first run has no record, so it cannot prune anything.
 #
 # Usage:
 #   ./scripts/deploy-skills.sh --target claude            # ~/.claude/skills
@@ -54,15 +59,39 @@ case "$TARGET" in
   *)      DEST="$TARGET" ;;
 esac
 
+# Deploy state lives next to DEST, not inside it: a host scanning the skills
+# directory must never mistake bookkeeping for a skill.
+STATE_FILE="$(dirname "$DEST")/.zhanggui-deployed-$(basename "$DEST").txt"
+
 # The skill directories this collection owns, discovered from the source tree.
 # Anything else in DEST is left untouched, because a host skills directory
 # legitimately holds skills from other sources.
 mapfile -t OWNED < <(cd "$SOURCE_DIR" && find . -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
 [[ ${#OWNED[@]} -gt 0 ]] || die "no skill directories found in '$SOURCE_DIR'"
 
+# Previously deployed names that the source no longer contains. Only these are
+# prune candidates; without a state file the set is empty and nothing is removed.
+RETIRED=()
+if [[ -f "$STATE_FILE" ]]; then
+  # The record may have been written on Windows with CRLF. A trailing CR makes
+  # every name look retired while matching no directory, which would report a
+  # prune that never happened, so strip it before comparing.
+  while IFS= read -r previous || [[ -n "$previous" ]]; do
+    previous="${previous%$'\r'}"
+    [[ -n "$previous" ]] || continue
+    for kept in "${OWNED[@]}"; do
+      [[ "$kept" == "$previous" ]] && continue 2
+    done
+    RETIRED+=("$previous")
+  done < "$STATE_FILE"
+fi
+
 echo "Source: $SOURCE_DIR"
 echo "Target: $DEST"
 echo "Owned skills: ${#OWNED[@]}"
+if [[ ${#RETIRED[@]} -gt 0 ]]; then
+  echo "Retired since last deploy: ${#RETIRED[@]} (${RETIRED[*]})"
+fi
 [[ $DRY_RUN -eq 1 ]] && echo "Mode:   DRY RUN (nothing is written)"
 echo ""
 
@@ -95,10 +124,28 @@ for name in "${OWNED[@]}"; do
   SYNC "$SOURCE_DIR/$name" "$DEST/$name"
 done
 
+PRUNED=0
+for name in ${RETIRED[@]+"${RETIRED[@]}"}; do
+  [[ -n "$name" ]] || continue
+  echo "-> $name (retired)"
+  if [[ ! -d "$DEST/$name" ]]; then
+    echo "   already absent from $DEST"
+  elif [[ $DRY_RUN -eq 1 ]]; then
+    echo "   would remove $DEST/$name (no longer in source)"
+  else
+    rm -rf "$DEST/$name"
+    echo "   removed $DEST/$name"
+    PRUNED=$((PRUNED + 1))
+  fi
+done
+
 echo ""
 if [[ $DRY_RUN -eq 1 ]]; then
   echo "Dry run complete. Nothing was written."
 else
+  printf '%s\n' "${OWNED[@]}" > "$STATE_FILE"
   echo "Deployed ${#OWNED[@]} skills to $DEST"
+  echo "Pruned ${PRUNED} skill(s) that a previous deploy installed."
+  echo "Deploy record: $STATE_FILE"
   echo "Reminder: $DEST is a generated artifact. Edit $SOURCE_DIR instead."
 fi

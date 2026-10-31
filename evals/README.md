@@ -76,7 +76,7 @@ agent 臂以 `--dangerously-skip-permissions` 启动：默认权限模式下 Bas
 - **delta(有技能 − 无技能)是承重指标**。delta ≤ 0 的技能没挣到它的 token:要么删掉,要么改到能赢过基线。
 - 夹具必须声明 `fixture_baseline`(`passing` / `failing`),由 `tests/quality-corpus.test.mjs` 实际跑一遍验证。故意失败的夹具一旦悄悄变绿,依赖它的用例就什么也没在测。
 
-**当前覆盖**:3 个技能有语料（三个零增量技能已退役，其语料随目录一并删除，运行记录保留在 `results/quality-RETIRED-*`）。`zhanggui-systematic-debugging`(2 例,夹具 `buggy-cart` 故意 1 个测试失败)、`zhanggui-test-driven-development`(2 例,夹具 `fresh-cart` 全绿)、`decision-notes`(2 例,无夹具)、`zhanggui-requesting-code-review`(2 例,夹具 `review-app` / `weak-test-app` 全绿)、`zhanggui-receiving-code-review`(2 例,夹具 `reviewed-app` 全绿)。其余 5 个技能尚未写语料。
+**当前覆盖**:3 个技能有语料。`zhanggui-systematic-debugging`(2 例,夹具 `buggy-cart` 故意 1 个测试失败)、`zhanggui-test-driven-development`(2 例,夹具 `fresh-cart` 全绿)、`decision-notes`(2 例,无夹具)。其余 5 个技能尚未写语料。已退役的三个过程纪律技能（verification / requesting / receiving）语料随目录一并删除，运行记录保留在 `results/quality-RETIRED-*`，**不得作为当前目录的数字引用**。
 
 ## 当前状态
 
@@ -94,6 +94,106 @@ agent 臂以 `--dangerously-skip-permissions` 启动：默认权限模式下 Bas
 | `results/triggers-validation-revised.json` | validation | 48/51 = 0.941 | 当前工作树 |
 
 **validation 打平**，因此当前 catalog 不是“验证出来的更好版本”。唯一在两个划分上同号的改动是 `zhanggui-requesting-code-review` 的召回（train 0.556→0.833，validation 0.500→0.750），其机制可解释：此前被宿主内置 `code-review` 抢掉的 query 现在收回。其余逐技能差异在 train / validation 之间反向变号，属 n=2~3 次重复的方差。
+
+### v0.10 重测（当前目录，2026-10-31）
+
+**测量条件**：host `claude` 2.1.314（reference adapter）、驱动模型 `qwen3.8-flash`、渠道 `nexus.bx9y.com.cn`（经 `CLAUDE_CONFIG_DIR` 隔离注入，密钥未写入仓库）、每条 3 次、阈值 0.5。根目录已是 v0.10 的八个技能（三个过程纪律 leaf 已退役）。
+
+| 记录 | split | 通过 | 说明 |
+|---|---|---|---|
+| `results/triggers-v0.10-train.json` | train | 71/79 = 0.899 | 根 recall 0.333 / precision 0.286；null 干净率 0.773 |
+| `results/triggers-v0.10-validation.json` | validation | 37/41 = 0.902 | 改前基线：根 recall 0.333 / precision 0.800；8 次运行失败已记录在案 |
+| `results/triggers-v0.10-validation-candidate-c.json` | validation | 37/41 = 0.902 | 按 train 失败改根 description 后的复测：根 recall 0.600 / precision 1.000，null 干净率 0.842 |
+
+判定判据事先固定，避免事后找理由：**根 recall 必须严格高于 0.333，且整体不低于 37/41**。候选 C 两项均满足（0.333→0.600，整体 37/41 不变），故保留。
+
+已知未解，且**不得用 validation 结果驱动下一轮修改**（纪律要求只由 train 失败指导）：`zg-pos-07`（“只有个模糊想法…先帮我查清到底要解决什么”）在候选里降到 1/3，原因是删掉了 `from an unclear idea`；`zg-pos-09`（iOS/Android 多端统筹）仍有 2/3 被 `zhanggui-dispatching-parallel-agents` 抢走。这两条进入下一轮 train 证据的候选清单。
+
+#### 上面两批数字已作废，不得引用
+
+跑完根描述改动后才发现两个采集缺陷，且都直接影响那两个数：
+
+1. **超时把已发生的激活丢掉**：`runOnce` 曾以 `exit_code === 0` 判定观测成功，而复杂根用例加载技能后还会继续长跑，超时被杀时整条 run 记成 `loaded: []`。现改为 `spawn` + 自累积 stdout，**只要输出里已出现激活就算有效观测**（`terminated_early: true`），无激活仍算失败。
+2. **超时值过小**：默认超时对“加载后还要干活”的根用例不够。
+
+修正后重跑 10 条根用例（`results/triggers-v0.10-train-root-recheck.json`，3 次/条、并发 2、`--timeout-ms 600000`、29/30 次有效）：
+
+| 指标 | 修正前（两批旧记录） | 修正后 |
+|---|---|---|
+| 根 recall | 0.333 | **0.586** |
+| 根 precision | 0.286 / 1.000 | **1.000** |
+
+逐条：`zg-pos-01` 0/1→3/3、`02` 0/1→3/3、`04` 0/1→2/3、`05` 0/0→1/2、`06` 0/3→2/3；`03` 0/3→1/3；`07` 1/3、`09` 0/3 仍未过。
+
+结论：**train 71/79 与 validation 37/41 这两个口径下的“根 recall 0.333”是测量假象**（超时算作未命中），不是描述问题的证据。当前可引用的是 recheck 的 0.586/1.000。尚未解决的仍是 dispatching 抢占多包/多端统筹（`zg-pos-03` 1/3、`zg-pos-09` 0/3）。
+
+#### 候选 D（收紧 dispatching 触发条件）已试并**否决**
+
+做法：把 dispatching 的触发子句从“请求只是列了几件事”改成“拆分**已经存在**”（`already been divided`、`the boundary of each already clear`），与根的“nobody has decided yet how the work is split”对齐。依据只有 train 侧 `zg-pos-03`。
+
+结果（`results/triggers-v0.10-validation-candidate-d.json`，3 次/条、并发 6、`--timeout-ms 600000`、36/41 = 0.878）：
+
+| 指标 | 候选 C（保留） | 候选 D（否决） |
+|---|---|---|
+| 整体 | 37/41 = 0.902 | **36/41 = 0.878** |
+| 根 recall / precision | 0.600 / 1.000 | **0.400 / 0.667** |
+| dispatching recall / precision | 0.889 / 0.615 | 1.000 / 0.643 |
+
+判定判据事先固定：整体不低于 37/41 且 dispatching recall 不低于 0.889。候选 D 第一条不满足，**已回滚**（描述恢复原文，快照回到 `b6f45d48…`，该次改动记录从 `changes_since_supersede` 删除），运行记录保留作审计，不得引用为当前目录的速率。
+
+这条负结果本身有价值：收紧叶子的前置条件会让根回涨、但把整体和根精度一起拖下来，说明**这一处重叠已经贴着噪声底**，靠改措辞解决不了——要动就得换一个行为更稳定的驱动模型，或把每条用例的运行次数提上去。
+
+#### v0.11 结构变更：并行派发 leaf 退役
+
+措辞路线走不通后改用结构方案：给 `zhanggui-dispatching-parallel-agents` 补质量语料实测（`results/quality-RETIRED-dispatching.json`，2 例 × 2 臂）：
+
+| 用例 | with_skill | without_skill | delta |
+|---|---|---|---|
+| 三包并行派发 | 0.25 | 0.50 | **-0.25** |
+| package.json 共享冲突 | 1.00 | 1.00 | +0.00 |
+| 平均 | 0.625 | 0.750 | **-0.125** |
+
+delta 为负 → 按“delta ≤ 0 要么删要么改到能赢”的规则退役。纪律并入 [`skills/zhanggui/stages/executing-plans/references/parallel-dispatch.md`](../skills/zhanggui/stages/executing-plans/references/parallel-dispatch.md)，由执行阶段内联执行。**并行派发不再是可发现技能**，根与它之间的 discovery 竞争从结构上消失。
+
+随之调整：语料里 `dis-pos-01..10` 重标为 `expected_skill: null`（没有任何技能该认领它们；质量族显示不加载技能的产出更好），目录从八个技能缩到七个，快照 digest 重算。
+
+**一次被作废的验证，及由此学到的方法论**：退役后第一次跑 `^zg-pos|^dis-pos`，其中一次运行竟加载了已删除的 `zhanggui-dispatching-parallel-agents`——原因是本机 `~/.claude/skills` 还留着退役前的八技能部署，与评测器暂存的七技能目录同场竞争。该记录改名为 `results/triggers-DISCARDED-stale-host.json`，**不得引用**。结论：**跑触发族之前必须先把被测宿主部署同步到当前 catalog**，否则旧技能会作为幽灵参赛者污染结果；这条以前只写在"宿主自带技能关不掉"里，不够具体。
+
+结构验证随后在干净宿主（两处宿主目录都已同步到七技能）上重跑：`results/triggers-v0.11-post-retirement.json`，`^zg-pos|^dis-pos` 20 条 × 3 次、59/60 次有效、并发 6、600 秒超时。
+
+| 指标 | 值 |
+|---|---|
+| 根 recall | 0.525（run 级） |
+| 根 precision | **1.000**（该子集零误触发） |
+| 训练 / validation | 7/12 · 5/8 |
+| 出现退役 leaf 的运行 | **0**（幽灵参赛者消失） |
+
+逐条最关键的翻转：`zg-pos-03`（三包统筹，曾被 dispatching 3/3 抢走）0/3 → **2/3 通过**；`zg-pos-09`（多端统筹）0/3 → 1/3，仍不过，但失败形态已从“被 leaf 抢走”变成“不加载任何技能”。`zg-pos-07` 也从 1/3 → 2/3 通过。代价是 `zg-pos-01`、`zg-pos-06` 各掉一档，属同一量级的方差。
+
+**不得**把这次变更与 v0.10 的 37/41 直接相减——catalog 构成已变（8→7 技能、10 条用例重标），口径不同。
+
+#### 独立验证集实验：“多端/统筹”族能不能靠措辞救回来
+
+`zg-pos-09` 属于一个更普遍的家族（“两端一起改 / 你从头到尾负责 / 全部交给你”）。为不碰 validation，另写了 3 条全新查询（`fresh-multi-01..03`，从未参与任何调参）单跑：
+
+| 版本 | 结果 |
+|---|---|
+| 退役后、加 pushy 措辞前（`results/triggers-v0.11-holdout.json`） | **0/3 命中，9 次运行全部不加载** |
+| 改成祈使句 + “Even when the ask sounds like plain implementation…”（`results/triggers-v0.11-holdout-pushy.json`） | **1/9 次命中**，每例仍 0/3 |
+
+结论：这不是描述措辞的问题，而是官方指南写明的天花板——*agent 只在任务超出自身能力时才查技能*，“你帮我统筹”对它来说属于能直接做的事。因此 **pushy 改写已回滚**（描述退回 580 字符版本，该版本在退役后子集上有实测支撑：根 recall 0.525 / precision 1.000），改动记录也已从 `changes_since_supersede` 删除——没有证据支撑的改动不留在记录里。
+
+**换驱动模型复验（2026-11-01）**：同渠道换 `deepseek-flash`（`results/triggers-v0.11-holdout-deepseek.json`，3 条 × 3 次，8 次有效）：
+
+| 驱动模型 | `fresh-multi-01..03` 命中 |
+|---|---|
+| `qwen3.8-flash` | 0/9 |
+| `qwen3.8-flash` + pushy 措辞 | 1/9 |
+| `deepseek-flash` | **0/8** |
+
+两个独立模型复现同一结果 → 天花板与模型无关，是“这类请求在 agent 判断里不需要技能”这一层，不是 description 能修的。附带记录一个可复用事实：同渠道下 `deepseek-flash` 的首字延迟约 **132 秒**（qwen 约 2 秒），不适合做需要成百次调用的触发测量。
+
+要覆盖这一族，只剩接受“这类请求由模型直接处理”（质量族显示不带技能并不更差），或者改写这类用例的标注预期——但那属于用结果反推标签，不做。
 
 `results/triggers-train-DISCARDED-ratelimited.json` 是**作废**记录：那次运行有 81/279 次调用因端点限流（11 请求/分钟）失败，不得引用其速率。
 

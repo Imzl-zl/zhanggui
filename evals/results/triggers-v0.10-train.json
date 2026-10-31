@@ -1,0 +1,3197 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "qwen3.8-flash",
+  "workspace_fixture": null,
+  "descriptions_override": null,
+  "descriptions_override_sha256": null,
+  "runs_per_query": 3,
+  "concurrency": 8,
+  "threshold": 0.5,
+  "split_sha256": "117eabe77c46b8ec9c0a52da0b9d06fc038889a3912d6480c03f4ef5d9db6678",
+  "queries": 79,
+  "successful_runs": 220,
+  "total_runs": 237,
+  "by_split": {
+    "train": {
+      "queries": 79,
+      "passed": 71,
+      "pass_rate": 0.8987341772151899
+    },
+    "validation": {
+      "queries": 0,
+      "passed": 0,
+      "pass_rate": null
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": 1,
+      "precision": 0.875,
+      "tp": 21,
+      "fn": 0,
+      "fp": 3,
+      "tn": 196
+    },
+    "setup-collaboration-files": {
+      "recall": 0.9545454545454546,
+      "precision": 0.9545454545454546,
+      "tp": 21,
+      "fn": 1,
+      "fp": 1,
+      "tn": 197
+    },
+    "zhanggui": {
+      "recall": 0.3333333333333333,
+      "precision": 0.2857142857142857,
+      "tp": 2,
+      "fn": 4,
+      "fp": 5,
+      "tn": 209
+    },
+    "zhanggui-dispatching-parallel-agents": {
+      "recall": 0.9444444444444444,
+      "precision": 0.85,
+      "tp": 17,
+      "fn": 1,
+      "fp": 3,
+      "tn": 199
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": 1,
+      "precision": 0.8076923076923077,
+      "tp": 21,
+      "fn": 0,
+      "fp": 5,
+      "tn": 194
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": 0.9,
+      "precision": 0.8571428571428571,
+      "tp": 18,
+      "fn": 2,
+      "fp": 3,
+      "tn": 197
+    },
+    "zhanggui-test-driven-development": {
+      "recall": 1,
+      "precision": 0.8947368421052632,
+      "tp": 17,
+      "fn": 0,
+      "fp": 2,
+      "tn": 201
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": 0.9,
+      "precision": 0.9473684210526315,
+      "tp": 18,
+      "fn": 2,
+      "fp": 1,
+      "tn": 199
+    }
+  },
+  "null_target_clean_rate": 0.7733333333333333,
+  "records": [
+    {
+      "id": "zg-pos-01",
+      "query": "我想做个库存管理小系统，需求还没想清楚，你先帮我把要定的问题理出来，然后一路做到能验证交付",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui"
+          ],
+          "error": "Command failed: claude -p 我想做个库存管理小系统，需求还没想清楚，你先帮我把要定的问题理出来，然后一路做到能验证交付 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 我想做个库存管理小系统，需求还没想清楚，你先帮我把要定的问题理出来，然后一路做到能验证交付 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-02",
+      "query": "Own this end-to-end: the permissions redesign. Resolve the open decisions first, then take it all the way to verified delivery.",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 1,
+      "scored": 1,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui"
+          ],
+          "error": "Command failed: claude -p Own this end-to-end: the permissions redesign. Resolve the open decisions first, then take it all the way to verified delivery. --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p Own this end-to-end: the permissions redesign. Resolve the open decisions first, then take it all the way to verified delivery. --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-03",
+      "query": "这次改动要动 api、web、shared 三个包，还要同时出迁移脚本和文档，你统一负责吧",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-04",
+      "query": "上次那个支付重构做到一半断了，checkpoint 还在，接着往下做，做到验证通过",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 1,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 上次那个支付重构做到一半断了，checkpoint 还在，接着往下做，做到验证通过 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 上次那个支付重构做到一半断了，checkpoint 还在，接着往下做，做到验证通过 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "zg-pos-05",
+      "query": "把订单数据从 MySQL 迁到 PostgreSQL，包括双写、回滚和上线验证，你全程管",
+      "expected_skill": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 0,
+      "scored": 0,
+      "rate": null,
+      "passed": false,
+      "observed": [],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui"
+          ],
+          "error": "Command failed: claude -p 把订单数据从 MySQL 迁到 PostgreSQL，包括双写、回滚和上线验证，你全程管 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui"
+          ],
+          "error": "Command failed: claude -p 把订单数据从 MySQL 迁到 PostgreSQL，包括双写、回滚和上线验证，你全程管 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui"
+          ],
+          "error": "Command failed: claude -p 把订单数据从 MySQL 迁到 PostgreSQL，包括双写、回滚和上线验证，你全程管 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-01",
+      "query": "这个单测昨天还好好的，今天挂了，帮我查下根因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui",
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui",
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-03",
+      "query": "Build works locally but fails in CI. Find out why before anyone changes anything.",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ],
+          "error": "Command failed: claude -p Build works locally but fails in CI. Find out why before anyone changes anything. --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-04",
+      "query": "为撒我这个接口返回的时间差了一个小时啊 找半天没找到原因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-05",
+      "query": "前面已经修过两次了，每次都是好一阵又开始抖，这次别再贴膏药了，找真正原因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-06",
+      "query": "这个页面首屏从 1.2s 变成 4s 了，性能问题，帮我定位到具体原因",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbg-pos-07",
+      "query": "集成测试本地过，跑在容器里就失败，怀疑是环境差异，帮我系统地查一下",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-01",
+      "query": "先写个会失败的测试，再实现这个函数",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-02",
+      "query": "给折扣计算加个新功能，按先写测试后写实现的方式来",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ],
+          "error": "Command failed: claude -p 给折扣计算加个新功能，按先写测试后写实现的方式来 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-03",
+      "query": "修这个 bug 之前先补一个能复现它的测试",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-05",
+      "query": "这个行为要改，但我想要先有回归测试锁住它再动实现",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-06",
+      "query": "I need the failing test written before you touch the implementation. It is a behaviour change in the parser.",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tdd-pos-07",
+      "query": "加这个接口之前先把契约测试写好",
+      "expected_skill": "zhanggui-test-driven-development",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-test-driven-development"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-01",
+      "query": "在隔离的 worktree 里改，别动我当前的工作区",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 在隔离的 worktree 里改，别动我当前的工作区 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-02",
+      "query": "我想开个独立的工作区做这个功能，主干这边还要能继续编译",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-03",
+      "query": "帮我建个 worktree 执行这个计划里的任务",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-04",
+      "query": "我想另开一份代码副本改东西 不想切分支搞乱现在的东西",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-05",
+      "query": "Set up an isolated checkout for this feature so my main working tree stays clean.",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-06",
+      "query": "这段工作需要独立的写范围，跟我正在改的文件不能混在一起",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-dispatching-parallel-agents"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [
+          "zhanggui-using-git-worktrees"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wt-pos-07",
+      "query": "建完 worktree 后面还要清理掉，别留垃圾",
+      "expected_skill": "zhanggui-using-git-worktrees",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 1,
+      "scored": 3,
+      "rate": 0.3333333333333333,
+      "passed": false,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees"
+        ],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-01",
+      "query": "这几件事互不依赖，并行做掉",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ],
+          "error": "Command failed: claude -p 这几件事互不依赖，并行做掉 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-02",
+      "query": "开几个 subagent 同时查这两个模块的问题，文件不重叠",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees",
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-03",
+      "query": "我有 5 个独立的任务，想同时推进，各自写不同的文件",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-04",
+      "query": "能不能并发跑 一个个来太慢了",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-05",
+      "query": "Dispatch parallel agents for these two independent investigations.",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-06",
+      "query": "这两个包的问题没有共享状态，可以同时开工",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees",
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents",
+            "zhanggui-test-driven-development"
+          ],
+          "error": "Command failed: claude -p 这两个包的问题没有共享状态，可以同时开工 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dis-pos-07",
+      "query": "并行派发的时候注意别让两个 agent 改同一个文件",
+      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 1,
+      "scored": 2,
+      "rate": 0.5,
+      "passed": true,
+      "observed": [
+        [],
+        [
+          "zhanggui-dispatching-parallel-agents"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-dispatching-parallel-agents"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "Command failed: claude -p 并行派发的时候注意别让两个 agent 改同一个文件 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-01",
+      "query": "这个分支的活已经验完了，接下来怎么落地",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-02",
+      "query": "测试过了，你决定下是合还是开 PR",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-03",
+      "query": "这个功能做完了也验证过，我想收尾",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-04",
+      "query": "活干完了 测试也过了 后面咋办",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-05",
+      "query": "The branch passed verification. Decide how it lands.",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-06",
+      "query": "这个 worktree 里的工作验完了，清理还是保留",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-using-git-worktrees",
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-using-git-worktrees",
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fin-pos-07",
+      "query": "我想放弃这个分支，怎么干净丢掉",
+      "expected_skill": "zhanggui-finishing-a-development-branch",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-01",
+      "query": "帮我给这个项目初始化一套协作文件",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-02",
+      "query": "我这个仓库没有 AGENTS.md，帮我建一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-03",
+      "query": "把这个项目的规则文件归一一下，现在好几份互相冲突",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-04",
+      "query": "新项目 啥都没有 先把规矩文档搭起来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-05",
+      "query": "这个老项目规则文件很乱，帮我整理成一套",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-06",
+      "query": "给项目建 docs/ 和决策笔记目录，顺手把 AGENTS.md 写出来",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "setup-collaboration-files"
+          ],
+          "error": "Command failed: claude -p 给项目建 docs/ 和决策笔记目录，顺手把 AGENTS.md 写出来 --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ip-pos-07",
+      "query": "init project",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 2,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "init",
+          "setup-collaboration-files"
+        ],
+        [
+          "init",
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init",
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "init",
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": null,
+          "loaded": [
+            "init",
+            "setup-collaboration-files"
+          ],
+          "error": "Command failed: claude -p init project --output-format stream-json --verbose --dangerously-skip-permissions\nWarning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"qwen3.8-flash\",\"query_source\":\"sdk\"}\n"
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-01",
+      "query": "帮我把刚才为什么选 Redis 而不是 Postgres 记成一条决策笔记",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-02",
+      "query": "这个方案我们讨论过又否了，得把这个结论写下来免得以后重提",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-03",
+      "query": "非平凡改动要留笔记，这次改动的取舍帮我落一篇",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-04",
+      "query": "记一下为啥这块代码写得这么别扭",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-05",
+      "query": "上次那个决定要升级了，旧笔记别改，新写一篇并把旧的标成被取代",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-06",
+      "query": "把这轮被放弃的三个方案和原因写进 .agents/notes/",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dn-pos-07",
+      "query": "review 反馈里有一条我觉得该记成决策，帮我落盘",
+      "expected_skill": "decision-notes",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nul-01",
+      "query": "rebase 和 merge 有什么区别",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch",
+        "zhanggui-using-git-worktrees"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-02",
+      "query": "帮我写个正则匹配手机号",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [],
+        [
+          "zhanggui"
+        ],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-03",
+      "query": "这个 CSS 居中怎么写",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-04",
+      "query": "解释一下什么是幂等",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-05",
+      "query": "帮我做个小脚本把 csv 转成 json，就一个文件",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui",
+        "setup-collaboration-files"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-06",
+      "query": "我想加个日志，就在这个函数里加两行",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-07",
+      "query": "git 怎么撤销上一次 commit",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-08",
+      "query": "写个 SQL 查最近 7 天的订单数",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-09",
+      "query": "什么是 CAP 定理",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-10",
+      "query": "帮我起个变量名",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-11",
+      "query": "总结一下这个文件的内容",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-12",
+      "query": "这段报错什么意思：ECONNREFUSED",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-systematic-debugging"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-13",
+      "query": "帮我看看这个正则的时间复杂度",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-tdd-01",
+      "query": "这个测试挂了，你先把它改成能过的",
+      "expected_skill": "zhanggui-systematic-debugging",
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-tdd-02",
+      "query": "测试覆盖率不够，帮我补几个测试",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [],
+        [
+          "zhanggui-test-driven-development"
+        ],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-tdd-03",
+      "query": "帮我把测试跑通就行，怎么改你看着办",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-test-driven-development"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "zhanggui-systematic-debugging",
+          "zhanggui-test-driven-development"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ],
+        [
+          "zhanggui-systematic-debugging"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging",
+            "zhanggui-test-driven-development"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-systematic-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-01",
+      "query": "帮我把 README 整理一下",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "setup-collaboration-files"
+      ],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-ip-02",
+      "query": "这几个规则文件应该放哪",
+      "expected_skill": "setup-collaboration-files",
+      "split": "train",
+      "near_miss_for": [],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ],
+        [
+          "setup-collaboration-files"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "setup-collaboration-files"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-01",
+      "query": "帮我写个注释解释这个函数",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-02",
+      "query": "记录一下今天的进度",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ],
+        [
+          "decision-notes"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "decision-notes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nm-dn-03",
+      "query": "把这份需求文档存下来",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "decision-notes",
+        "setup-collaboration-files"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-zg-01",
+      "query": "帮我规划一下这周的排期",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nm-zg-03",
+      "query": "我有个想法，你觉得可行吗",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui"
+      ],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [
+          "zhanggui"
+        ],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-21",
+      "query": "这个分支先留着，等我明天决定合不合",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nul-22",
+      "query": "合并之前先别动，我还要补两句说明",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 3,
+      "scored": 3,
+      "rate": 1,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "nul-23",
+      "query": "PR 描述里要不要写验收步骤",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch",
+        "zhanggui"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui-finishing-a-development-branch"
+        ],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui-finishing-a-development-branch"
+          ]
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nul-24",
+      "query": "发布流程该走哪个入口，我先问一下",
+      "expected_skill": null,
+      "split": "train",
+      "near_miss_for": [
+        "zhanggui-finishing-a-development-branch"
+      ],
+      "hits": 2,
+      "scored": 3,
+      "rate": 0.6666666666666666,
+      "passed": true,
+      "observed": [
+        [],
+        [],
+        [
+          "zhanggui"
+        ]
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": [
+            "zhanggui"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -56,15 +56,9 @@ Preserve `ReturnPhase` and `ReturnNode` unchanged in the output delta. Debug doe
 - 构建失败
 - 集成问题
 
-多个互不相关的失败可并行调查，每个失败域一个 agent：
-- Direct mode: activate the exact leaf name `zhanggui-dispatching-parallel-agents` through the host catalog; if the optional parallel capability is unavailable, execute serially and say so.
-- Embedded mode: return `SkillResult.status=skill-required` with `next_skill_request` set to the exact leaf; do not load sibling files directly.
-
-```text
-next_skill_request:
-  name: zhanggui-dispatching-parallel-agents
-  mode: zhanggui-embedded
-```
+多个互不相关的失败可并行调查，每个失败域一个 agent。并行派发本身不是 leaf：规则在 `../zhanggui/stages/executing-plans/references/parallel-dispatch.md`，本 procedure 只把已分好的域交出去。
+- Direct mode: read that reference and follow it inline; when serial investigation is the only option, say so instead of pretending to parallelize.
+- Embedded mode: record the partitioned domains and their per-domain evidence in `delta`; `/zhanggui` decides whether to run them concurrently. Do not load sibling files directly.
 
 **特别推荐**：
 - 时间压力下（紧急时猜测诱人但更慢）
@@ -285,8 +279,11 @@ next_skill_request:
 RootCause: 已证实的根因和证据
 Change: 修复或设计事实；未修改时明确写 none
 Validation: 新鲜命令/场景及结果
+ArchitectureFinding: none | <受影响模块、判定依据、建议边界、这样改的代价>
 Outcome: resolved | blocked | architecture-review-required
 ```
+
+`ArchitectureFinding` 只在 `Outcome: architecture-review-required` 时非空，其余情况写 `none`。它报告**调查已经证实**的结构事实（哪个边界破了、缺陷如何产生、不修会持续逼出什么后续改动），不给出最终设计方案——重设计归 `/zhanggui` 的设计阶段，本 procedure 不替它做决定。
 
 报告实际结果后结束本次调用。没有编排 frame 时不得输出或伪造 `ReturnPhase`、`ReturnNode`。
 
@@ -303,11 +300,12 @@ SkillResult:
     RootCause: 已证实的根因和证据
     Change: 修复或设计事实；未修改时明确写 none
     Validation: 新鲜命令/场景及结果
+    ArchitectureFinding: none | <受影响模块、判定依据、建议边界、这样改的代价>
     ReturnPhase: 原阶段
     ReturnNode: 原 decision/prototype/task/validation id
     StageStatus: resolved | blocked | architecture-review-required
   question_request: <QuestionRequest-or-null>
-  next_skill_request: <SkillRequest-or-null；parallel 用 zhanggui-dispatching-parallel-agents，生产 bugfix 实现前用 zhanggui-test-driven-development>
+  next_skill_request: <SkillRequest-or-null；生产 bugfix 实现前用 zhanggui-test-driven-development，其余情况为 null>
 ```
 
 `status: completed` with `delta.StageStatus: resolved` 只表示本次 debug 闭环；`/zhanggui` 必须回到 `ReturnPhase` 继续原流程。本 skill 不自行切换 phase、清空 return point 或设置 readiness。`skill-required` 时由根同步处理 `next_skill_request` 后恢复本 procedure。

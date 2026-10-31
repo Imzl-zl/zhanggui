@@ -67,6 +67,44 @@ test('design-assist treats architecture as an explicit decision domain', async (
   assert.match(assist, /架构结构决策/);
 });
 
+test('debug architecture finding carries payload and re-enters design without rewriting the return point', async () => {
+  const debug = await read('zhanggui-systematic-debugging/SKILL.md');
+  const root = await read('zhanggui/SKILL.md');
+
+  // A bare status enum is not a finding: both delivery contracts must carry the payload,
+  // otherwise the caller receives architecture-review-required with nothing to design from.
+  const payloadFields = debug.match(/ArchitectureFinding: none \|/g) ?? [];
+  assert.equal(payloadFields.length, 2, 'Direct and Embedded contracts both need ArchitectureFinding');
+
+  assert.match(root, /debug `blocked` -> 保留 return point，不得伪装继续/);
+  assert.match(root, /architecture-review-required` -> [\s\S]*?`domain: architecture`/);
+  assert.match(root, /architecture-review-required` 是同一路径的第二个入口/);
+  assert.match(root, /不重写 `return_point`/);
+  assert.match(root, /不得就地打补丁/);
+});
+
+test('question batching is gated mechanically and stays out of serial decision flows', async () => {
+  const root = await read('zhanggui/SKILL.md');
+  const questioning = await read('zhanggui/references/questioning.md');
+  const grilling = await read('zhanggui/stages/grilling/STAGE.md');
+
+  assert.match(questioning, /每轮等待最多一次用户交互/);
+  assert.match(questioning, /### 成批资格/);
+  assert.match(questioning, /\*\*彼此无依赖\*\*/);
+  assert.match(questioning, /\*\*不混批\*\*/);
+  assert.match(questioning, /\*\*不处于串行场景\*\*/);
+  assert.match(questioning, /只答其中一部分/);
+
+  // The opening double question must cite the batch rule instead of the old wording that
+  // demanded two dimensions in one interaction while claiming one question per round.
+  assert.match(root, /满足 `references\/questioning\.md` 的成批资格/);
+  assert.doesNotMatch(root, /仍遵守“每轮最多一问”/);
+  assert.match(root, /每轮等待最多一次用户交互/);
+
+  // A user-owned decision domain still takes one node at a time.
+  assert.match(grilling, /一次只问当前一个 decision node/);
+});
+
 test('steelman argumentation gates fog discovery and obvious-optimum', async () => {
   const root = await read('zhanggui/SKILL.md');
   const assist = await read('zhanggui/stages/design-assist/STAGE.md');

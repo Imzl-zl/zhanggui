@@ -263,7 +263,7 @@
           "null_clean": 0.974
         },
         "per_skill_recall": {
-          "decision-notes": 1.0,
+          "decision-notes": 1,
           "setup-collaboration-files": 0.8,
           "zhanggui": 0.5,
           "zhanggui-dispatching-parallel-agents": 0.7,
@@ -275,6 +275,24 @@
         "caveat": "One run per query and about 11 percent of invocations failed at transport level, so the root and setup-collaboration-files recalls rest on 4 and 5 scored queries. This is a shape check, not a citable rate; --runs 3 is still required.",
         "reading": "The new baseline is not comparable to v0.9 (different catalog and different corpus). The root remains the weakest router at 0.5, unchanged by the retirement, while decision-notes stays at 1.000 — consistent with its positive quality delta."
       }
+    },
+    {
+      "scope": "zhanggui root description, revised against the v0.10 trigger-family train run",
+      "target_case": "zg-pos-03, zg-pos-04",
+      "evidence": "evals/results/triggers-v0.10-train.json, host claude with the reference adapter, driver model qwen3.8-flash, 79 train queries x 3 runs, train pass rate 71/79 = 0.899. Only train failures were used; the validation split was not consulted to choose this wording. zg-pos-03 (\"...三个包...你统一负责吧\") loaded zhanggui-dispatching-parallel-agents in 3/3 runs; zg-pos-04 (\"...checkpoint 还在，接着往下做\") loaded nothing in 3/3 runs.",
+      "change": "Trigger clause now separates whole-job handover and an undecided work split from the leaf that dispatches already-decided parallel work, names the multi-package/multi-deliverable case explicitly, and states checkpoint resume as picking up a previous session that stopped mid-task. Retained preconditions: an undecided work split, and unresolved design decisions blocking implementation."
+    },
+    {
+      "scope": "zhanggui-dispatching-parallel-agents retired into the execute stage",
+      "target_case": "zg-pos-03, zg-pos-09",
+      "evidence": "Quality family: evals/results/quality-dispatching.json, 2 cases x 2 arms, with_skill 0.625 vs without_skill 0.750, delta -0.125 (the skill made output worse). Trigger family: the leaf also won multi-module requests that the root should own (zg-pos-03, zg-pos-09). Per the delta <= 0 rule, the skill did not earn its tokens.",
+      "change": "Deleted the leaf. Its discipline now lives in skills/zhanggui/stages/executing-plans/references/parallel-dispatch.md and is executed inline by the execute stage, so parallel dispatch can no longer compete with the root in discovery. The ten parallel-dispatch trigger cases are relabelled to the root, which is the capability that now owns them."
+    },
+    {
+      "scope": "zhanggui root description, claims parallel execution after the leaf retired",
+      "target_case": "dis-pos-01..10",
+      "evidence": "With the leaf gone, the parallel-dispatch cases had no owner; the post-retirement run had the root claim only part of them. The root now owns concurrent execution, backed by stages/executing-plans/references/parallel-dispatch.md.",
+      "change": "Compressed the checkpoint clause and added 'when several independent pieces have to run concurrently' (580 chars, within the repo's 600 budget). The corpus cases are relabelled to the root, which is the capability that now owns them."
     }
   ],
   "required_before_claiming_rates": [
@@ -289,11 +307,11 @@
   "catalog_snapshot": {
     "source_head": null,
     "snapshot_note": "Taken from the working tree after the three zero-delta discipline leaves were retired; source_head stays null until this catalog is committed.",
-    "sha256": "eb5476d09d3fcccd01eb9eab8bef7217907c01fe3c6c9c67d062bf53d2f7f7c4",
+    "sha256": "6bbf2901f40f468fe7892c14d19d4778daa445cb5ccb54dbeae2f0c95fe9c70c",
     "entries": [
       {
         "name": "zhanggui",
-        "description": "Owns one development request end-to-end — resolves open design decisions, plans the path, implements with tests, and carries the work to verified delivery. Use when a development request must be carried from an unclear idea or unresolved design decisions through implementation to verified delivery, when it spans multiple modules or produces multiple deliverables, when an interrupted task with a saved checkpoint is being resumed, or when someone hands over end-to-end ownership of a feature, migration, or redesign.",
+        "description": "Owns one development request end-to-end — resolves open design decisions, plans the path, implements with tests, and carries the work to verified delivery. Use when a request hands over whole ownership of the job, when multiple modules, packages or deliverables are named at once and nobody has decided how the work is split, when a previous session stopped mid-task and its checkpoint must be resumed through verified delivery, when several independent pieces have to run concurrently, or when unresolved design decisions block implementation of a feature, migration or redesign.",
         "implicit": true
       },
       {
@@ -309,11 +327,6 @@
       {
         "name": "zhanggui-using-git-worktrees",
         "description": "Creates an isolated git worktree for feature work so the main working tree stays untouched, and tears one down again when the work is done. Use when feature work needs an isolated checkout, a write scope separated from the main working tree, or a dedicated workspace for executing an implementation plan, when parallel features each need their own checkout, when the workspace has to be isolated before a plan starts, and when an existing worktree has to be set up or cleaned up rather than left behind, even if the request never says 'worktree'.",
-        "implicit": true
-      },
-      {
-        "name": "zhanggui-dispatching-parallel-agents",
-        "description": "Runs independent pieces of work at the same time instead of one after another, keeping one writer per file set. Use when subagent capacity is available and two or more independent problem domains can run at the same time on non-overlapping files without shared state, including when the parallel dispatch is already decided and only the non-overlapping file scope remains to be settled, and when the request only lists several things to do.",
         "implicit": true
       },
       {

@@ -2,11 +2,11 @@
 
 一个 **skills 创作项目**：产物是 Agent Skills 本身，不是应用代码。仓库根同时是分发单元（Claude Code / Codex 插件），无构建依赖。
 
-三个入口技能，共 11 个 strict Agent Skills 目录：
+三个入口技能，共 7 个 strict Agent Skills 目录：
 
 | 入口 | 内容 | 位置 |
 |---|---|---|
-| `zhanggui` | selective-hybrid 有状态编排器 + 五个可独立发现的 `zhanggui-*` 工程 leaf | `skills/zhanggui/`、`skills/zhanggui-*/` |
+| `zhanggui` | selective-hybrid 有状态编排器 + 四个可独立发现的 `zhanggui-*` 工程 leaf | `skills/zhanggui/`、`skills/zhanggui-*/` |
 | `setup-collaboration-files` | 项目协作体系初始化 / 归一（AGENTS.md、`docs/`、`.agents/notes/`、tools.md、memory.md） | `skills/setup-collaboration-files/` |
 | `decision-notes` | 决策笔记的落盘与生命周期（非平凡判定、四格、状态迁移、取代与冻结） | `skills/decision-notes/` |
 
@@ -14,9 +14,9 @@
 
 > 本 README 只是导览，不参与运行，也不复述规则细节——避免出现第三份会漂移的“真值”。运行契约以 [`skills/zhanggui/SKILL.md`](skills/zhanggui/SKILL.md)、各 leaf `SKILL.md`、[`skills/setup-collaboration-files/SKILL.md`](skills/setup-collaboration-files/SKILL.md)、[`skills/decision-notes/SKILL.md`](skills/decision-notes/SKILL.md) 与内部 `STAGE.md` 为准；完整设计论证见 [Skill 融合工作流设计](docs/skill-fusion-design.md)。
 
-集合打包版本 v0.9.0。WorkflowState 与 task-root schema 沿用 v0.4 语义。
+集合打包版本 v0.10.0。WorkflowState 与 task-root schema 沿用 v0.4 语义。
 
-description 现已对齐开放规范：规范要求「既描述这个技能做什么，也描述何时用它」，官方作者指南的示例一律是**能力在前、`Use when` 触发子句在后**，并要求「宁可写得多一点」（显式列出用户没直接点名领域也算的场景）。此前八个 description 全部只写触发条件，能力那半个信号完全缺席，已整体改写（触发关键词与前置条件逐字保留）。九个被钉子评测的 description 因此进入**待重测**状态。
+description 现已对齐开放规范：规范要求「既描述这个技能做什么，也描述何时用它」，官方作者指南的示例一律是**能力在前、`Use when` 触发子句在后**，并要求「宁可写得多一点」（显式列出用户没直接点名领域也算的场景）。此前八个 description 全部只写触发条件，能力那半个信号完全缺席，已整体改写（触发关键词与前置条件逐字保留）。六个被钉子评测的 description 因此进入**待重测**状态。
 
 评测方法也已换成社区标准的两族：**触发族**用真 agent 观测宿主实际加载了哪个技能（`evals/triggers/`，144 条语料 + 固定 train/validation 划分），**质量族**用 with_skill / without_skill 对照看 delta（`skills/<skill>/evals/`）。运行状态、测量条件与现有数字**只在 [`evals/README.md`](evals/README.md) 维护**，本文不复制。旧判官 harness 降级为廉价的历史描述冲突检查，**不是发布门槛**。
 
@@ -24,7 +24,7 @@ tdd / finishing / dispatching 三处按 v0.8 的确定性误路由做的修订�
 
 ## 架构要点
 
-- **Eight strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
+- **Seven strict catalog entries**：七个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
 - **选中只靠 description**：宿主启动时只注入 `name` + `description`，规范要求它同时说清「做什么」和「何时用」。所以 description 先写能力、再接 `Use when` 触发子句，不写仲裁条款、不写行为指令、不概述工作流；这条约束由 `tests/skill-discovery.test.mjs` 机械卡住。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 边界、`Invocation Modes` 全在正文——那里才会被执行。
 - **选择性 Hybrid 根**：高信号复杂请求可自动进入；任何时候也可用宿主原生命令手动进入。
@@ -35,7 +35,7 @@ tdd / finishing / dispatching 三处按 v0.8 的确定性误路由做的修订�
 
 ## 快速使用
 
-复杂请求可以直接描述；支持 model-selected skills 的宿主会按 `zhanggui` 的 description 选择性自动加载它，根在首次工具调用前说明进入原因。触发面以该 description 为唯一出处，本文不复述——根只对"一次做不完"的请求负责，实现与交付细节归对应 leaf。调试、TDD、验证、审查、反馈、worktree、并行派发和分支收尾等窄请求仍由对应 leaf 自动匹配。
+复杂请求可以直接描述；支持 model-selected skills 的宿主会按 `zhanggui` 的 description 选择性自动加载它，根在首次工具调用前说明进入原因。触发面以该 description 为唯一出处，本文不复述——根只对"一次做不完"的请求负责，实现与交付细节归对应 leaf。调试、TDD、worktree 和分支收尾等窄请求仍由对应 leaf 自动匹配；验证、审查与反馈处理已退役为执行阶段 `references/` 里的单点维护文档，由执行流程内联执行，不再单独暴露为 leaf。
 
 需要确定性进入完整流程时，只显式调用一次根：
 
@@ -56,7 +56,7 @@ tdd / finishing / dispatching 三处按 v0.8 的确定性误路由做的修订�
   -> 新鲜验证
 ```
 
-调试、TDD、完成验证、请求/接收审查、worktree、并行派发或分支收尾等窄任务也可单独描述，由宿主发现对应 leaf skill；Direct 模式不会虚构掌柜的 WorkflowState。完整工作流中，同一 leaf 由根通过 `SkillRequest` 按 `Zhanggui Embedded` 契约激活并合并 `SkillResult`。
+调试、TDD、worktree 或分支收尾等窄任务也可单独描述，由宿主发现对应 leaf skill；完成验证、审查与反馈处理没有独立 leaf，由执行阶段按其 `references/` 内联执行。Direct 模式不会虚构掌柜的 WorkflowState。完整工作流中，同一 leaf 由根通过 `SkillRequest` 按 `Zhanggui Embedded` 契约激活并合并 `SkillResult`。
 
 ## 仓库结构
 
@@ -110,10 +110,7 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
     │   ├── SKILL.md
     │   ├── references/testing-anti-patterns.md
     │   └── evals/                # 族 2 语料 + fresh-cart 夹具（全绿）
-    │   ├── SKILL.md
-    │   └── references/code-reviewer.md
     ├── zhanggui-using-git-worktrees/SKILL.md
-    ├── zhanggui-dispatching-parallel-agents/SKILL.md
     └── zhanggui-finishing-a-development-branch/SKILL.md
 ```
 
@@ -125,7 +122,7 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
 
 ### 安装单元：完整 collection
 
-完整可移植单元是 `skills/` 下的全部目录（`zhanggui/` + 五个 `zhanggui-*/` + `setup-collaboration-files/` + `decision-notes/`），无需构建。按宿主能力优先选择正式安装方式：
+完整可移植单元是 `skills/` 下的全部目录（`zhanggui/` + 四个 `zhanggui-*/` + `setup-collaboration-files/` + `decision-notes/`），无需构建。按宿主能力优先选择正式安装方式：
 
 **1. Claude Code 插件（首选）**
 
@@ -165,9 +162,9 @@ cp -R skills/zhanggui skills/zhanggui-* skills/setup-collaboration-files skills/
 
 ### 宿主调用模型
 
-- 八个技能的 `name` + `description` 全部 catalog-visible，均可被宿主按 description 自动匹配或用宿主原生命令手动调用；description 里没有任何互斥仲裁，`setup-collaboration-files` 与 `decision-notes` 不参与根/leaf 路由。
+- 七个技能的 `name` + `description` 全部 catalog-visible，均可被宿主按 description 自动匹配或用宿主原生命令手动调用；description 里没有任何互斥仲裁，`setup-collaboration-files` 与 `decision-notes` 不参与根/leaf 路由。
 - `skills/zhanggui/SKILL.md` 是唯一默认强编排入口，采用选择性 Hybrid：高信号完整生命周期请求可自动进入，也可显式调用；Codex profile 设置 `allow_implicit_invocation: true`。
-- 五个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和「能力 + `Use when ...`」description；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
+- 四个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和「能力 + `Use when ...`」description；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
 - 确定性进入完整工作流时只显式调用一次根编排器（OMP 交互式为 `/skill:zhanggui`；逻辑 alias 为 `/zhanggui`）；阶段切换不要求继续输入命令。
 - Embedded 路径只接受根提供的 `SkillRequest`，leaf/stage 返回 `SkillResult` 或请求；根按 native activation → catalog location → collection fallback 激活，并校验 frontmatter 身份后合并 delta。
 - `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 也不参与 discovery。
@@ -213,7 +210,8 @@ cp -R skills/zhanggui skills/zhanggui-* skills/setup-collaboration-files skills/
 | 共识与 readiness | user-owned 决策必须 recap 确认；五级 readiness 硬门 | SKILL.md「共识与 Readiness 硬门」 |
 | Shape 与真值 | Transient 会话 plan / Durable TODO.csv / Epic 父子 CSV，单一真值 | `stages/writing-plans/`、`stages/executing-plans/` |
 | 恢复 | 压缩 state 块 + 机械触发的 DESIGN checkpoint + 冷启动流程 | SKILL.md「跨会话设计检查点」、`RECOVERY.md` |
-| 质量与收尾 | 审查双轴、分支收尾、worktree 隔离、并行派发——既可独立使用，也可嵌入根 frame | 对应 `skills/zhanggui-*/SKILL.md` |
+| 质量与收尾 | 分支收尾、worktree 隔离——既可独立使用，也可嵌入根 frame | 对应 `skills/zhanggui-*/SKILL.md` |
+| 审查 / 验证 / 反馈 / 并行派发 | 执行阶段的同步子步骤，规则单点维护，由根或执行阶段内联加载 | `stages/executing-plans/references/` |
 
 与模型内置 plan 的关系：模型 plan 保持短（目标与即时进度），磁盘 tracker 只补执行细节（boundary、related_files、sync_targets、depends_on、validation），会话 plan 是磁盘 CSV 的镜像投影。细节见 `stages/writing-plans/STAGE.md`「与模型 plan 的互补」。
 
@@ -225,7 +223,6 @@ cp -R skills/zhanggui skills/zhanggui-* skills/setup-collaboration-files skills/
 - `zhanggui-systematic-debugging`
 - `zhanggui-test-driven-development`
 - `zhanggui-using-git-worktrees`
-- `zhanggui-dispatching-parallel-agents`
 - `zhanggui-finishing-a-development-branch`
 - `decision-notes`（独立入口，不参与根/leaf 路由）
 - `setup-collaboration-files`（独立入口，不参与根/leaf 路由）
@@ -248,7 +245,7 @@ npm run validate                         # node scripts/validate-agent-skills.mj
 npm run check                            # 两者串跑
 ```
 
-Expected: 68 tests / 68 pass / 0 fail；validator 最终行报告 `Validated 11 strict Agent Skills.`
+Expected: 70 tests / 71 pass / 0 fail；validator 最终行报告 `Validated 7 strict Agent Skills.`
 
 测试命令**必须**限定在 `tests/`：`skills/*/evals/files/` 下的评测夹具是故意会失败的（比如 `buggy-cart` 有一个测试就该挂），裸跑 `node --test` 会把它当成仓库测试招进来。
 

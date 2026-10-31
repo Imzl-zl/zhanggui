@@ -1,0 +1,149 @@
+{
+  "skill": "zhanggui-dispatching-parallel-agents",
+  "host": "claude",
+  "agent_permissions": "bypassPermissions",
+  "driving_model": "qwen3.8-flash",
+  "judge_identity_sha256": "ce24d4a9bd7b3be0ebd84e0a71422e25c34cbf5f9fe86a041e98f9ae17bb0735",
+  "with_skill": {
+    "pass_rate_mean": 0.625
+  },
+  "without_skill": {
+    "pass_rate_mean": 0.75
+  },
+  "delta": {
+    "pass_rate": -0.125
+  },
+  "ungraded_assertions": 0,
+  "cases": [
+    {
+      "id": "three-independent-packages-parallel",
+      "prompt": "有三个互不相关的改造：api 包改鉴权中间件、web 包改表单校验、shared 包补类型定义。三处文件不共享，帮我并行派出去，快点。",
+      "expected_output": "给出一个可执行的派发计划：每个 agent 一个明确的写范围，明确说明文件集互不重叠，并给出合并后的集成验证步骤。",
+      "with_skill": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "total": 4,
+        "duration_ms": 36365,
+        "exit_code": 0,
+        "skill_activations": [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "The reply assigns each agent an explicit write scope naming the files or package it owns",
+            "passed": false,
+            "evidence": "The reply assigns no write scope to any agent — it refuses to dispatch ('现在不能派') and only lists the api/web/shared items as examples of information the user must supply ('每个任务一句话目标 + 验收方式，例如：api 包：…；web 包：…；shared 包：…'), deferring scope assignment to a future turn ('路径有了之后，我会先确认三包文件确实不重叠…再把三个 agent 在同一条消息里一次性派出'), so there is no explicit per-agent write scope naming the files or package it owns."
+          },
+          {
+            "text": "The reply states that the three scopes do not overlap, or names the specific files where they would",
+            "passed": false,
+            "evidence": "The reply defers the overlap check rather than making it — \"路径有了之后，我会先确认三包文件确实不重叠（这是能并行的硬条件）\" — and names no specific files where the api/web/shared scopes would collide (it only notes the packages don't exist in the working directory: \"没有 `api` / `web` / `shared` 包，没有任何源码\")."
+          },
+          {
+            "text": "The reply avoids running two agents against the same file set at the same time",
+            "passed": true,
+            "evidence": "The run dispatched no agents at all (transcript contains only Skill and Bash inspection calls, no Agent tool use), and the reply makes file-set isolation an explicit precondition: \"我会先确认三包文件确实不重叠（这是能并行的硬条件），再把三个 agent 在同一条消息里一次性派出\" — so two agents were never run against the same file set."
+          },
+          {
+            "text": "The reply ends with a concrete integration verification step rather than assuming the merge is safe",
+            "passed": false,
+            "evidence": "The reply ends with a conditional future promise rather than a concrete verification step: \"路径有了之后，我会先确认三包文件确实不重叠（这是能并行的硬条件），再把三个 agent 在同一条消息里一次性派出，收齐各自 diff 后跑集成验证。\" — no actual integration verification command or executable step is given (and no merge/diff exists to verify, since the working directory contains no project code)."
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 0.5,
+        "passed": 2,
+        "total": 4,
+        "duration_ms": 31706,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "The reply assigns each agent an explicit write scope naming the files or package it owns",
+            "passed": false,
+            "evidence": "The reply assigns no write scopes at all — it only defers: \"路径确认后……我会一次性发三个 Agent 调用，每个 brief 带上具体文件路径和改造目标\", without naming any files or packages per agent."
+          },
+          {
+            "text": "The reply states that the three scopes do not overlap, or names the specific files where they would",
+            "passed": true,
+            "evidence": "The reply states \"路径确认后，三个包互不共享文件、任务互相独立，确实适合并行\" — an explicit claim that the three packages share no files (scopes do not overlap)."
+          },
+          {
+            "text": "The reply avoids running two agents against the same file set at the same time",
+            "passed": true,
+            "evidence": "The agent dispatched no agents at all ('我先不派 agent') and its forward plan explicitly separates write scopes: '路径确认后，三个包互不共享文件、任务互相独立，确实适合并行——我会一次性发三个 Agent 调用，每个 brief 带上具体文件路径和改造目标，跑完汇总给你' — each agent gets its own package's file paths, with a stated non-overlap claim and a post-run consolidation step, so no two agents ever touch the same file set."
+          },
+          {
+            "text": "The reply ends with a concrete integration verification step rather than assuming the merge is safe",
+            "passed": false,
+            "evidence": "The reply ends with \"我会一次性发三个 Agent 调用，每个 brief 带上具体文件路径和改造目标，跑完汇总给你。\" — a promise to summarize the three agent outputs, with no concrete post-merge integration verification step (no cross-package build, typecheck, or test run named), so the assertion that it ends with an integration verification step is not met."
+          }
+        ]
+      },
+      "delta": -0.25
+    },
+    {
+      "id": "shared-package-json-conflict",
+      "prompt": "这两个活也并行跑吧：一个升级依赖版本，另一个加个 npm script，都在根目录 package.json 上改。",
+      "expected_output": "识别出共享文件导致两者不独立，拒绝同时并行；改为串行顺序或先拆分出各自独立的写范围。",
+      "with_skill": {
+        "pass_rate": 1,
+        "passed": 3,
+        "total": 3,
+        "duration_ms": 25934,
+        "exit_code": 0,
+        "skill_activations": [
+          "zhanggui-dispatching-parallel-agents"
+        ],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "The reply identifies package.json as shared state that makes the two tasks non-independent",
+            "passed": true,
+            "evidence": "The reply states: 「并行调度的前提是写作用域不重叠，而升级依赖版本和加 npm script 改的是**同一个 `package.json`**…两个 agent 同时写会互相覆盖」 and proposes 「正确做法是串行：一次读文件，两处改动一起写回」— identifying package.json as the shared state blocking parallel dispatch and recommending serial execution."
+          },
+          {
+            "text": "The reply declines to run both agents against package.json at the same time",
+            "passed": true,
+            "evidence": "The reply states '就算文件在，这两个活也不该并行。并行调度的前提是写作用域不重叠，而升级依赖版本和加 npm script 改的是同一个 package.json……两个 agent 同时写会互相覆盖' and prescribes '正确做法是串行：一次读文件，两处改动一起写回', explicitly declining simultaneous parallel agents on the shared file and proposing a serial alternative."
+          },
+          {
+            "text": "The reply proposes either a serial order or a split that removes the shared write",
+            "passed": true,
+            "evidence": "The reply explicitly rejects parallel dispatch due to the shared file — 「就算文件在，这两个活也不该并行。……改的是同一个 package.json……两个 agent 同时写会互相覆盖」 — and proposes the serial alternative: 「正确做法是串行：一次读文件，两处改动一起写回」."
+          }
+        ]
+      },
+      "without_skill": {
+        "pass_rate": 1,
+        "passed": 3,
+        "total": 3,
+        "duration_ms": 34323,
+        "exit_code": 0,
+        "skill_activations": [],
+        "outputs": [],
+        "assertion_results": [
+          {
+            "text": "The reply identifies package.json as shared state that makes the two tasks non-independent",
+            "passed": true,
+            "evidence": "The reply states '两个任务都改同一个 `package.json`，并行写同一文件会互相覆盖（后写的把先写的改动冲掉），所以不适合拆成两个 agent 并发跑...我直接顺序改更快也更安全' and repeats in point 2: '两个 agent 各自 Read → Edit 同一个文件...改同一文件的多处编辑必须串行，由一个执行者一次做完' — identifying package.json as shared state and switching to serial editing."
+          },
+          {
+            "text": "The reply declines to run both agents against package.json at the same time",
+            "passed": true,
+            "evidence": "The reply states 「两个任务都改同一个 package.json，并行写同一文件会互相覆盖…所以不适合拆成两个 agent 并发跑」 and 「改同一文件的多处编辑必须串行，由一个执行者一次做完」, explicitly declining parallel agents and choosing a serial single-executor approach."
+          },
+          {
+            "text": "The reply proposes either a serial order or a split that removes the shared write",
+            "passed": true,
+            "evidence": "The reply explicitly rejects parallelism due to the shared file and proposes serial execution: \"两个任务都改同一个 `package.json`，并行写同一文件会互相覆盖……不适合拆成两个 agent 并发跑。这两处改动本来就只是同一个文件上的两次小编辑，我直接顺序改更快也更安全\" and \"改同一文件的多处编辑必须串行，由一个执行者一次做完\"."
+          }
+        ]
+      },
+      "delta": 0
+    }
+  ]
+}

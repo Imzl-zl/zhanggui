@@ -12,12 +12,12 @@ const leafNames = [
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
   'zhanggui-using-git-worktrees',
-  'zhanggui-dispatching-parallel-agents',
   'zhanggui-finishing-a-development-branch',
 ];
 
-// The two leaves that still carry their own procedure; the other three were
-// retired into stages/executing-plans/references/.
+// Leaves that still carry their own procedure. Four were retired into
+// stages/executing-plans/references/ (review, feedback, verification,
+// parallel dispatch).
 const coreLeafNames = [
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
@@ -57,15 +57,14 @@ function embeddedSections(content) {
   return bodies;
 }
 
+// One local status field name across the collection: delta.StageStatus. The retired
+// review/verification leaves used to carry their own entries here.
 const coreLeafStatusInDelta = {
   'zhanggui-systematic-debugging': /StageStatus:\s*resolved\s*\|\s*blocked\s*\|\s*architecture-review-required/,
-  'zhanggui-test-driven-development': /ProcedureStatus:\s*tdd-complete\s*\|\s*blocked/,
-  'zhanggui-verification-before-completion': /StageStatus:\s*verified\s*\|\s*not-verified/,
-  'zhanggui-requesting-code-review': /StageStatus:\s*review-passed\s*\|\s*fixes-required\s*\|\s*blocked/,
-  'zhanggui-receiving-code-review': /StageStatus:\s*feedback-resolved\s*\|\s*changes-required\s*\|\s*blocked/,
+  'zhanggui-test-driven-development': /StageStatus:\s*tdd-complete\s*\|\s*blocked/,
 };
 
-// Structural: local StageStatus/ProcedureStatus must be indented under delta, not a SkillResult peer (T3-1).
+// Structural: local StageStatus must be indented under delta, not a SkillResult peer (T3-1).
 function assertLocalStatusUnderDelta(embedded, statusRegex, label = 'Embedded') {
   const fenceMatch = /```(?:text|yaml)?\r?\n([\s\S]*?)```/.exec(embedded);
   const block = fenceMatch ? fenceMatch[1] : embedded;
@@ -81,7 +80,7 @@ function assertLocalStatusUnderDelta(embedded, statusRegex, label = 'Embedded') 
   const peerField = new RegExp(`\\n {${deltaIndent}}[a-z_][a-z0-9_]*:`, 'm').exec(afterDeltaHeader);
   const deltaBody = peerField ? afterDeltaHeader.slice(0, peerField.index) : afterDeltaHeader;
 
-  const statusLine = /^( +)((?:Stage|Procedure)Status:\s*.+)$/m.exec(deltaBody);
+  const statusLine = /^( +)(StageStatus:\s*.+)$/m.exec(deltaBody);
   assert.ok(statusLine, `${label}: local status missing under delta`);
   assert.ok(
     statusLine[1].length > deltaIndent,
@@ -89,8 +88,8 @@ function assertLocalStatusUnderDelta(embedded, statusRegex, label = 'Embedded') 
   );
   assert.match(statusLine[2], statusRegex, `${label}: exact local status mapping missing under delta`);
 
-  // Reject any StageStatus/ProcedureStatus that is a column-peer of delta (same indent) or less indented.
-  const peerStatus = new RegExp(`(?:^|\\n) {0,${deltaIndent}}(?:Stage|Procedure)Status:`, 'm');
+  // Reject any StageStatus that is a column-peer of delta (same indent) or less indented.
+  const peerStatus = new RegExp(`(?:^|\\n) {0,${deltaIndent}}StageStatus:`, 'm');
   assert.doesNotMatch(
     skillSlice,
     peerStatus,
@@ -161,11 +160,11 @@ test('root declares the complete SkillRequest and SkillResult contracts', async 
   assert.match(root, /skill_requests:/);
 });
 
-test('fallback registry contains exactly the eight discovered leaves', async () => {
+test('fallback registry contains exactly the discovered leaves', async () => {
   const root = await readFile(rootPath, 'utf8');
   const registry = section(root, '### Fallback Registry', '## WorkflowState');
   for (const name of leafNames) assert.match(registry, new RegExp(`\\b${name}\\b`));
-  assert.equal((registry.match(/\.\.\/zhanggui-[^`\s]+\/SKILL\.md/g) ?? []).length, 5);
+  assert.equal((registry.match(/\.\.\/zhanggui-[^`\s]+\/SKILL\.md/g) ?? []).length, 4);
 });
 
 function assertRootFailureAndQuestionCodes(rootText) {
@@ -251,7 +250,7 @@ test('core leaves return identity-bearing Embedded SkillResult envelopes', async
       assert.match(embedded, new RegExp(`name: ${name}`), `${name} Embedded#${index + 1} missing exact name`);
       assert.match(embedded, /mode: zhanggui-embedded/, `${name} Embedded#${index + 1} missing mode`);
     }
-    const operational = sections.find(body => /(?:StageStatus|ProcedureStatus):/.test(body)) ?? sections.at(-1);
+    const operational = sections.find(body => /StageStatus:/.test(body)) ?? sections.at(-1);
     assertLocalStatusUnderDelta(
       operational,
       coreLeafStatusInDelta[name],
@@ -260,18 +259,15 @@ test('core leaves return identity-bearing Embedded SkillResult envelopes', async
   }
 });
 
-test('Embedded debugging requests parallel or TDD by name instead of loading sibling files', async () => {
+test('Embedded debugging requests TDD by name and reads parallel dispatch as a reference', async () => {
   const content = await readFile(path.join(skillsRoot, 'zhanggui-systematic-debugging', 'SKILL.md'), 'utf8');
-  assert.doesNotMatch(content, /(?:\.\.\/)+zhanggui-[^`\s]+\/SKILL\.md/);
-  assert.match(
-    content,
-    /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-dispatching-parallel-agents/,
-  );
   assert.match(
     content,
     /status[=:]\s*skill-required[\s\S]{0,240}?next_skill_request:[\s\S]{0,120}?name:\s*zhanggui-test-driven-development/,
   );
-  assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-dispatching-parallel-agents[\s\S]{0,200}?serial/i);
+  // Parallel dispatch is no longer a catalog leaf; the procedure points at the reference.
+  assert.doesNotMatch(content, /name:\s*zhanggui-dispatching-parallel-agents/);
+  assert.match(content, /executing-plans\/references\/parallel-dispatch\.md/);
   assert.match(content, /Direct mode:[\s\S]{0,200}?zhanggui-test-driven-development[\s\S]{0,200}?(?:required[\s\S]{0,80}?block|block[\s\S]{0,80}?unavailable)/i);
 });
 
@@ -303,13 +299,11 @@ SkillResult:
 
 const deliveryLeafNames = [
   'zhanggui-using-git-worktrees',
-  'zhanggui-dispatching-parallel-agents',
   'zhanggui-finishing-a-development-branch',
 ];
 
 const deliveryLeafStatusInDelta = {
   'zhanggui-using-git-worktrees': /StageStatus:\s*isolated\s*\|\s*in-place\s*\|\s*blocked\s*\|\s*awaiting-user/,
-  'zhanggui-dispatching-parallel-agents': /StageStatus:\s*integrated\s*\|\s*conflicts-found\s*\|\s*blocked\s*\|\s*serial-fallback/,
   'zhanggui-finishing-a-development-branch': /StageStatus:\s*finished\s*\|\s*kept\s*\|\s*blocked/,
 };
 
@@ -325,13 +319,52 @@ test('delivery leaves return identity-bearing Embedded SkillResult envelopes', a
       assert.match(embedded, new RegExp(`name: ${name}`), `${name} Embedded#${index + 1} missing exact name`);
       assert.match(embedded, /mode: zhanggui-embedded/, `${name} Embedded#${index + 1} missing mode`);
     }
-    const operational = sections.find(body => /(?:StageStatus|ProcedureStatus):/.test(body)) ?? sections.at(-1);
+    const operational = sections.find(body => /StageStatus:/.test(body)) ?? sections.at(-1);
     assertLocalStatusUnderDelta(
       operational,
       deliveryLeafStatusInDelta[name],
       `${name} operational Embedded`,
     );
   }
+});
+
+const statusProducingDocs = [
+  'zhanggui-systematic-debugging/SKILL.md',
+  'zhanggui-test-driven-development/SKILL.md',
+  'zhanggui-using-git-worktrees/SKILL.md',
+  'zhanggui-finishing-a-development-branch/SKILL.md',
+  'zhanggui/stages/design-assist/STAGE.md',
+  'zhanggui/stages/grilling/STAGE.md',
+  'zhanggui/stages/prototype/STAGE.md',
+  'zhanggui/stages/writing-plans/STAGE.md',
+  'zhanggui/stages/executing-plans/STAGE.md',
+  'zhanggui/stages/executing-plans/references/verification.md',
+];
+
+// Every status a producer can emit needs a deterministic consumer rule. The root is the
+// only consumer, so a status it never names is silently resolved by improvisation — which
+// is how architecture-review-required previously ended with no route back to design.
+test('root consumes every status a leaf or stage can return', async () => {
+  const root = await readFile(rootPath, 'utf8');
+  const start = root.indexOf('### 返回状态消费');
+  assert.ok(start !== -1, 'root must declare a status consumption section');
+  const end = root.indexOf('### Fallback Registry', start);
+  const table = root.slice(start, end === -1 ? undefined : end);
+
+  const statuses = new Set();
+  for (const rel of statusProducingDocs) {
+    const text = await readFile(path.join(skillsRoot, rel), 'utf8');
+    for (const match of text.matchAll(/(?:StageStatus|Outcome):\s*([a-z][a-z| -]*)/g)) {
+      for (const raw of match[1].split('|')) {
+        const value = raw.trim();
+        if (/^[a-z][a-z-]*$/.test(value)) statuses.add(value);
+      }
+    }
+  }
+
+  assert.ok(statuses.size >= 20, `expected a full status set, parsed ${statuses.size}`);
+  const uncovered = [...statuses].filter(value => !table.includes(`\`${value}\``)).sort();
+  assert.deepEqual(uncovered, [], `root consumption table must cover: ${uncovered.join(', ')}`);
 });
 
 test('leaf business flow contains no hardcoded sibling SKILL paths', async () => {
@@ -341,14 +374,18 @@ test('leaf business flow contains no hardcoded sibling SKILL paths', async () =>
   }
 });
 
-test('Embedded parallel reads the review discipline instead of dispatching a retired leaf', async () => {
+test('parallel dispatch lives in the execute stage and reads the review discipline locally', async () => {
   const content = await readFile(
-    path.join(skillsRoot, 'zhanggui-dispatching-parallel-agents', 'SKILL.md'),
+    path.join(skillsRoot, 'zhanggui', 'stages', 'executing-plans', 'references', 'parallel-dispatch.md'),
     'utf8',
   );
-  assert.match(content, /references\/code-review\.md/);
+  assert.match(content, /references\/code-review\.md|\[code-review\.md\]\(code-review\.md\)/);
   assert.doesNotMatch(content, /name: zhanggui-requesting-code-review/);
   assert.match(content, /zhanggui-using-git-worktrees/);
+  // The retired leaf must not come back as a discovered skill.
+  await assert.rejects(
+    readFile(path.join(skillsRoot, 'zhanggui-dispatching-parallel-agents', 'SKILL.md'), 'utf8'),
+  );
 });
 test('finishing applies the verification discipline itself when evidence is stale', async () => {
   const content = await readFile(

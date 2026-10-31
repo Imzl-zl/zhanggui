@@ -381,7 +381,7 @@ SkillResult:
     GreenEvidence: 最小实现与通过结果
     RefactorEvidence: 清理内容；无清理时写 none
     Validation: 原 task validation 的新鲜结果
-    ProcedureStatus: tdd-complete | blocked
+    StageStatus: tdd-complete | blocked
   question_request: <QuestionRequest-or-null>
   next_skill_request: <SkillRequest-or-null>
 ```

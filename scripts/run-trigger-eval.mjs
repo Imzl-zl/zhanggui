@@ -51,14 +51,11 @@
 
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { execFile, execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { accessSync, appendFileSync, cpSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
-
-const execFileAsync = promisify(execFile);
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const skillsRoot = path.join(projectRoot, 'skills');
@@ -285,30 +282,68 @@ async function mapWithConcurrency(items, limit, worker) {
   return results;
 }
 
+// Capture the child's output through files, not pipes. On Windows a killed child can lose
+// piped output on kill, so an activation already printed before a timeout must be read from
+// our own buffer instead of from the exit status. A run that never activated stays failed:
+// an early kill cannot prove the host would not have loaded something later.
+function runCaptured(command, args, { cwd, env, timeoutMs }) {
+  return new Promise((resolve) => {
+    // stdin stays a pipe: closing it makes the reference adapter stall before starting.
+    const child = spawn(command, args, { cwd, env, stdio: ['pipe', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    let settled = false;
+    let timedOut = false;
+
+    child.stdout.on('data', (chunk) => { stdout += chunk; });
+    child.stderr.on('data', (chunk) => { stderr += chunk; });
+
+    const finish = (code, extra = '') => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve({ code, stdout, stderr: `${stderr}${extra}` });
+    };
+
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGKILL');
+    }, timeoutMs);
+
+    child.on('error', (error) => finish(null, `\n${String(error)}`));
+    child.on('close', (code) => finish(code, timedOut ? `\n[timeout after ${timeoutMs}ms]` : ''));
+  });
+}
+
 async function runOnce(entry) {
   const hostDir = mkdtempSync(path.join(tmpdir(), 'trigger-eval-'));
   try {
     if (options.fixture) prepareWorkspace(hostDir);
     stageCatalog(hostDir);
     applyDescriptionOverrides(hostDir);
-    const { stdout } = await execFileAsync(adapter.command, buildArgs(options.host, entry.query, hostDir), {
-      cwd: hostDir,
-      encoding: 'utf8',
-      env: process.env,
-      timeout: options.timeoutMs,
-      maxBuffer: 64 * 1024 * 1024,
-    });
-    return { exit_code: 0, loaded: adapter.detect(stdout ?? '', catalog) };
-  } catch (error) {
-    const stdout = typeof error?.stdout === 'string' ? error.stdout : '';
-    const stderr = typeof error?.stderr === 'string' ? error.stderr : '';
-    const exitCode = typeof error?.code === 'number' ? error.code : null;
+    const { code, stdout, stderr } = await runCaptured(
+      adapter.command,
+      buildArgs(options.host, entry.query, hostDir),
+      { cwd: hostDir, env: process.env, timeoutMs: options.timeoutMs },
+    );
+    const detected = adapter.detect(stdout ?? '', catalog);
+    if (code === 0) {
+      return { exit_code: 0, loaded: detected };
+    }
+    // What this family measures is which skill the host activated, not whether the run
+    // finished. The activation event is emitted within the first few lines, so a timeout
+    // that arrives afterwards carries a valid observation — discarding it is what turned
+    // real root activations into recorded misses. Without an activation the run stays
+    // failed, because an early kill cannot prove that nothing would have loaded.
+    if (detected.length) {
+      return { exit_code: 0, loaded: detected, terminated_early: true };
+    }
     // Keep the diagnostics for every failed invocation, not just timeouts: a
     // partial run is only interpretable if the failure reason is in the report.
     return {
-      exit_code: exitCode,
-      loaded: adapter.detect(stdout, catalog),
-      error: `${String(error?.message ?? error)}${stderr ? `\n[stderr] ${stderr}` : ''}`.slice(0, 4000),
+      exit_code: code,
+      loaded: [],
+      error: `exit code ${code}${stderr ? `\n[stderr] ${stderr}` : ''}`.slice(0, 4000),
     };
   } finally {
     // A Windows file lock (a lingering child process, antivirus) can make this

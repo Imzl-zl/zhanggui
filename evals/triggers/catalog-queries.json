@@ -31,9 +31,7 @@
       "query": "这次改动要动 api、web、shared 三个包，还要同时出迁移脚本和文档，你统一负责吧",
       "expected_skill": "zhanggui",
       "split": "train",
-      "near_miss_for": [
-        "zhanggui-dispatching-parallel-agents"
-      ]
+      "near_miss_for": []
     },
     {
       "id": "zg-pos-04",
@@ -68,9 +66,7 @@
       "query": "从零负责一个通知子系统：后端、定时任务、前端展示都要，需要一套能恢复的执行计划",
       "expected_skill": "zhanggui",
       "split": "validation",
-      "near_miss_for": [
-        "zhanggui-dispatching-parallel-agents"
-      ]
+      "near_miss_for": []
     },
     {
       "id": "zg-pos-09",
@@ -78,7 +74,6 @@
       "expected_skill": "zhanggui",
       "split": "validation",
       "near_miss_for": [
-        "zhanggui-dispatching-parallel-agents",
         "zhanggui-test-driven-development"
       ]
     },
@@ -254,7 +249,7 @@
       "expected_skill": "zhanggui-using-git-worktrees",
       "split": "train",
       "near_miss_for": [
-        "zhanggui-dispatching-parallel-agents"
+        "zhanggui"
       ]
     },
     {
@@ -284,7 +279,7 @@
       "expected_skill": "zhanggui-using-git-worktrees",
       "split": "train",
       "near_miss_for": [
-        "zhanggui-dispatching-parallel-agents"
+        "zhanggui"
       ]
     },
     {
@@ -300,7 +295,7 @@
       "expected_skill": "zhanggui-using-git-worktrees",
       "split": "validation",
       "near_miss_for": [
-        "zhanggui-dispatching-parallel-agents"
+        "zhanggui"
       ]
     },
     {
@@ -322,90 +317,110 @@
     {
       "id": "dis-pos-01",
       "query": "这几件事互不依赖，并行做掉",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
       "near_miss_for": [
         "zhanggui-using-git-worktrees"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-02",
       "query": "开几个 subagent 同时查这两个模块的问题，文件不重叠",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
       "near_miss_for": [
         "zhanggui-using-git-worktrees",
         "zhanggui-systematic-debugging"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-03",
       "query": "我有 5 个独立的任务，想同时推进，各自写不同的文件",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
       "near_miss_for": [
         "zhanggui-using-git-worktrees"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-04",
       "query": "能不能并发跑 一个个来太慢了",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
-      "near_miss_for": []
+      "near_miss_for": [],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-05",
       "query": "Dispatch parallel agents for these two independent investigations.",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
       "near_miss_for": [
         "zhanggui-using-git-worktrees"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-06",
       "query": "这两个包的问题没有共享状态，可以同时开工",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
       "near_miss_for": [
         "zhanggui-using-git-worktrees",
         "zhanggui-systematic-debugging"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-07",
       "query": "并行派发的时候注意别让两个 agent 改同一个文件",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "train",
       "near_miss_for": [
         "zhanggui-using-git-worktrees"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-08",
       "query": "依赖已经就绪的任务有 4 个，一起做",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "validation",
-      "near_miss_for": []
+      "near_miss_for": [],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-09",
       "query": "两条独立的排查线，同时进行，互不干扰",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "validation",
       "near_miss_for": [
         "zhanggui-systematic-debugging"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "dis-pos-10",
       "query": "想让多个子代理同时开工，各自负责不相交的文件集",
-      "expected_skill": "zhanggui-dispatching-parallel-agents",
+      "expected_skill": "zhanggui",
       "split": "validation",
       "near_miss_for": [
         "zhanggui-using-git-worktrees"
-      ]
+      ],
+      "expected_first": "zhanggui",
+      "forbidden_skills": []
     },
     {
       "id": "fin-pos-01",

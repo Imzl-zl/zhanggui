@@ -97,13 +97,19 @@ UI mode 不改变非 UI node 的 owner。
 
 ## Owner 切换
 
-用户说“这部分我要自己定”时，只返回对应 node/domain 的 ownership change：
+出现以下任一情况时，把该 node 交回用户，不替用户决定：
+
+- 用户说“这部分我要自己定”。
+- 研究后发现该 node 命中第 1 级 Assisted 用户卡点（判定表在根 `SKILL.md`，本 stage 不复述）。
+
+两种来源共用一个出口：只返回对应 node/domain 的 ownership change，stage status 同为 `ownership-changed`，方向由箭头表达。
 
 ```text
 OwnershipChanges: Dn model -> user
+StageStatus: ownership-changed
 ```
 
-其他 model-owned node 保持原 owner。stage 不 handoff 给 grilling；编排器合并后从全局 frontier 重新选节点。
+其他 model-owned node 保持原 owner。stage 不 handoff 给 grilling；编排器按 `OwnershipChanges` 的方向重新调度（`model -> user` 交 grilling，`user -> model` 交回本 stage），合并后从全局 frontier 重新选节点。
 
 ## 输出 delta
 
@@ -114,7 +120,7 @@ NewNodes: id、domain、owner、question、depends_on
 Pruned: 被答案取消的 node 及原因
 OwnershipChanges: 显式 owner 变化
 PrototypeRequest: none | ParentDecisionId + Question + SuccessSignal
-StageStatus: node-resolved | needs-user | needs-prototype | blocked
+StageStatus: node-resolved | ownership-changed | needs-prototype | blocked
 Next: 对编排器的一个建议动作
 ```
 

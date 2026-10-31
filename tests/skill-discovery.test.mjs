@@ -11,7 +11,6 @@ const leafSkills = [
   { name: 'zhanggui-systematic-debugging', enabled: true },
   { name: 'zhanggui-test-driven-development', enabled: true },
   { name: 'zhanggui-using-git-worktrees', enabled: true },
-  { name: 'zhanggui-dispatching-parallel-agents', enabled: true },
   { name: 'zhanggui-finishing-a-development-branch', enabled: true },
 ];
 
@@ -123,18 +122,40 @@ function assertPluginManifestV09(manifest) {
   assert.equal(manifest.version, '0.10.0');
   assert.equal(
     manifest.description,
-    'Eight strict Agent Skills: the Zhanggui selective-hybrid orchestrator, five dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.',
+    'Seven strict Agent Skills: the Zhanggui selective-hybrid orchestrator, four dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.',
   );
   assert.match(manifest.interface.shortDescription, /selective-hybrid root/i);
-  assert.match(manifest.interface.shortDescription, /five dual-mode leaves/i);
-  assert.match(manifest.interface.longDescription, /Eight strict Agent Skills/i);
+  assert.match(manifest.interface.shortDescription, /four dual-mode leaves/i);
+  assert.match(manifest.interface.longDescription, /Seven strict Agent Skills/i);
   assert.match(manifest.interface.longDescription, /automatic or manual/i);
-  assert.match(manifest.interface.longDescription, /five zhanggui-\* leaves/i);
+  assert.match(manifest.interface.longDescription, /four zhanggui-\* leaves/i);
   assert.match(manifest.interface.longDescription, /setup-collaboration-files/i);
   assert.match(manifest.interface.longDescription, /decision-notes/i);
   assert.ok(manifest.interface.defaultPrompt.some(line => /automatically match Zhanggui/i.test(line)));
   assert.ok(manifest.interface.defaultPrompt.some(line => /narrow task/i.test(line)));
 }
+
+test('marketplace manifest agrees with the packaged plugin manifest', async () => {
+  const pkg = JSON.parse(await readFile(path.join(projectRoot, 'package.json'), 'utf8'));
+  const plugin = JSON.parse(await readFile(path.join(projectRoot, '.claude-plugin', 'plugin.json'), 'utf8'));
+  const marketplace = JSON.parse(
+    await readFile(path.join(projectRoot, '.claude-plugin', 'marketplace.json'), 'utf8'),
+  );
+
+  const entry = marketplace.plugins.find((item) => item.name === 'zhanggui');
+  assert.ok(entry, 'marketplace must list the zhanggui plugin');
+  assert.equal(entry.source, './');
+
+  // Drift between the two manifests is how the marketplace kept advertising eleven
+  // skills at 0.9.0 after the collection became eight at 0.10.0. Pin them together.
+  assert.equal(entry.version, pkg.version);
+  assert.equal(entry.version, plugin.version);
+  assert.equal(entry.description, plugin.description);
+  assert.doesNotMatch(
+    entry.description,
+    /Eleven|requesting-code-review|receiving-code-review|verification-before-completion/,
+  );
+});
 
 test('plugin manifest pins the v0.9 hybrid packaging contract', async () => {
   const manifest = JSON.parse(
@@ -281,7 +302,7 @@ test('implicit-entry predicate defers to the description', () => {
 
 test('every catalog description states what the skill does and when to use it', async () => {
   const names = await discoverSkillNames();
-  assert.equal(names.length, 8);
+  assert.equal(names.length, 7);
 
   for (const name of names) {
     const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');

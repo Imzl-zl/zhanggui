@@ -85,7 +85,7 @@ description 是唯一的触发面：启动时宿主只注入 `name` + `descripti
 
 规范里**没有“路由技能”这个概念**：启动时所有技能的 `name` + `description` 同时注入，每个技能独立被发现、在同一个池子里竞争。想让某个技能负责调度其他技能，只能靠它自己的 description 去赢，没有额外机制。
 
-例外：`zhanggui` 与八个 `zhanggui-*` 的 description 被 `evals/catalog-current.json` 的 `catalog_snapshot` digest 钉住（`tests/skill-trigger-data.test.mjs` 会校验）。改它们必须同步那份快照，并在 `changes_since_supersede` 里写清改了哪个技能、针对哪个用例——没有对应失败用例时写 `target_case: null` 并说明这是规范对齐而非回归修复；`status` 在重测后置为 `measured`（`measured_by` 指向当次 summary），未重测时保持在 `pending-reevaluation`。已发布的 `results/v0.*-routing-summary.json` 是只读历史记录，任何情况下都不得为了让 digest 门变绿去改写它们（那等于让结果记录谎报产生该批速率的 catalog）。未重测前不得引用任何一版历史命中率描述当前目录。重测时 catalog 必须放入无关的第三方技能作为干扰项——v0.7 全程只开了 `--skills "zhanggui*"`，没测出竞争条件下的代价；v0.8 已按此要求重测并在 summary 中记录 `failures`。
+例外：`zhanggui` 与四个 `zhanggui-*` 的 description 被 `evals/catalog-current.json` 的 `catalog_snapshot` digest 钉住（`tests/skill-trigger-data.test.mjs` 会校验）。改它们必须同步那份快照，并在 `changes_since_supersede` 里写清改了哪个技能、针对哪个用例——没有对应失败用例时写 `target_case: null` 并说明这是规范对齐而非回归修复；`status` 在重测后置为 `measured`（`measured_by` 指向当次 summary），未重测时保持在 `pending-reevaluation`。已发布的 `results/v0.*-routing-summary.json` 是只读历史记录，任何情况下都不得为了让 digest 门变绿去改写它们（那等于让结果记录谎报产生该批速率的 catalog）。未重测前不得引用任何一版历史命中率描述当前目录。重测时 catalog 必须放入无关的第三方技能作为干扰项——v0.7 全程只开了 `--skills "zhanggui*"`，没测出竞争条件下的代价；v0.8 已按此要求重测并在 summary 中记录 `failures`。
 
 判官只读 `name` + `description`（见 v0.8 summary 的 `routing_evaluation.system_prompt`）。SKILL.md 正文里的路由谓词管的是加载之后的运行时行为，在这套路由评测里恒为零变化，不要用它去修评测数字；反过来，description 里要表达排除语义时，写成正向前置条件（如 `subagent capacity is available`、`has already passed verification`），而不是被机械门禁掉的 `do not use`。
 
@@ -121,6 +121,6 @@ npm test           # node --test "tests/**/*.test.mjs"
 
 测试命令**必须**限定在 `tests/`：`skills/*/evals/files/` 下的夹具是故意会失败的（比如 `buggy-cart`），裸跑 `node --test` 会把它当成仓库测试招进来。
 
-`npm test` 期望 68 tests / 68 pass / 0 fail；validator 期望末行 `Validated 11 strict Agent Skills.`。
+`npm test` 期望 70 tests / 70 pass / 0 fail；validator 期望末行 `Validated 7 strict Agent Skills.`。
 
 改完 skills 后至少跑一次 `npm run check`，再跑 `./scripts/deploy-skills.sh --target <host> --dry-run` 确认部署差异符合预期。

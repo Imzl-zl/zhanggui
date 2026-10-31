@@ -18,7 +18,6 @@ const evaluatedSkills = [
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
   'zhanggui-using-git-worktrees',
-  'zhanggui-dispatching-parallel-agents',
   'zhanggui-finishing-a-development-branch',
 ];
 // v0.7/v0.8/v0.9 were measured against a nine-entry catalog that has since

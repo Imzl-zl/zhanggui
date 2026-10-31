@@ -1,0 +1,199 @@
+{
+  "host": "claude",
+  "adapter_status": "reference",
+  "driving_model": "deepseek-flash",
+  "workspace_fixture": null,
+  "descriptions_override": null,
+  "descriptions_override_sha256": null,
+  "runs_per_query": 3,
+  "concurrency": 3,
+  "threshold": 0.5,
+  "split_sha256": "117eabe77c46b8ec9c0a52da0b9d06fc038889a3912d6480c03f4ef5d9db6678",
+  "queries": 3,
+  "successful_runs": 8,
+  "total_runs": 9,
+  "by_split": {
+    "train": {
+      "queries": 3,
+      "passed": 0,
+      "pass_rate": 0
+    },
+    "validation": {
+      "queries": 0,
+      "passed": 0,
+      "pass_rate": null
+    }
+  },
+  "rates": {
+    "decision-notes": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "setup-collaboration-files": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui": {
+      "recall": 0,
+      "precision": null,
+      "tp": 0,
+      "fn": 8,
+      "fp": 0,
+      "tn": 0
+    },
+    "zhanggui-finishing-a-development-branch": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-systematic-debugging": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-test-driven-development": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    },
+    "zhanggui-using-git-worktrees": {
+      "recall": null,
+      "precision": null,
+      "tp": 0,
+      "fn": 0,
+      "fp": 0,
+      "tn": 8
+    }
+  },
+  "null_target_clean_rate": null,
+  "records": [
+    {
+      "id": "fresh-multi-01",
+      "prompt": "同一个登录流程要在网页、iOS、Android 三端一起改，还要更新接口文档，你来统筹到底怎么拆",
+      "expected_skill": "zhanggui",
+      "expected_first": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "forbidden_skills": [],
+      "source": "implicit",
+      "tags": [
+        "root-positive",
+        "multi-platform"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    },
+    {
+      "id": "fresh-multi-02",
+      "prompt": "这个需求横跨后端、两个前端和一个数据迁移，我不清楚先动哪块，你从头到尾负责",
+      "expected_skill": "zhanggui",
+      "expected_first": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "forbidden_skills": [],
+      "source": "implicit",
+      "tags": [
+        "root-positive",
+        "cross-module"
+      ],
+      "hits": 0,
+      "scored": 2,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": null,
+          "loaded": [],
+          "error": "exit code null\n[stderr] Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.\n[claude-code:unrecognized_model] {\"model\":\"deepseek-flash\",\"query_source\":\"sdk\"}\n\n[timeout after 900000ms]"
+        }
+      ]
+    },
+    {
+      "id": "fresh-multi-03",
+      "prompt": "把这件事从提需求到上线都交给你，中间要我拍板的地方再问我",
+      "expected_skill": "zhanggui",
+      "expected_first": "zhanggui",
+      "split": "train",
+      "near_miss_for": [],
+      "forbidden_skills": [],
+      "source": "implicit",
+      "tags": [
+        "root-positive",
+        "end-to-end"
+      ],
+      "hits": 0,
+      "scored": 3,
+      "rate": 0,
+      "passed": false,
+      "observed": [
+        [],
+        [],
+        []
+      ],
+      "runs": [
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        },
+        {
+          "exit_code": 0,
+          "loaded": []
+        }
+      ]
+    }
+  ]
+}
