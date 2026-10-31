@@ -6,7 +6,7 @@
 
 | 入口 | 内容 | 位置 |
 |---|---|---|
-| `zhanggui` | selective-hybrid 有状态编排器 + 八个可独立发现的 `zhanggui-*` 工程 leaf | `skills/zhanggui/`、`skills/zhanggui-*/` |
+| `zhanggui` | selective-hybrid 有状态编排器 + 五个可独立发现的 `zhanggui-*` 工程 leaf | `skills/zhanggui/`、`skills/zhanggui-*/` |
 | `setup-collaboration-files` | 项目协作体系初始化 / 归一（AGENTS.md、`docs/`、`.agents/notes/`、tools.md、memory.md） | `skills/setup-collaboration-files/` |
 | `decision-notes` | 决策笔记的落盘与生命周期（非平凡判定、四格、状态迁移、取代与冻结） | `skills/decision-notes/` |
 
@@ -16,7 +16,7 @@
 
 集合打包版本 v0.9.0。WorkflowState 与 task-root schema 沿用 v0.4 语义。
 
-description 现已对齐开放规范：规范要求「既描述这个技能做什么，也描述何时用它」，官方作者指南的示例一律是**能力在前、`Use when` 触发子句在后**，并要求「宁可写得多一点」（显式列出用户没直接点名领域也算的场景）。此前十一个 description 全部只写触发条件，能力那半个信号完全缺席，已整体改写（触发关键词与前置条件逐字保留）。九个被钉子评测的 description 因此进入**待重测**状态。
+description 现已对齐开放规范：规范要求「既描述这个技能做什么，也描述何时用它」，官方作者指南的示例一律是**能力在前、`Use when` 触发子句在后**，并要求「宁可写得多一点」（显式列出用户没直接点名领域也算的场景）。此前八个 description 全部只写触发条件，能力那半个信号完全缺席，已整体改写（触发关键词与前置条件逐字保留）。九个被钉子评测的 description 因此进入**待重测**状态。
 
 评测方法也已换成社区标准的两族：**触发族**用真 agent 观测宿主实际加载了哪个技能（`evals/triggers/`，144 条语料 + 固定 train/validation 划分），**质量族**用 with_skill / without_skill 对照看 delta（`skills/<skill>/evals/`）。运行状态、测量条件与现有数字**只在 [`evals/README.md`](evals/README.md) 维护**，本文不复制。旧判官 harness 降级为廉价的历史描述冲突检查，**不是发布门槛**。
 
@@ -24,7 +24,7 @@ tdd / finishing / dispatching 三处按 v0.8 的确定性误路由做的修订�
 
 ## 架构要点
 
-- **Eleven strict catalog entries**：十一个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
+- **Eleven strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、return point、readiness 与 Embedded 合并权。
 - **选中只靠 description**：宿主启动时只注入 `name` + `description`，规范要求它同时说清「做什么」和「何时用」。所以 description 先写能力、再接 `Use when` 触发子句，不写仲裁条款、不写行为指令、不概述工作流；这条约束由 `tests/skill-discovery.test.mjs` 机械卡住。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 边界、`Invocation Modes` 全在正文——那里才会被执行。
 - **选择性 Hybrid 根**：高信号复杂请求可自动进入；任何时候也可用宿主原生命令手动进入。
@@ -110,11 +110,8 @@ zhanggui/                             # 仓库根 = 创作项目 = 插件 = mark
     │   ├── SKILL.md
     │   ├── references/testing-anti-patterns.md
     │   └── evals/                # 族 2 语料 + fresh-cart 夹具（全绿）
-    ├── zhanggui-requesting-code-review/
     │   ├── SKILL.md
     │   └── references/code-reviewer.md
-    ├── zhanggui-verification-before-completion/SKILL.md
-    ├── zhanggui-receiving-code-review/SKILL.md
     ├── zhanggui-using-git-worktrees/SKILL.md
     ├── zhanggui-dispatching-parallel-agents/SKILL.md
     └── zhanggui-finishing-a-development-branch/SKILL.md
@@ -168,9 +165,9 @@ cp -R skills/zhanggui skills/zhanggui-* skills/setup-collaboration-files skills/
 
 ### 宿主调用模型
 
-- 十一个技能的 `name` + `description` 全部 catalog-visible，均可被宿主按 description 自动匹配或用宿主原生命令手动调用；description 里没有任何互斥仲裁，`setup-collaboration-files` 与 `decision-notes` 不参与根/leaf 路由。
+- 八个技能的 `name` + `description` 全部 catalog-visible，均可被宿主按 description 自动匹配或用宿主原生命令手动调用；description 里没有任何互斥仲裁，`setup-collaboration-files` 与 `decision-notes` 不参与根/leaf 路由。
 - `skills/zhanggui/SKILL.md` 是唯一默认强编排入口，采用选择性 Hybrid：高信号完整生命周期请求可自动进入，也可显式调用；Codex profile 设置 `allow_implicit_invocation: true`。
-- 八个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和「能力 + `Use when ...`」description；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
+- 五个 `zhanggui-*` leaf 都有独立 `SKILL.md` 和「能力 + `Use when ...`」description；每个 leaf 都定义 `Direct` 与 `Zhanggui Embedded` 两种契约。
 - 确定性进入完整工作流时只显式调用一次根编排器（OMP 交互式为 `/skill:zhanggui`；逻辑 alias 为 `/zhanggui`）；阶段切换不要求继续输入命令。
 - Embedded 路径只接受根提供的 `SkillRequest`，leaf/stage 返回 `SkillResult` 或请求；根按 native activation → catalog location → collection fallback 激活，并校验 frontmatter 身份后合并 delta。
 - `design-assist`、`grilling`、`prototype`、`writing-plans`、`executing-plans` 保持内部 `STAGE.md`，永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；`RECOVERY.md` 也不参与 discovery。
@@ -227,9 +224,6 @@ cp -R skills/zhanggui skills/zhanggui-* skills/setup-collaboration-files skills/
 - `zhanggui`（selective-hybrid strict orchestrator）
 - `zhanggui-systematic-debugging`
 - `zhanggui-test-driven-development`
-- `zhanggui-verification-before-completion`
-- `zhanggui-requesting-code-review`
-- `zhanggui-receiving-code-review`
 - `zhanggui-using-git-worktrees`
 - `zhanggui-dispatching-parallel-agents`
 - `zhanggui-finishing-a-development-branch`
@@ -327,7 +321,6 @@ Observed v0.7 summary facts（**历史**：对旧 description 目录测得，仅
 | `native-root-implicit` | 无命令高信号请求自动加载 `zhanggui`，首次工具前出现 `已自动进入 Zhanggui 完整工作流：` |
 | `native-debug` | 窄 bug 请求先激活 `zhanggui-systematic-debugging`，根不抢占 |
 | `native-root-conflict` | 端到端 + TDD/verification 子步骤仍 root-first |
-| `native-review` | 窄 review 请求先激活 `zhanggui-requesting-code-review`，根不抢占 |
 | `fallback-debug` | `--no-skills` 下受控 collection fallback 读取 debugging leaf 并校验 frontmatter 身份 |
 
 **Root（OMP 交互式，host-direct injection）：**

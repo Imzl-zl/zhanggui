@@ -6,12 +6,12 @@
 
 ## 0. 运行架构摘要
 
-- **Eleven strict catalog entries**：十一个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权；`setup-collaboration-files` 与 `decision-notes` 是并列的独立技能，不参与根/leaf 路由。
+- **Eleven strict catalog entries**：八个技能均使用 strict Agent Skills frontmatter（`name` / `description` / `license`，根另有 `compatibility`）；`zhanggui` 是唯一有状态根，拥有 `WorkflowState`、frontier、consensus、return point、readiness 与 Embedded 合并权；`setup-collaboration-files` 与 `decision-notes` 是并列的独立技能，不参与根/leaf 路由。
 - **协作文件体系是并列的另一套体系**：`setup-collaboration-files` 一次性铺设骨架并写仓库不变量，`decision-notes` 每次非平凡改动写单篇笔记；两者单向耦合于 `.agents/notes/AGENTS.md` 这一份仓库运行时契约，互相不复述对方规则。设计论证见 [`history/specs/2026-09-16-collaboration-notes-workflow-design.md`](history/specs/2026-09-16-collaboration-notes-workflow-design.md)。
 - **选中只靠 description**：宿主启动时只注入 `name` + `description`，选哪个技能完全由它决定。因此 description 只写触发条件：不写 `Do not use for...` 一类仲裁条款（等于在自己招牌上写“别选我”），不写行为指令，不概述工作流（概述了模型会照摘要拄而不读正文）。根与 leaf 的边界靠各自具体的触发词自然分开。
 - **仲裁与编排在正文**：root-first、narrow-task de-escalation、leaf 的 `Invocation Modes`、技能间边界全部写在正文——那里才是它们真正被执行的地方。
 - **状态在磁盘**：规范不提供跳轮次的内存状态，能跳会话存活的只有文件；task root 下的 `DESIGN.md` / `PROGRESS.md` / CSV tracker 是真值，上下文里的 WorkflowState 只是它的投影。
-- **选择性 Hybrid 根**：高信号完整生命周期请求可自动进入；任何时候也可用宿主原生命令手动进入。八个 `zhanggui-*` leaf 继续 dual-mode。
+- **选择性 Hybrid 根**：高信号完整生命周期请求可自动进入；任何时候也可用宿主原生命令手动进入。五个 `zhanggui-*` leaf 继续 dual-mode。
 - **内部协议**：`SkillRequest` / `SkillResult` 是 Zhanggui 根拥有的内部协议，不是 Agent Skills 开放标准字段，宿主不执行也不保障它。
 - **激活顺序**：native activation → catalog location → controlled collection fallback；业务路由只写 skill name + mode，不把 sibling 路径当作唯一业务接口。
 - **内部 stage 不加载 sibling**：有状态 stage 永不加载 sibling skills；返回本地 state/task/node delta，并在需要 leaf 时返回 `SkillRequest` 供根消费；leaf 在 Embedded 模式返回 `SkillResult`，需要下游 skill 时写 `next_skill_request`。
@@ -312,7 +312,7 @@ DONE 必须有当前 validation 的新鲜证据。
 
 ## 10. Invocation 与隔离
 
-- plugin 发现十个 strict Agent Skills：selective-hybrid 根 `zhanggui`、八个 dual-mode leaf，以及并列的独立技能 `setup-collaboration-files`；全部 `name` + `description` catalog-visible。
+- plugin 发现十个 strict Agent Skills：selective-hybrid 根 `zhanggui`、五个 dual-mode leaf，以及并列的独立技能 `setup-collaboration-files`；全部 `name` + `description` catalog-visible。
 - 根支持选择性自动与手动进入：Codex profile 设置 `allow_implicit_invocation: true`；高信号请求可自动进入，任何时候也可用宿主原生命令手动进入。
 - `/zhanggui` 是逻辑 alias；OMP 交互式原生显式入口为 `/skill:zhanggui`，在模型工作前 host-direct 注入根 `SKILL.md`。`omp -p "/zhanggui ..."` / `omp -p "/skill:zhanggui ..."` 将未知 slash 当作普通文本，不能作为 native-root 证据。
 - leaf 不设置 model-invocation 禁用项；宿主可按 `Use when ...` description 匹配其 Direct 模式。根则通过 `SkillRequest` 激活同一 leaf 的 `Zhanggui Embedded` 模式。
@@ -378,7 +378,7 @@ Batch 不再是 shape：同质批量是 Durable/Epic 内的执行并行策略，
 12. 高风险/跨会话 -> Durable；多 deliverable -> Epic。
 13. 生产实现 -> TDD；throwaway prototype 排除；原型逻辑 lift 进生产走受控入口——先在生产模块写失败测试再接入，不以原型期验证抵扣。
 14. 完成声称 -> verification 使用新鲜证据。
-15. 运行 plugin discovery -> 发现 selective-hybrid 根 `zhanggui` 与八个 dual-mode leaf；九个均为 strict Agent Skills；五个有状态 stage 不出现。
+15. 运行 plugin discovery -> 发现 selective-hybrid 根 `zhanggui` 与五个 dual-mode leaf；九个均为 strict Agent Skills；五个有状态 stage 不出现。
 16. Transient 小改 -> 只建立 minimal state，不生成空 decision graph。
 17. DESIGN cutover 中断 -> 删除前 DESIGN 仍胜出；SPEC 已存在后的 drift 只用 SPEC + PROGRESS。
 18. 冷启动有普通未完成 Durable/Epic -> 从 SPEC/EPIC + CSV + PROGRESS 恢复 execution。

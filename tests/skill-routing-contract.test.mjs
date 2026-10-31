@@ -11,9 +11,6 @@ const rootPath = path.join(skillsRoot, 'zhanggui', 'SKILL.md');
 const leafNames = [
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
-  'zhanggui-verification-before-completion',
-  'zhanggui-requesting-code-review',
-  'zhanggui-receiving-code-review',
   'zhanggui-using-git-worktrees',
   'zhanggui-dispatching-parallel-agents',
   'zhanggui-finishing-a-development-branch',
@@ -142,49 +139,8 @@ test('root distinguishes explicit and implicit entry without persisting entry so
   assert.match(invocation, /root.*wins.*Direct/i);
 });
 
-test('requesting and receiving review descriptions distinguish new review from existing feedback', async () => {
-  const requesting = await readFile(
-    path.join(skillsRoot, 'zhanggui-requesting-code-review', 'SKILL.md'),
-    'utf8',
-  );
-  const receiving = await readFile(
-    path.join(skillsRoot, 'zhanggui-receiving-code-review', 'SKILL.md'),
-    'utf8',
-  );
-
-  assert.match(requesting, /^description: [A-Z]/m, 'requesting description must lead with what the skill does');
-  assert.match(requesting, /^description:.*\bUse when\b/m);
-  assert.match(
-    requesting,
-    /^description:.*(?:new independent review|new review).*(?:diff|code change)|^description:.*(?:diff|patch|code change).*new independent review/im,
-  );
-  assert.match(
-    requesting,
-    /^description:.*Critical and Important/im,
-  );
-
-  assert.match(receiving, /^description: [A-Z]/m, 'receiving description must lead with what the skill does');
-  assert.match(receiving, /^description:.*\bUse when\b/m);
-  assert.match(
-    receiving,
-    /^description:.*(?:review feedback|reviewer comments|findings report)/im,
-  );
-  assert.match(
-    receiving,
-    /^description:.*(?:has arrived|already exists|existing)/im,
-  );
-
-  // The pair must stay distinguishable by description alone, without either one
-  // arbitrating against the other or against the root.
-  for (const content of [requesting, receiving]) {
-    assert.doesNotMatch(content, /^description:.*\bdo not use\b/im);
-    assert.doesNotMatch(content, /^description:.*\bdefer to\b/im);
-  }
-
-  // The boundary rule itself lives in the body, where it is executed.
-  assert.match(receiving, /Producing a new review of a diff or code change belongs to `zhanggui-requesting-code-review`/);
-});
-
+// 这两个 leaf 已按"补模型缺的、省模型会的"原则退役，纪律原文并入
+// stages/executing-plans/references/；原先钉住两份 description 边界的那条断言随之移除。
 test('root declares the complete SkillRequest and SkillResult contracts', async () => {
   const root = await readFile(rootPath, 'utf8');
   const activation = section(root, '## Skill Activation Contract', '## WorkflowState');
@@ -202,7 +158,7 @@ test('fallback registry contains exactly the eight discovered leaves', async () 
   const root = await readFile(rootPath, 'utf8');
   const registry = section(root, '### Fallback Registry', '## WorkflowState');
   for (const name of leafNames) assert.match(registry, new RegExp(`\\b${name}\\b`));
-  assert.equal((registry.match(/\.\.\/zhanggui-[^`\s]+\/SKILL\.md/g) ?? []).length, 8);
+  assert.equal((registry.match(/\.\.\/zhanggui-[^`\s]+\/SKILL\.md/g) ?? []).length, 5);
 });
 
 function assertRootFailureAndQuestionCodes(rootText) {
@@ -286,9 +242,6 @@ test('internal stages request leaves through the root and contain no sibling ski
 const coreLeafNames = [
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
-  'zhanggui-verification-before-completion',
-  'zhanggui-requesting-code-review',
-  'zhanggui-receiving-code-review',
 ];
 
 test('core leaves return identity-bearing Embedded SkillResult envelopes', async () => {

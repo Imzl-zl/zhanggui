@@ -17,6 +17,17 @@ const evaluatedSkills = [
   'zhanggui',
   'zhanggui-systematic-debugging',
   'zhanggui-test-driven-development',
+  'zhanggui-using-git-worktrees',
+  'zhanggui-dispatching-parallel-agents',
+  'zhanggui-finishing-a-development-branch',
+];
+// v0.7/v0.8/v0.9 were measured against a nine-entry catalog that has since
+// shrunk. Their records are immutable, so they are compared against this frozen
+// list rather than against the live catalog.
+const HISTORICAL_CATALOG_NAMES = [
+  'zhanggui',
+  'zhanggui-systematic-debugging',
+  'zhanggui-test-driven-development',
   'zhanggui-verification-before-completion',
   'zhanggui-requesting-code-review',
   'zhanggui-receiving-code-review',
@@ -157,10 +168,10 @@ test('every trigger case has a stable identity and valid routing expectations', 
     assert.equal(typeof item.prompt, 'string');
     assert.ok(item.prompt.length > 0);
     assert.ok(['explicit', 'implicit'].includes(item.source));
-    assert.ok(item.expected_skill === null || evaluatedSkills.includes(item.expected_skill));
-    assert.ok(item.expected_first === null || evaluatedSkills.includes(item.expected_first));
+    assert.ok(item.expected_skill === null || HISTORICAL_CATALOG_NAMES.includes(item.expected_skill));
+    assert.ok(item.expected_first === null || HISTORICAL_CATALOG_NAMES.includes(item.expected_first));
     assert.ok(Array.isArray(item.forbidden_skills));
-    assert.ok(item.forbidden_skills.every(name => evaluatedSkills.includes(name)));
+    assert.ok(item.forbidden_skills.every(name => HISTORICAL_CATALOG_NAMES.includes(name)));
     assert.ok(Array.isArray(item.tags));
     assert.ok(item.tags.length > 0);
     assert.equal(new Set(item.tags).size, item.tags.length);
@@ -247,7 +258,7 @@ test('v0.7 catalog snapshot stays an internally consistent historical record', (
     .digest('hex');
   assert.equal(summary.catalog_snapshot.sha256, digest);
   assert.equal(summary.catalog_snapshot.source_head, APPROVED_CATALOG_SOURCE_HEAD);
-  assert.deepEqual(summary.catalog_snapshot.entries.map(entry => entry.name), evaluatedSkills);
+  assert.deepEqual(summary.catalog_snapshot.entries.map(entry => entry.name), HISTORICAL_CATALOG_NAMES);
 });
 
 async function readLiveCatalogEntries() {
@@ -311,7 +322,7 @@ test('v0.8 summary stays an internally consistent record with rates and baseline
   assert.equal(v08.catalog_snapshot.sha256, catalogDigest(v08.catalog_snapshot.entries));
   assert.equal(v08.catalog_snapshot.sha256, APPROVED_V08_CATALOG_SHA256);
   assert.equal(v08.catalog_snapshot.source_head, APPROVED_V08_CATALOG_SOURCE_HEAD);
-  assert.deepEqual(v08.catalog_snapshot.entries.map(entry => entry.name), evaluatedSkills);
+  assert.deepEqual(v08.catalog_snapshot.entries.map(entry => entry.name), HISTORICAL_CATALOG_NAMES);
   assert.equal(v08.dataset_snapshot.sha256, APPROVED_TRIGGER_DATASET_SHA256);
   assert.equal(v08.version, '0.8');
   assert.equal(v08.runs_per_case, 3);

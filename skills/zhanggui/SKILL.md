@@ -98,9 +98,6 @@ Stable failures are: `missing-skill`, `skill-identity-mismatch`, `unsupported-mo
 |---|---|
 | `zhanggui-systematic-debugging` | `../zhanggui-systematic-debugging/SKILL.md` |
 | `zhanggui-test-driven-development` | `../zhanggui-test-driven-development/SKILL.md` |
-| `zhanggui-verification-before-completion` | `../zhanggui-verification-before-completion/SKILL.md` |
-| `zhanggui-requesting-code-review` | `../zhanggui-requesting-code-review/SKILL.md` |
-| `zhanggui-receiving-code-review` | `../zhanggui-receiving-code-review/SKILL.md` |
 | `zhanggui-using-git-worktrees` | `../zhanggui-using-git-worktrees/SKILL.md` |
 | `zhanggui-dispatching-parallel-agents` | `../zhanggui-dispatching-parallel-agents/SKILL.md` |
 | `zhanggui-finishing-a-development-branch` | `../zhanggui-finishing-a-development-branch/SKILL.md` |
@@ -198,8 +195,6 @@ DESIGN 尚未物化时是设计真值。planning 采用单次 cutover：候选�
 |---|---|---|
 | 继续/恢复、提供 checkpoint，或存在活动 tracker | 按冷启动优先序 hydrate 设计/drift/execution 真值 | checkpoint 对应 phase |
 | 问答、研究、解释且不改文件 | 直接处理；完成后 `stop`，不建 tracker | route |
-| 请求代码审查且不改文件 | `SkillRequest(name=zhanggui-requesting-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；报告后 `stop`，不建 tracker | route |
-| 收到外部代码审查反馈 | `SkillRequest(name=zhanggui-receiving-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)`；核实后逐项处理，设计冲突返回根 frame | execute |
 | Bug、测试失败、异常行为 | 保存 return point；`SkillRequest(name=zhanggui-systematic-debugging, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` | debug |
 | 已有可执行计划或明确任务清单 | 复用现有真值，不新建第二套 | execute |
 | 部分计划、笔记或不完整 TODO | 先做可执行性检查 | route |
@@ -390,9 +385,6 @@ destination 是"搞懂一个陌生产品、技术、行业或人物"时，用横
 | `phase = execute`（Transient 直入；Durable/Epic 需 plan-ready） | `stages/executing-plans/STAGE.md` |
 | `phase = execute` ∧ 当前 task 是永久生产功能/bugfix/refactor/行为变化，写实现代码前 | `SkillRequest(name=zhanggui-test-driven-development, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | `phase = debug`（bug、测试/构建失败、异常；detour 先写 return_point） | `SkillRequest(name=zhanggui-systematic-debugging, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
-| `phase = verify`（任何完成或修复声称前；detour 先写 return_point） | `SkillRequest(name=zhanggui-verification-before-completion, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
-| 完成门/任务级/ad-hoc 请求审查（同步子步骤，不占 return_point 单槽） | `SkillRequest(name=zhanggui-requesting-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
-| 收到外部代码审查反馈（同步子步骤，不占 return_point 单槽） | `SkillRequest(name=zhanggui-receiving-code-review, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | verification `verified` ∧（工作在独立分支/worktree ∨ 用户要求收尾） | `SkillRequest(name=zhanggui-finishing-a-development-branch, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | `phase = execute` 开始前 ∧ 隔离触发（`readiness ∈ {durable-plan, epic-plan}` ∨ 并行写范围 ∨ 脏工作区 ∨ 用户要求） | `SkillRequest(name=zhanggui-using-git-worktrees, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
 | 存在互不相关的可并行问题域 ∧ 宿主有 subagent 能力 | `SkillRequest(name=zhanggui-dispatching-parallel-agents, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` |
@@ -412,6 +404,5 @@ execution 返回 `design-drift` 时，确认 `return_point` 为空后写入 `{ p
 - 每次等待、stage delta 和恢复都更新同一 WorkflowState。
 - 用户暂停时先写必要的 DESIGN/PROGRESS checkpoint，再退出；执行中的 Transient 先原地升级 Durable（落 `SPEC.md` + `TODO.csv` + `PROGRESS.md`）再退出，不得裸退出丢进度。
 - 只有工具和仓库都无法提供、且会实质改变结果的信息才升级给用户。
-- 完成声称前必须发出 `SkillRequest(name=zhanggui-verification-before-completion, mode=zhanggui-embedded, input=<required fields>, return_to=<current phase/node>)` 并运行能证明目标的最新检查。
 - 用户明确放弃当前目标或方向大变时执行 scope reset：剪枝全部 `open_nodes` 和 `fog`，作废受影响的 decisions（不受影响的保留），按共识失效规则重置 `consensus`，再从新目标重新路由；已落盘的 DESIGN.md 按用户意愿删除或保留，不遗留无主 checkpoint。
 - 用户明确暂停、终止或切换其他工作时，先保存当前 checkpoint，再停止本编排 frame。

@@ -10,9 +10,6 @@ const skillsRoot = path.join(projectRoot, 'skills');
 const leafSkills = [
   { name: 'zhanggui-systematic-debugging', enabled: true },
   { name: 'zhanggui-test-driven-development', enabled: true },
-  { name: 'zhanggui-verification-before-completion', enabled: true },
-  { name: 'zhanggui-requesting-code-review', enabled: true },
-  { name: 'zhanggui-receiving-code-review', enabled: true },
   { name: 'zhanggui-using-git-worktrees', enabled: true },
   { name: 'zhanggui-dispatching-parallel-agents', enabled: true },
   { name: 'zhanggui-finishing-a-development-branch', enabled: true },
@@ -123,16 +120,16 @@ test('all relative skill navigation paths resolve', async () => {
 
 function assertPluginManifestV09(manifest) {
   assert.equal(manifest.skills, './skills/');
-  assert.equal(manifest.version, '0.9.0');
+  assert.equal(manifest.version, '0.10.0');
   assert.equal(
     manifest.description,
-    'Eleven strict Agent Skills: the Zhanggui selective-hybrid orchestrator, eight dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.',
+    'Eight strict Agent Skills: the Zhanggui selective-hybrid orchestrator, five dual-mode engineering leaves, and the standalone setup-collaboration-files and decision-notes collaboration pair.',
   );
   assert.match(manifest.interface.shortDescription, /selective-hybrid root/i);
-  assert.match(manifest.interface.shortDescription, /eight dual-mode leaves/i);
-  assert.match(manifest.interface.longDescription, /Eleven strict Agent Skills/i);
+  assert.match(manifest.interface.shortDescription, /five dual-mode leaves/i);
+  assert.match(manifest.interface.longDescription, /Eight strict Agent Skills/i);
   assert.match(manifest.interface.longDescription, /automatic or manual/i);
-  assert.match(manifest.interface.longDescription, /eight zhanggui-\* leaves/i);
+  assert.match(manifest.interface.longDescription, /five zhanggui-\* leaves/i);
   assert.match(manifest.interface.longDescription, /setup-collaboration-files/i);
   assert.match(manifest.interface.longDescription, /decision-notes/i);
   assert.ok(manifest.interface.defaultPrompt.some(line => /automatically match Zhanggui/i.test(line)));
@@ -284,7 +281,7 @@ test('implicit-entry predicate defers to the description', () => {
 
 test('every catalog description states what the skill does and when to use it', async () => {
   const names = await discoverSkillNames();
-  assert.equal(names.length, 11);
+  assert.equal(names.length, 8);
 
   for (const name of names) {
     const content = await readFile(path.join(skillsRoot, name, 'SKILL.md'), 'utf8');
